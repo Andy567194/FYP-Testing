@@ -6,6 +6,7 @@ using static UnityEditor.FilePathAttribute;
 public class ProjectileMotion : MonoBehaviour
 {
     public float forceMagnitude = 10f;
+    public int destroytime = 7;
 
     // Define the direction of the force
     public Vector3 forceDirection ; // Default direction (Z-axis)
@@ -26,6 +27,7 @@ public class ProjectileMotion : MonoBehaviour
 
         // Apply the defined force in the specified direction
         ApplyForceToSphere();
+        Destroy(this,destroytime);
     }
 
     void ApplyForceToSphere()
