@@ -12,15 +12,16 @@ using UnityEngine.InputSystem;
 
 public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 {
-
+    [SerializeField]
+    private float _mouseSensitivity = 10f;
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
-    [Networked, Capacity(12)] private NetworkDictionary<PlayerRef, Player> Players => default;
+    //[Networked, Capacity(12)] private NetworkDictionary<PlayerRef, PlayerController> Players => default;
 
 
     private NetworkRunner _runner;
 
-   
+
     public void OnConnectedToServer(NetworkRunner runner)
     {
         throw new NotImplementedException();
@@ -53,6 +54,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
+        /*
         var data = new NetworkInputData();
 
         if (Input.GetKey(KeyCode.W))
@@ -67,7 +69,20 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         if (Input.GetKey(KeyCode.D))
             data.direction += Vector3.right;
 
-        input.Set(data);
+        input.Set(data);*/
+        var inputData = new InputData();
+
+        if (Input.GetKey(KeyCode.W)) { inputData.MoveInput += Vector2.up; }
+        if (Input.GetKey(KeyCode.S)) { inputData.MoveInput += Vector2.down; }
+        if (Input.GetKey(KeyCode.A)) { inputData.MoveInput += Vector2.left; }
+        if (Input.GetKey(KeyCode.D)) { inputData.MoveInput += Vector2.right; }
+
+        inputData.Pitch = Input.GetAxis("Mouse Y") * _mouseSensitivity * (-1);
+        inputData.Yaw = Input.GetAxis("Mouse X") * _mouseSensitivity;
+
+        inputData.Button.Set(InputButton.Jump, Input.GetKey(KeyCode.Space));
+
+        input.Set(inputData);
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
@@ -85,28 +100,28 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         throw new NotImplementedException();
     }
 
- 
 
-public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
-{
-    if (runner.IsServer)
-    {
-        // Create a unique position for the player
-        Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 5, 0);
-        NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
-        // Keep track of the player avatars for easy access
-        _spawnedCharacters.Add(player, networkPlayerObject);
-    }
-}
 
-public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
-{
-    if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
+    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        runner.Despawn(networkObject);
-        _spawnedCharacters.Remove(player);
+        if (runner.IsServer)
+        {
+            // Create a unique position for the player
+            Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 5, 0);
+            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
+            // Keep track of the player avatars for easy access
+            _spawnedCharacters.Add(player, networkPlayerObject);
+        }
     }
-}
+
+    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
+    {
+        if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
+        {
+            runner.Despawn(networkObject);
+            _spawnedCharacters.Remove(player);
+        }
+    }
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
     {
         throw new NotImplementedException();

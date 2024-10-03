@@ -1,4 +1,4 @@
-using Fusion;
+/*using Fusion;
 using Fusion.Menu;
 using Fusion.Sockets;
 
@@ -132,3 +132,4 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
 
     void INetworkRunnerCallbacks.OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
 }
+*/
