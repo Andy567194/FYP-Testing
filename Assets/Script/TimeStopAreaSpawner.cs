@@ -34,7 +34,7 @@ public class TimeStopAreaSpawner : MonoBehaviour
     void UpdatePreview()
     {
         // Get the player's camera
-        Camera playerCamera = Camera.main;
+        Camera playerCamera = GetComponentInChildren<Camera>();
 
         // Calculate the spawn position in front of the camera
         Vector3 spawnPosition = playerCamera.transform.position + playerCamera.transform.forward * spawnDistance;
