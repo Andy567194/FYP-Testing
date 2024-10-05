@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4551573483198870102}
   - component: {fileID: 6060630077285712735}
   - component: {fileID: 4256002299335388156}
+  - component: {fileID: 6460522699611934539}
   m_Layer: 0
   m_Name: TestBullet
   m_TagString: TimeStoppable
@@ -151,3 +152,18 @@ MonoBehaviour:
   forceMagnitude: 10
   destroytime: 7
   forceDirection: {x: 0, y: 0, z: 0}
+--- !u!114 &6460522699611934539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3416369305203529225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24be06c3eaca2b34592743f8680ec91f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeStopped: 0
+  lineRenderer: {fileID: 0}
+  takePowerButton: {fileID: 0}
