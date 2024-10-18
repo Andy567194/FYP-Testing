@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
+//using static UnityEditor.Progress;
 
 public class ProjectileShooter : MonoBehaviour
 {
@@ -12,14 +12,15 @@ public class ProjectileShooter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
         cooldown -= Time.deltaTime;
-        if (active && cooldown < 0) {
+        if (active && cooldown < 0)
+        {
             Shoot();
             cooldown = 1f;
         }
@@ -28,6 +29,6 @@ public class ProjectileShooter : MonoBehaviour
     public void Shoot()
     {
         Instantiate(projectile, transform.position, Quaternion.identity);
-       
+
     }
 }

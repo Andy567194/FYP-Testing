@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.FilePathAttribute;
+//using static UnityEditor.FilePathAttribute;
 
 public class ProjectileMotion : MonoBehaviour
 {
@@ -9,7 +9,7 @@ public class ProjectileMotion : MonoBehaviour
     public int destroytime = 7;
 
     // Define the direction of the force
-    public Vector3 forceDirection ; // Default direction (Z-axis)
+    public Vector3 forceDirection; // Default direction (Z-axis)
 
     private Rigidbody rb;
 
@@ -27,13 +27,13 @@ public class ProjectileMotion : MonoBehaviour
 
         // Apply the defined force in the specified direction
         ApplyForceToSphere();
-        Destroy(this,destroytime);
+        Destroy(this, destroytime);
     }
 
     void ApplyForceToSphere()
     {
         // Normalize the direction to ensure consistent force application
-        forceDirection =transform.InverseTransformDirection( new Vector3(1, 0, 0));
+        forceDirection = transform.InverseTransformDirection(new Vector3(1, 0, 0));
         Vector3 normalizedDirection = forceDirection.normalized;
 
 

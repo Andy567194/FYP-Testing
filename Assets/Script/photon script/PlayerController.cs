@@ -27,7 +27,7 @@ public class PlayerController : NetworkBehaviour
 
             foreach (var visual in _visuals)
             {
-                visual.enabled = false;
+                visual.enabled = true;
             }
         }
         else
@@ -44,7 +44,23 @@ public class PlayerController : NetworkBehaviour
             var buttonPressed = data.Button.GetPressed(_previousButton);
             _previousButton = data.Button;
 
-            var moveInput = new Vector3(data.MoveInput.x, 0, data.MoveInput.y);
+            Vector3 moveInput = Vector3.zero;
+            if (data.MoveInput.x > 0)
+            {
+                moveInput += Vector3.right;
+            }
+            if (data.MoveInput.x < 0)
+            {
+                moveInput += Vector3.left;
+            }
+            if (data.MoveInput.y > 0)
+            {
+                moveInput += Vector3.forward;
+            }
+            if (data.MoveInput.y < 0)
+            {
+                moveInput += Vector3.back;
+            }
             _characterController.Move(transform.rotation * moveInput * _speed * Runner.DeltaTime);
 
             HandlePitchYaw(data);
@@ -57,8 +73,8 @@ public class PlayerController : NetworkBehaviour
 
         transform.rotation = Quaternion.Euler(0, (float)_yaw, 0);
 
-        var cameraEulerAngle = _camera.transform.localRotation.eulerAngles;
-        _camera.transform.rotation = Quaternion.Euler((float)_pitch, cameraEulerAngle.y, cameraEulerAngle.z);
+        //var cameraEulerAngle = _camera.transform.localRotation.eulerAngles;
+        _camera.transform.rotation = Quaternion.Euler((float)_pitch, (float)_yaw, 0);
     }
 
     private void HandlePitchYaw(InputData data)
@@ -76,24 +92,3 @@ public class PlayerController : NetworkBehaviour
         }
     }
 }
-
-/*using Fusion;
-
-public class Player : NetworkBehaviour
-{
-    private NetworkCharacterController _cc;
-
-    private void Awake()
-    {
-        _cc = GetComponent<NetworkCharacterController>();
-    }
-
-    public override void FixedUpdateNetwork()
-    {
-        if (GetInput(out InputData data))
-        {
-            data.direction.Normalize();
-            _cc.Move(5 * data.direction * Runner.DeltaTime);
-        }
-    }
-}*/
