@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerController : NetworkBehaviour
 {
+
+    public Transform playerModel;
     [SerializeField]
     private NetworkCharacterController _characterController;
     [SerializeField]
@@ -29,11 +31,19 @@ public class PlayerController : NetworkBehaviour
             {
                 visual.enabled = true;
             }
+            SetRenderLayerInChildren(playerModel, LayerMask.NameToLayer("LocalPlayerModel"));
+            Camera.main.gameObject.SetActive(false);
         }
         else
         {
             _camera.enabled = false;
             _camera.GetComponent<AudioListener>().enabled = false;
+
+            Camera localCamera = GetComponentInChildren<Camera>();
+            localCamera.enabled = false;
+
+            AudioListener audioListener = GetComponentInChildren<AudioListener>();
+            audioListener.enabled = false;
         }
     }
 
@@ -90,5 +100,10 @@ public class PlayerController : NetworkBehaviour
         {
             _pitch = 89;
         }
+    }
+    public static void SetRenderLayerInChildren(Transform transform, int layerNumber) 
+    {
+        foreach (Transform trans in transform.GetComponentsInChildren<Transform>(true))
+            trans.gameObject.layer = layerNumber;
     }
 }
