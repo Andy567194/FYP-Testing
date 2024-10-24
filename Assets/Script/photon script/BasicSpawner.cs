@@ -8,8 +8,6 @@ using System;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-
-
 public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField]
@@ -18,9 +16,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
     //[Networked, Capacity(12)] private NetworkDictionary<PlayerRef, PlayerController> Players => default;
 
-
     private NetworkRunner _runner;
-
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
@@ -64,7 +60,9 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         inputData.Pitch = Input.GetAxis("Mouse Y") * _mouseSensitivity * (-1);
         inputData.Yaw = Input.GetAxis("Mouse X") * _mouseSensitivity;
 
-        inputData.Button.Set(InputButton.Jump, Input.GetKey(KeyCode.Space));
+        inputData.JumpButton.Set(InputButton.Jump, Input.GetKey(KeyCode.Space));
+        inputData.TSAButton.Set(InputButton.TSA, Input.GetKey(KeyCode.Mouse1));
+        inputData.ScrollInput = Input.GetAxis("Mouse ScrollWheel");
 
         input.Set(inputData);
     }
@@ -83,8 +81,6 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     {
 
     }
-
-
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
@@ -106,6 +102,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             _spawnedCharacters.Remove(player);
         }
     }
+
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
     {
 
@@ -113,22 +110,22 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data)
     {
-
+        // Implementation needed
     }
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
-
+        // Implementation needed
     }
 
     public void OnSceneLoadStart(NetworkRunner runner)
     {
-
+        // Implementation needed
     }
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
-
+        // Implementation needed
     }
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
@@ -140,6 +137,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     {
 
     }
+
     async void StartGame(GameMode mode)
     {
         // Create the Fusion runner and let it know that we will be providing user input
@@ -163,6 +161,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
     }
+
     private void OnGUI()
     {
         if (_runner == null)

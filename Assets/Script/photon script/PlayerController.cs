@@ -18,10 +18,14 @@ public class PlayerController : NetworkBehaviour
     [Networked]
     private Angle _pitch { get; set; }
     [Networked]
-    private NetworkButtons _previousButton { get; set; }
+    private NetworkButtons _jumpPreviousButton { get; set; }
+    [Networked]
+    private NetworkButtons _TSAPreviousButton { get; set; }
 
     public override void Spawned()
     {
+        Debug.Log($"Player {Object.Id} spawned. Has Authority: {Object.HasInputAuthority}");
+
         if (Object.HasInputAuthority)
         {
             _camera.enabled = true;
@@ -33,6 +37,8 @@ public class PlayerController : NetworkBehaviour
             }
             SetRenderLayerInChildren(playerModel, LayerMask.NameToLayer("LocalPlayerModel"));
             Camera.main.gameObject.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
         else
         {
@@ -51,8 +57,11 @@ public class PlayerController : NetworkBehaviour
     {
         if (GetInput(out InputData data))
         {
-            var buttonPressed = data.Button.GetPressed(_previousButton);
-            _previousButton = data.Button;
+            var jumpButtonPressed = data.JumpButton.GetPressed(_jumpPreviousButton);
+            _jumpPreviousButton = data.JumpButton;
+
+            var TSAButtonPressed = data.TSAButton.GetPressed(_TSAPreviousButton);
+            _TSAPreviousButton = data.TSAButton;
 
             Vector3 moveInput = Vector3.zero;
             if (data.MoveInput.x > 0)
@@ -75,15 +84,29 @@ public class PlayerController : NetworkBehaviour
 
             HandlePitchYaw(data);
 
-            if (buttonPressed.IsSet(InputButton.Jump))
+            if (jumpButtonPressed.IsSet(InputButton.Jump))
             {
                 _characterController.Jump();
+            }
+            if (TSAButtonPressed.IsSet(InputButton.TSA))
+            {
+                TimeStopAreaSpawner timeStopAreaSpawner = GetComponentInChildren<TimeStopAreaSpawner>();
+                if (timeStopAreaSpawner != null)
+                {
+                    timeStopAreaSpawner.SpawnObject();
+                }
+            }
+            if (data.ScrollInput != 0)
+            {
+                TimeStopAreaSpawner timeStopAreaSpawner = GetComponent<TimeStopAreaSpawner>();
+                if (timeStopAreaSpawner != null)
+                {
+                    timeStopAreaSpawner.SetSpawnDistance(data.ScrollInput);
+                }
             }
         }
 
         transform.rotation = Quaternion.Euler(0, (float)_yaw, 0);
-
-        //var cameraEulerAngle = _camera.transform.localRotation.eulerAngles;
         _camera.transform.rotation = Quaternion.Euler((float)_pitch, (float)_yaw, 0);
     }
 
@@ -101,7 +124,7 @@ public class PlayerController : NetworkBehaviour
             _pitch = 89;
         }
     }
-    public static void SetRenderLayerInChildren(Transform transform, int layerNumber) 
+    public static void SetRenderLayerInChildren(Transform transform, int layerNumber)
     {
         foreach (Transform trans in transform.GetComponentsInChildren<Transform>(true))
             trans.gameObject.layer = layerNumber;

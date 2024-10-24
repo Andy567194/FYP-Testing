@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 528073394489392325}
   - component: {fileID: 5109056489862770732}
   - component: {fileID: 8022639640827659478}
+  - component: {fileID: 1558415462679763662}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -59,6 +60,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 528073394489392325}
   - {fileID: 8022639640827659478}
+  - {fileID: 1558415462679763662}
 --- !u!143 &7479006153031603497
 CharacterController:
   m_ObjectHideFlags: 0
@@ -150,6 +152,22 @@ MonoBehaviour:
   braking: 10
   maxSpeed: 10
   rotationSpeed: 15
+--- !u!114 &1558415462679763662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3401485072938351536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 720ba895330a6a84d8ce031b4e68c9d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToSpawn: {fileID: 8182162656668968402, guid: 43162b4895d351843a047a88ecba5851, type: 3}
+  previewObject: {fileID: 5686982452573836312, guid: 052c682e47b450f419a6a0a38f4b18a3, type: 3}
+  spawnDistance: 10
+  scrollSpeed: 5
 --- !u!1 &5829563818528834496
 GameObject:
   m_ObjectHideFlags: 0
