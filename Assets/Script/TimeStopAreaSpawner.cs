@@ -22,7 +22,7 @@ public class TimeStopAreaSpawner : NetworkBehaviour
 
     void Update()
     {
-        UpdatePreview();
+        //UpdatePreview();
     }
 
     void UpdatePreview()
@@ -56,12 +56,8 @@ public class TimeStopAreaSpawner : NetworkBehaviour
     {
         if (!spawned)
         {
-            // Instantiate the object at the calculated position with the same rotation as the camera
-            if (currentPreview != null)
-            {
-                TSA = Runner.Spawn(objectToSpawn, currentPreview.transform.position, currentPreview.transform.rotation, Object.InputAuthority);
-                spawned = true;
-            }
+            TSA = Runner.Spawn(objectToSpawn, transform.position, Quaternion.identity, Object.InputAuthority);
+            spawned = true;
         }
         else
         {
@@ -72,7 +68,7 @@ public class TimeStopAreaSpawner : NetworkBehaviour
             }
         }
     }
-
+    /*
     public override void FixedUpdateNetwork()
     {
         if (Object.HasStateAuthority)
@@ -82,4 +78,5 @@ public class TimeStopAreaSpawner : NetworkBehaviour
             currentPreview.transform.rotation = previewRotation;
         }
     }
+    */
 }
