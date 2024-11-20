@@ -1,34 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
-public class Shooter : MonoBehaviour
+public class Shooter : NetworkBehaviour
 {
-    public GameObject item;
-    public float force = 1000;
-    float cooldown = 1;
-    // Start is called before the first frame update
-    void Start()
-    {
+    public GameObject item; // The prefab to instantiate
+    public float force = 10f;
+    private float cooldown = 1f;
 
-    }
-
-    // Update is called once per frame
-    void Update()
+    public override void FixedUpdateNetwork()
     {
-        cooldown -= Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Object.HasStateAuthority)
         {
-            var cube = Instantiate(item, transform.position, Quaternion.identity);
-            cube.GetComponent<Rigidbody>().AddForce(Vector3.right * force);
-            cooldown = 1;
+            cooldown -= Runner.DeltaTime;
+            if (cooldown <= 0)
+            {
+                var cube = Runner.Spawn(item, transform.position, Quaternion.identity);
+                cube.GetComponent<Rigidbody>().AddForce(Vector3.right * force);
+                cooldown = 1;
+            }
         }
-
     }
 
     public void Shoot()
     {
-        var cube = Instantiate(item, transform.position, Quaternion.identity);
-        cube.GetComponent<Rigidbody>().AddForce(Vector3.right * force);
+        if (Object.HasStateAuthority)
+        {
+            var cube = Runner.Spawn(item, transform.position, Quaternion.identity);
+            cube.GetComponent<Rigidbody>().AddForce(Vector3.right * force);
+        }
     }
 }

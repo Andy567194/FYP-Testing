@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class PlayerController : NetworkBehaviour
 {
-
     public Transform playerModel;
     [SerializeField]
     private NetworkCharacterController _characterController;
@@ -22,9 +21,13 @@ public class PlayerController : NetworkBehaviour
     [Networked]
     private NetworkButtons _TSAPreviousButton { get; set; }
 
+    private TimeStopAreaSpawner timeStopAreaSpawner;
+    private Rigidbody _rigidbody;
+    private bool _isGrounded;
+
     public override void Spawned()
     {
-        Debug.Log($"Player {Object.Id} spawned. Has Authority: {Object.HasInputAuthority}");
+        //Debug.Log($"Player {Object.Id} spawned. Has Authority: {Object.HasInputAuthority}");
 
         if (Object.HasInputAuthority)
         {
@@ -50,6 +53,33 @@ public class PlayerController : NetworkBehaviour
 
             AudioListener audioListener = GetComponentInChildren<AudioListener>();
             audioListener.enabled = false;
+        }
+
+        timeStopAreaSpawner = GetComponentInChildren<TimeStopAreaSpawner>();
+        _rigidbody = GetComponent<Rigidbody>();
+        if (_rigidbody == null)
+        {
+            _rigidbody = gameObject.AddComponent<Rigidbody>();
+        }
+        _rigidbody.useGravity = true;
+        //_rigidbody.isKinematic = false;
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        // Check if the player is grounded
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            _isGrounded = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        // Check if the player is no longer grounded
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            _isGrounded = false;
         }
     }
 
@@ -90,20 +120,18 @@ public class PlayerController : NetworkBehaviour
             }
             if (TSAButtonPressed.IsSet(InputButton.TSA))
             {
-                TimeStopAreaSpawner timeStopAreaSpawner = GetComponentInChildren<TimeStopAreaSpawner>();
                 if (timeStopAreaSpawner != null)
                 {
                     timeStopAreaSpawner.SpawnObject();
                 }
             }
-            if (data.ScrollInput != 0)
+            /*if (data.ScrollInput != 0)
             {
-                TimeStopAreaSpawner timeStopAreaSpawner = GetComponent<TimeStopAreaSpawner>();
                 if (timeStopAreaSpawner != null)
                 {
                     timeStopAreaSpawner.SetSpawnDistance(data.ScrollInput);
                 }
-            }
+            }*/
         }
 
         transform.rotation = Quaternion.Euler(0, (float)_yaw, 0);
@@ -124,6 +152,7 @@ public class PlayerController : NetworkBehaviour
             _pitch = 89;
         }
     }
+
     public static void SetRenderLayerInChildren(Transform transform, int layerNumber)
     {
         foreach (Transform trans in transform.GetComponentsInChildren<Transform>(true))

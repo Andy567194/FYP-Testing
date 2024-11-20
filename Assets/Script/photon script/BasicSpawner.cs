@@ -84,14 +84,18 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        if (runner.IsServer)
-        {
-            // Create a unique position for the player
-            Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 5, 0);
-            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
-            // Keep track of the player avatars for easy access
-            _spawnedCharacters.Add(player, networkPlayerObject);
-        }
+        // Create a unique position for the player
+        Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 5, 0);
+        NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
+
+        // Assign input authority to the player object
+        networkPlayerObject.AssignInputAuthority(player);
+
+        // Keep track of the player avatars for easy access
+        _spawnedCharacters.Add(player, networkPlayerObject);
+
+        // Log whether the player has InputAuthority
+        Debug.Log($"Player {player} joined. Has InputAuthority: {networkPlayerObject.HasInputAuthority}");
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
@@ -158,8 +162,33 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             GameMode = mode,
             SessionName = "TestRoom",
             Scene = scene,
-            SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
+            SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>(),
         });
+
+        // Ensure the host has input authority
+        if (mode == GameMode.Host)
+        {
+            foreach (var player in _runner.ActivePlayers)
+            {
+                if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
+                {
+                    networkObject.AssignInputAuthority(player);
+                    Debug.Log($"Host player {player} assigned input authority: {networkObject.HasInputAuthority}");
+                }
+            }
+        }
+        else if (mode == GameMode.Client)
+        {
+            // Ensure the client has input authority
+            foreach (var player in _runner.ActivePlayers)
+            {
+                if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
+                {
+                    networkObject.AssignInputAuthority(player);
+                    Debug.Log($"Client player {player} assigned input authority: {networkObject.HasInputAuthority}");
+                }
+            }
+        }
     }
 
     private void OnGUI()

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1397662884376529887}
   - component: {fileID: 2753475991103487298}
+  - component: {fileID: 850285991161932928}
   m_Layer: 0
   m_Name: Shooter
   m_TagString: Untagged
@@ -44,5 +45,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2644d030d4ad5840904c97e350cb17b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 2079558349527323473, guid: b44d9e2fec96e544e9ad9f4c0c6e2017, type: 3}
+  item: {fileID: 760498207128508713, guid: 649d966032bfdac4cbf35ea5d0b131b6, type: 3}
   force: 700
+--- !u!114 &850285991161932928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3854239736045303712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 188016745
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 2753475991103487298}
