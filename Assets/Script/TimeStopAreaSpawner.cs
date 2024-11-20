@@ -9,7 +9,7 @@ public class TimeStopAreaSpawner : NetworkBehaviour
     //public float scrollSpeed = 1f;
     //private GameObject currentPreview; // Reference to the current preview object
     private NetworkObject TSA;
-    [Networked] private NetworkBool spawned { get; set; } = false;
+    [Networked] public NetworkBool spawned { get; set; } = false;
     //[Networked] private Vector3 previewPosition { get; set; }
     //[Networked] private Quaternion previewRotation { get; set; }
     //[Networked] private Vector3 spawnedPosition { get; set; }
@@ -17,7 +17,7 @@ public class TimeStopAreaSpawner : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (spawned)
+        if (spawned && TSA != null)
         {
             TSA.transform.position = transform.position;
         }

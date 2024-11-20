@@ -148,8 +148,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravity: -20
   jumpImpulse: 8
-  acceleration: 10
-  braking: 10
+  acceleration: 100
+  braking: 100
   maxSpeed: 10
   rotationSpeed: 15
 --- !u!114 &1558415462679763662
@@ -165,9 +165,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToSpawn: {fileID: 8182162656668968402, guid: 43162b4895d351843a047a88ecba5851, type: 3}
-  previewObject: {fileID: 5686982452573836312, guid: 052c682e47b450f419a6a0a38f4b18a3, type: 3}
-  spawnDistance: 10
-  scrollSpeed: 5
 --- !u!1 &5829563818528834496
 GameObject:
   m_ObjectHideFlags: 0
