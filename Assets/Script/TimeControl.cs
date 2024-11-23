@@ -1,23 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
-public class TimeControl : MonoBehaviour
+public class TimeControl : NetworkBehaviour
 {
-    public bool timeStopped = false;
+    [Networked] public bool timeStopped { get; set; }
     public LineRenderer lineRenderer;
     public GameObject takePowerButton;
     bool recovered = false;
-    private Vector3 tempVelocity, storedForce;
+    [Networked] private Vector3 tempVelocity { get; set; }
+    [Networked] private Vector3 storedForce { get; set; }
     Rigidbody rb;
-
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         if (lineRenderer == null)
         {
-            var line = FindObjectOfType<LineRenderer>();
+            var line = GetComponentInChildren<LineRenderer>();
             if (line != null)
             {
                 lineRenderer = line;
@@ -88,5 +89,10 @@ public class TimeControl : MonoBehaviour
         PowerBank powerBank = FindObjectOfType<PowerBank>();
         powerBank.AddPower(storedForce);
         storedForce = Vector3.zero;
+    }
+
+    public void SetTimeStopped(bool value)
+    {
+        timeStopped = value;
     }
 }

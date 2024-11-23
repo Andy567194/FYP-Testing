@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
-public class TimeStopArea : MonoBehaviour
+public class TimeStopArea : NetworkBehaviour
 {
     private List<TimeControl> timeControllableObjects = new List<TimeControl>();
 
@@ -22,7 +23,7 @@ public class TimeStopArea : MonoBehaviour
             {
                 timeControllableObjects.Add(timeControl);
             }
-            timeControl.timeStopped = true;
+            timeControl.SetTimeStopped(true);
         }
     }
 
@@ -31,7 +32,7 @@ public class TimeStopArea : MonoBehaviour
         if (other.CompareTag("TimeStoppable"))
         {
             TimeControl timeControl = other.GetComponent<TimeControl>();
-            timeControl.timeStopped = false;
+            timeControl.SetTimeStopped(false);
             timeControllableObjects.Remove(timeControl);
         }
     }
@@ -40,15 +41,16 @@ public class TimeStopArea : MonoBehaviour
     {
         foreach (var timeControl in timeControllableObjects)
         {
-            timeControl.timeStopped = false;
+            timeControl.SetTimeStopped(false);
         }
         timeControllableObjects.Clear();
     }
+
     private void OnDestroy()
     {
         foreach (var timeControl in timeControllableObjects)
         {
-            timeControl.timeStopped = false;
+            timeControl.SetTimeStopped(false);
         }
         timeControllableObjects.Clear();
     }

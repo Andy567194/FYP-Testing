@@ -23,7 +23,6 @@ public class PlayerController : NetworkBehaviour
 
     private TimeStopAreaSpawner timeStopAreaSpawner;
     private Rigidbody _rigidbody;
-    private bool _isGrounded;
 
     public override void Spawned()
     {
@@ -63,24 +62,6 @@ public class PlayerController : NetworkBehaviour
         }
         _rigidbody.useGravity = true;
         //_rigidbody.isKinematic = false;
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        // Check if the player is grounded
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            _isGrounded = true;
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        // Check if the player is no longer grounded
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            _isGrounded = false;
-        }
     }
 
     public override void FixedUpdateNetwork()
