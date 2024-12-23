@@ -61,7 +61,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         inputData.Yaw = Input.GetAxis("Mouse X") * _mouseSensitivity;
 
         inputData.JumpButton.Set(InputButton.Jump, Input.GetKey(KeyCode.Space));
-        inputData.TSAButton.Set(InputButton.TSA, Input.GetKey(KeyCode.Mouse1));
+        inputData.Skill1Button.Set(InputButton.Skill1, Input.GetKey(KeyCode.Mouse1));
         inputData.ScrollInput = Input.GetAxis("Mouse ScrollWheel");
 
         input.Set(inputData);

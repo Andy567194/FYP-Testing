@@ -20,10 +20,13 @@ public class PlayerController : NetworkBehaviour
     [Networked]
     private NetworkButtons _jumpPreviousButton { get; set; }
     [Networked]
-    private NetworkButtons _TSAPreviousButton { get; set; }
+    private NetworkButtons _Skill1PreviousButton { get; set; }
 
     private TimeStopAreaSpawner timeStopAreaSpawner;
     private Rigidbody _rigidbody;
+    public bool timeControlPlayer = false;
+    ManipulateEnergy manipulateEnergy;
+    public bool manipulateEnergyPlayer = false;
 
     public override void Spawned()
     {
@@ -42,30 +45,6 @@ public class PlayerController : NetworkBehaviour
             Camera.main.gameObject.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            BasicSpawner basicSpawner = FindObjectOfType<BasicSpawner>();
-            if (basicSpawner != null)
-            {
-                int i = 0;
-                foreach (var kvp in basicSpawner._spawnedCharacters)
-                {
-                    if (kvp.Value == Object)
-                    {
-                        break;
-                    }
-                    i++;
-                }
-                timeStopAreaSpawner = GetComponent<TimeStopAreaSpawner>();
-                if (i == 0 && timeStopAreaSpawner != null)
-                {
-                    timeStopAreaSpawner.enabled = true;
-                    timeStopAreaSpawner.timeStopPlayer = true;
-                }
-                else
-                {
-                    timeStopAreaSpawner.timeStopPlayer = false;
-                    timeStopAreaSpawner.enabled = false;
-                }
-            }
         }
         else
         {
@@ -79,7 +58,6 @@ public class PlayerController : NetworkBehaviour
             audioListener.enabled = false;
         }
 
-        timeStopAreaSpawner = GetComponentInChildren<TimeStopAreaSpawner>();
         _rigidbody = GetComponent<Rigidbody>();
         if (_rigidbody == null)
         {
@@ -87,6 +65,35 @@ public class PlayerController : NetworkBehaviour
         }
         _rigidbody.useGravity = true;
         //_rigidbody.isKinematic = false;
+        timeStopAreaSpawner = GetComponent<TimeStopAreaSpawner>();
+        manipulateEnergy = GetComponent<ManipulateEnergy>();
+        BasicSpawner basicSpawner = FindObjectOfType<BasicSpawner>();
+        if (basicSpawner != null)
+        {
+            int i = 0;
+            foreach (var kvp in basicSpawner._spawnedCharacters)
+            {
+                if (kvp.Value == Object)
+                {
+                    break;
+                }
+                i++;
+            }
+            if (i == 0 && timeStopAreaSpawner != null)
+            {
+                timeStopAreaSpawner.enabled = true;
+                timeControlPlayer = true;
+                manipulateEnergyPlayer = false;
+                manipulateEnergy.enabled = false;
+            }
+            else if (i == 1 && manipulateEnergy != null)
+            {
+                timeControlPlayer = false;
+                timeStopAreaSpawner.enabled = false;
+                manipulateEnergyPlayer = true;
+                manipulateEnergy.enabled = true;
+            }
+        }
     }
 
     public override void FixedUpdateNetwork()
@@ -96,8 +103,8 @@ public class PlayerController : NetworkBehaviour
             var jumpButtonPressed = data.JumpButton.GetPressed(_jumpPreviousButton);
             _jumpPreviousButton = data.JumpButton;
 
-            var TSAButtonPressed = data.TSAButton.GetPressed(_TSAPreviousButton);
-            _TSAPreviousButton = data.TSAButton;
+            var Skill1ButtonPressed = data.Skill1Button.GetPressed(_Skill1PreviousButton);
+            _Skill1PreviousButton = data.Skill1Button;
 
             Vector3 moveInput = Vector3.zero;
             if (data.MoveInput.x > 0)
@@ -124,11 +131,15 @@ public class PlayerController : NetworkBehaviour
             {
                 _characterController.Jump();
             }
-            if (TSAButtonPressed.IsSet(InputButton.TSA))
+            if (Skill1ButtonPressed.IsSet(InputButton.Skill1))
             {
-                if (timeStopAreaSpawner != null)
+                if (timeControlPlayer && timeStopAreaSpawner != null)
                 {
                     timeStopAreaSpawner.SpawnObject();
+                }
+                if (manipulateEnergyPlayer && manipulateEnergy != null)
+                {
+                    manipulateEnergy.UseEnergy();
                 }
             }
             /*if (data.ScrollInput != 0)

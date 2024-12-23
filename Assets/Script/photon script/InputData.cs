@@ -4,7 +4,7 @@ using UnityEngine;
 public enum InputButton
 {
     Jump,
-    TSA
+    Skill1
 }
 
 public struct InputData : INetworkInput
@@ -13,6 +13,6 @@ public struct InputData : INetworkInput
     public Vector2 MoveInput;
     public Angle Pitch;
     public Angle Yaw;
-    public NetworkButtons TSAButton;
+    public NetworkButtons Skill1Button;
     public float ScrollInput;
 }
