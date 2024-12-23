@@ -13,7 +13,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField]
     private float _mouseSensitivity = 10f;
     [SerializeField] private NetworkPrefabRef _playerPrefab;
-    private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    public Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
     //[Networked, Capacity(12)] private NetworkDictionary<PlayerRef, PlayerController> Players => default;
 
     private NetworkRunner _runner;

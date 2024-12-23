@@ -14,6 +14,7 @@ public class TimeStopAreaSpawner : NetworkBehaviour
     //[Networked] private Quaternion previewRotation { get; set; }
     //[Networked] private Vector3 spawnedPosition { get; set; }
     //[Networked] private Quaternion spawnedRotation { get; set; }
+    public bool timeStopPlayer = false;
 
     public override void FixedUpdateNetwork()
     {
@@ -55,6 +56,10 @@ public class TimeStopAreaSpawner : NetworkBehaviour
 
     public void SpawnObject()
     {
+        if (!timeStopPlayer)
+        {
+            return;
+        }
         if (!spawned)
         {
             TSA = Runner.Spawn(objectToSpawn, transform.position, Quaternion.identity, Object.InputAuthority);

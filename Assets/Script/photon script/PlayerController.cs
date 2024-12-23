@@ -1,4 +1,5 @@
 using Fusion;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : NetworkBehaviour
@@ -41,6 +42,30 @@ public class PlayerController : NetworkBehaviour
             Camera.main.gameObject.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            BasicSpawner basicSpawner = FindObjectOfType<BasicSpawner>();
+            if (basicSpawner != null)
+            {
+                int i = 0;
+                foreach (var kvp in basicSpawner._spawnedCharacters)
+                {
+                    if (kvp.Value == Object)
+                    {
+                        break;
+                    }
+                    i++;
+                }
+                timeStopAreaSpawner = GetComponent<TimeStopAreaSpawner>();
+                if (i == 0 && timeStopAreaSpawner != null)
+                {
+                    timeStopAreaSpawner.enabled = true;
+                    timeStopAreaSpawner.timeStopPlayer = true;
+                }
+                else
+                {
+                    timeStopAreaSpawner.timeStopPlayer = false;
+                    timeStopAreaSpawner.enabled = false;
+                }
+            }
         }
         else
         {
