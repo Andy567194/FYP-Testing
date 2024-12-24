@@ -79,14 +79,14 @@ public class PlayerController : NetworkBehaviour
                 }
                 i++;
             }
-            if (i == 0 && timeStopAreaSpawner != null)
+            if (i == 1 && timeStopAreaSpawner != null)
             {
                 timeStopAreaSpawner.enabled = true;
                 timeControlPlayer = true;
                 manipulateEnergyPlayer = false;
                 manipulateEnergy.enabled = false;
             }
-            else if (i == 1 && manipulateEnergy != null)
+            else if (i == 0 && manipulateEnergy != null)
             {
                 timeControlPlayer = false;
                 timeStopAreaSpawner.enabled = false;
@@ -139,7 +139,7 @@ public class PlayerController : NetworkBehaviour
                 }
                 if (manipulateEnergyPlayer && manipulateEnergy != null)
                 {
-                    manipulateEnergy.UseEnergy();
+                    //manipulateEnergy.UseEnergy();
                 }
             }
             /*if (data.ScrollInput != 0)

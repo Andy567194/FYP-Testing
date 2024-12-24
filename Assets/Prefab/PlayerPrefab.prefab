@@ -62,6 +62,7 @@ MonoBehaviour:
   - {fileID: 528073394489392325}
   - {fileID: 8022639640827659478}
   - {fileID: 1558415462679763662}
+  - {fileID: 5476158691148093407}
 --- !u!143 &7479006153031603497
 CharacterController:
   m_ObjectHideFlags: 0
@@ -108,6 +109,8 @@ MonoBehaviour:
   - {fileID: 7437077621175938863}
   _camera: {fileID: 4207702496644517324}
   _speed: 10
+  timeControlPlayer: 0
+  manipulateEnergyPlayer: 0
 --- !u!54 &5109056489862770732
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -147,8 +150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 378411a89480da345945c2f888327a2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: -20
-  jumpImpulse: 8
+  gravity: -100
+  jumpImpulse: 20
   acceleration: 100
   braking: 100
   maxSpeed: 10
@@ -175,11 +178,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3401485072938351536}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 07b41ead708a4a9429ced4eb856e7f1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  highlightMaterial: {fileID: 2100000, guid: 756c7678505af0146a6008e682b3e68f, type: 2}
 --- !u!1 &5829563818528834496
 GameObject:
   m_ObjectHideFlags: 0
