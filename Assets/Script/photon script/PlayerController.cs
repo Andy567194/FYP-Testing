@@ -1,7 +1,7 @@
 using Fusion;
 using Unity.VisualScripting;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class PlayerController : NetworkBehaviour
 {
     public Transform playerModel;
@@ -12,7 +12,12 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     private Camera _camera;
     [SerializeField]
+    private int maxHP = 100;
+    [Networked, OnChangedRender(nameof(OnHpChanged))]
+    public int Hp { get; set; }
+    [SerializeField]
     private float _speed = 5f;
+
     [Networked]
     private Angle _yaw { get; set; }
     [Networked]
@@ -30,6 +35,8 @@ public class PlayerController : NetworkBehaviour
 
     public override void Spawned()
     {
+        if (Object.HasStateAuthority)
+            Hp = maxHP;
         //Debug.Log($"Player {Object.Id} spawned. Has Authority: {Object.HasInputAuthority}");
 
         if (Object.HasInputAuthority)
@@ -94,10 +101,12 @@ public class PlayerController : NetworkBehaviour
                 manipulateEnergy.enabled = true;
             }
         }
+        OnHpChanged(default);
     }
 
     public override void FixedUpdateNetwork()
     {
+
         if (GetInput(out InputData data))
         {
             var jumpButtonPressed = data.JumpButton.GetPressed(_jumpPreviousButton);
@@ -149,12 +158,26 @@ public class PlayerController : NetworkBehaviour
                     timeStopAreaSpawner.SetSpawnDistance(data.ScrollInput);
                 }
             }*/
+
         }
 
         transform.rotation = Quaternion.Euler(0, (float)_yaw, 0);
         _camera.transform.rotation = Quaternion.Euler((float)_pitch, (float)_yaw, 0);
+
+        if (Hp <= 0)
+        {
+            Respawn();
+        }
     }
 
+    private void Respawn()
+    {
+        if (Object.HasStateAuthority)
+        {
+            Hp = maxHP;
+            transform.position = new Vector3(3, 5, 0);
+        }
+    }
     private void HandlePitchYaw(InputData data)
     {
         _yaw += data.Yaw;
@@ -168,6 +191,20 @@ public class PlayerController : NetworkBehaviour
         {
             _pitch = 89;
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (Object.HasStateAuthority)
+        {
+            Hp -= damage;
+            Debug.Log($"Player took {damage} damage. Current HP: {Hp}");
+        }
+    }
+
+    private static void OnHpChanged(Changed<PlayerController> changed)
+    {
+        changed.Behaviour.hpBar.fillAmount = (float)changed.Behaviour.Hp / changed.Behaviour.maxHP;
     }
 
     public static void SetRenderLayerInChildren(Transform transform, int layerNumber)
