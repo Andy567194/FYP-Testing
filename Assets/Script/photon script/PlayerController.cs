@@ -1,7 +1,7 @@
 using Fusion;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class PlayerController : NetworkBehaviour
 {
     public Transform playerModel;
@@ -13,10 +13,11 @@ public class PlayerController : NetworkBehaviour
     private Camera _camera;
     [SerializeField]
     private int maxHP = 100;
-    [Networked, OnChangedRender(nameof(OnHpChanged))]
-    public int Hp { get; set; }
     [SerializeField]
     private float _speed = 5f;
+
+    [Networked]
+    public int Hp { get; set; }
 
     [Networked]
     private Angle _yaw { get; set; }
@@ -32,12 +33,14 @@ public class PlayerController : NetworkBehaviour
     public bool timeControlPlayer = false;
     ManipulateEnergy manipulateEnergy;
     public bool manipulateEnergyPlayer = false;
+    public HealthBar healthBar;
+
+    private ChangeDetector _changeDetector;
 
     public override void Spawned()
     {
         if (Object.HasStateAuthority)
             Hp = maxHP;
-        //Debug.Log($"Player {Object.Id} spawned. Has Authority: {Object.HasInputAuthority}");
 
         if (Object.HasInputAuthority)
         {
@@ -71,7 +74,7 @@ public class PlayerController : NetworkBehaviour
             _rigidbody = gameObject.AddComponent<Rigidbody>();
         }
         _rigidbody.useGravity = true;
-        //_rigidbody.isKinematic = false;
+
         timeStopAreaSpawner = GetComponent<TimeStopAreaSpawner>();
         manipulateEnergy = GetComponent<ManipulateEnergy>();
         BasicSpawner basicSpawner = FindObjectOfType<BasicSpawner>();
@@ -101,12 +104,16 @@ public class PlayerController : NetworkBehaviour
                 manipulateEnergy.enabled = true;
             }
         }
-        OnHpChanged(default);
+
+        // Initialize the ChangeDetector
+        _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
+
+        // Initialize the health bar
+        UpdateHealthBar();
     }
 
     public override void FixedUpdateNetwork()
     {
-
         if (GetInput(out InputData data))
         {
             var jumpButtonPressed = data.JumpButton.GetPressed(_jumpPreviousButton);
@@ -151,33 +158,21 @@ public class PlayerController : NetworkBehaviour
                     //manipulateEnergy.UseEnergy();
                 }
             }
-            /*if (data.ScrollInput != 0)
-            {
-                if (timeStopAreaSpawner != null)
-                {
-                    timeStopAreaSpawner.SetSpawnDistance(data.ScrollInput);
-                }
-            }*/
-
         }
 
         transform.rotation = Quaternion.Euler(0, (float)_yaw, 0);
         _camera.transform.rotation = Quaternion.Euler((float)_pitch, (float)_yaw, 0);
 
-        if (Hp <= 0)
+        // Detect changes in Hp and update the health bar
+        foreach (var change in _changeDetector.DetectChanges(this))
         {
-            Respawn();
+            if (change == nameof(Hp))
+            {
+                UpdateHealthBar();
+            }
         }
     }
 
-    private void Respawn()
-    {
-        if (Object.HasStateAuthority)
-        {
-            Hp = maxHP;
-            transform.position = new Vector3(3, 5, 0);
-        }
-    }
     private void HandlePitchYaw(InputData data)
     {
         _yaw += data.Yaw;
@@ -199,12 +194,30 @@ public class PlayerController : NetworkBehaviour
         {
             Hp -= damage;
             Debug.Log($"Player took {damage} damage. Current HP: {Hp}");
+            if (Hp <= 0)
+            {
+                Respawn();
+            }
         }
     }
 
-    private static void OnHpChanged(Changed<PlayerController> changed)
+    private void Respawn()
     {
-        changed.Behaviour.hpBar.fillAmount = (float)changed.Behaviour.Hp / changed.Behaviour.maxHP;
+        // Implement respawn logic here
+        Hp = maxHP;
+        UpdateHealthBar();
+        // Move player to respawn position
+        transform.position = new Vector3(3, 5, 0);
+        // Example respawn position
+        Debug.Log("Player respawned");
+    }
+
+    private void UpdateHealthBar()
+    {
+        if (healthBar != null)
+        {
+            healthBar.SetHealth((float)Hp / maxHP);
+        }
     }
 
     public static void SetRenderLayerInChildren(Transform transform, int layerNumber)

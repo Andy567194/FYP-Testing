@@ -1,7 +1,8 @@
+using Fusion;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBar : MonoBehaviour
+public class HealthBar : NetworkBehaviour
 {
     public Image healthFill;
 

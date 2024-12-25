@@ -16,7 +16,7 @@ public class Trap : NetworkBehaviour
         if (player != null)
         {
             Debug.Log("PlayerController component found");
-            player.TakeDamage(50);
+            player.TakeDamage(25);
             Runner.Despawn(Object);
         }
         else
