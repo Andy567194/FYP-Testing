@@ -20,6 +20,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
+        Debug.Log("Connected to server");
 
     }
 
@@ -63,6 +64,8 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         inputData.JumpButton.Set(InputButton.Jump, Input.GetKey(KeyCode.Space));
         inputData.Skill1Button.Set(InputButton.Skill1, Input.GetKey(KeyCode.Mouse1));
         inputData.ScrollInput = Input.GetAxis("Mouse ScrollWheel");
+        inputData.PickUpButton.Set(InputButton.PickUp, Input.GetKey(KeyCode.E));
+
 
         input.Set(inputData);
     }
@@ -96,6 +99,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
         // Log whether the player has InputAuthority
         Debug.Log($"Player {player} joined. Has InputAuthority: {networkPlayerObject.HasInputAuthority}");
+
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)

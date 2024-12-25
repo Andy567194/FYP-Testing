@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8022639640827659478}
   - component: {fileID: 1558415462679763662}
   - component: {fileID: 5476158691148093407}
+  - component: {fileID: 4974981536161001450}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -36,6 +37,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2688698457127683525}
   - {fileID: 2242488073593146233}
   - {fileID: 1135491372470926529}
   - {fileID: 5158436019031448644}
@@ -63,6 +65,7 @@ MonoBehaviour:
   - {fileID: 8022639640827659478}
   - {fileID: 1558415462679763662}
   - {fileID: 5476158691148093407}
+  - {fileID: 4974981536161001450}
 --- !u!143 &7479006153031603497
 CharacterController:
   m_ObjectHideFlags: 0
@@ -184,6 +187,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightMaterial: {fileID: 2100000, guid: 756c7678505af0146a6008e682b3e68f, type: 2}
+--- !u!114 &4974981536161001450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3401485072938351536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8726abfe00135ed489f090a165b8ef20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handTransform: {fileID: 2688698457127683525}
 --- !u!1 &5829563818528834496
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,3 +585,34 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &8147356368418505616
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2688698457127683525}
+  m_Layer: 0
+  m_Name: hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2688698457127683525
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8147356368418505616}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.4959273, y: 0.020456577, z: 0.011687161, w: 0.8680444}
+  m_LocalPosition: {x: 0.845, y: -0.523, z: 1.27}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6587995363804895472}
+  m_LocalEulerAnglesHint: {x: -59.48, y: 2.7, z: 0}
