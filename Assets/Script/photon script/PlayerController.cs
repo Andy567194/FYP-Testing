@@ -16,7 +16,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     private float _speed = 5f;
 
-    [Networked]
+    [Networked, OnChangedRender(nameof(UpdateHealthBar))]
     public int Hp { get; set; }
 
     [Networked]
@@ -216,7 +216,7 @@ public class PlayerController : NetworkBehaviour
     {
         if (healthBar != null)
         {
-            healthBar.SetHealth((float)Hp / maxHP);
+            healthBar.SetHealth(Hp, maxHP);
         }
     }
 

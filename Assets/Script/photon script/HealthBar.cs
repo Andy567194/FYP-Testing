@@ -1,13 +1,14 @@
 using Fusion;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
-public class HealthBar : NetworkBehaviour
+public class HealthBar : MonoBehaviour
 {
-    public Image healthFill;
+    public Image healthFill = null;
 
-    public void SetHealth(float healthPercentage)
+    public void SetHealth(int Hp, int maxHP)
     {
-        healthFill.fillAmount = healthPercentage;
+        healthFill.fillAmount = (float)Hp / maxHP;
     }
 }
