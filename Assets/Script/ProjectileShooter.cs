@@ -6,8 +6,9 @@ using static UnityEditor.Progress;
 public class ProjectileShooter : MonoBehaviour
 {
     public GameObject projectile;
+    public GameObject ShootPosition;
     bool active = true;
-    float cooldown = 1f;
+    public float cooldown = 1f;
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +28,7 @@ public class ProjectileShooter : MonoBehaviour
 
     public void Shoot()
     {
-        Instantiate(projectile, transform.position, Quaternion.identity);
+        Instantiate(projectile, ShootPosition.transform.position, ShootPosition.transform.rotation);
        
     }
 }

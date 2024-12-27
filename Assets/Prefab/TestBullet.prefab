@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 4551573483198870102}
   - component: {fileID: 6060630077285712735}
   - component: {fileID: 4256002299335388156}
-  - component: {fileID: 6460522699611934539}
   m_Layer: 0
   m_Name: TestBullet
   m_TagString: TimeStoppable
@@ -118,9 +117,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3416369305203529225}
   serializedVersion: 4
-  m_Mass: 0.2
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Mass: 1
+  m_Drag: 0.76
+  m_AngularDrag: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -149,21 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c0eec047a25e5544917a6d06425d3ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linear: 1
   forceMagnitude: 10
   destroytime: 7
-  forceDirection: {x: 0, y: 0, z: 0}
---- !u!114 &6460522699611934539
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3416369305203529225}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24be06c3eaca2b34592743f8680ec91f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeStopped: 0
-  lineRenderer: {fileID: 0}
-  takePowerButton: {fileID: 0}
+  forceDirection: {x: 0, y: 1, z: 1}
