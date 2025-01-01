@@ -10,7 +10,7 @@ public class TimeControl : NetworkBehaviour
     public GameObject takePowerButton;
     bool recovered = false;
     [Networked] private Vector3 tempVelocity { get; set; }
-    [Networked] private Vector3 storedForce { get; set; }
+    [Networked] public Vector3 storedForce { get; set; }
     Rigidbody rb;
 
     private void Start()

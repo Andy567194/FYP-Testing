@@ -5,54 +5,17 @@ using Fusion;
 
 public class ManipulateEnergy : NetworkBehaviour
 {
-    private Camera _camera;
-    public Material highlightMaterial;
-    private Material originalMaterial;
-    private GameObject lastHitObject;
 
-    private void Start()
+    GameObject selectedObject;
+    public void AbosrbEnergy()
     {
-        _camera = GetComponentInChildren<Camera>();
-    }
-
-    private void Update()
-    {
-        // Ensure this code runs only for the player with input authority
-        if (!Object.HasInputAuthority)
+        selectedObject = GetComponent<SelectObject>().selectedObject;
+        if (selectedObject != null)
         {
-            return;
+            Vector3 storedForce = selectedObject.GetComponent<TimeControl>().storedForce;
+            selectedObject.GetComponent<TimeControl>().storedForce = Vector3.zero;
+            EnergyBank energyBank = FindObjectOfType<EnergyBank>().GetComponent<EnergyBank>();
+            energyBank.AddEnergy(Mathf.Abs(storedForce.x) + Mathf.Abs(storedForce.y) + Mathf.Abs(storedForce.z));
         }
-
-        RaycastHit raycastHit;
-        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out raycastHit, 5) && raycastHit.collider.gameObject.CompareTag("TimeStoppable"))
-        {
-            GameObject hitObject = raycastHit.collider.gameObject;
-            Renderer hitRenderer = hitObject.GetComponent<MeshRenderer>();
-
-            if (hitRenderer != null)
-            {
-                if (lastHitObject != hitObject)
-                {
-                    if (lastHitObject != null)
-                    {
-                        lastHitObject.GetComponent<MeshRenderer>().material = originalMaterial;
-                    }
-
-                    originalMaterial = hitRenderer.material;
-                    hitRenderer.material = highlightMaterial;
-                    lastHitObject = hitObject;
-                }
-            }
-        }
-        else if (lastHitObject != null)
-        {
-            lastHitObject.GetComponent<MeshRenderer>().material = originalMaterial;
-            lastHitObject = null;
-        }
-    }
-
-    public void UseEnergy()
-    {
-        Debug.Log("Energy used");
     }
 }
