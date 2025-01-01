@@ -64,7 +64,8 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         inputData.JumpButton.Set(InputButton.Jump, Input.GetKey(KeyCode.Space));
         inputData.Skill1Button.Set(InputButton.Skill1, Input.GetKey(KeyCode.Mouse1));
         inputData.ScrollInput = Input.GetAxis("Mouse ScrollWheel");
-        inputData.PickUpButton.Set(InputButton.PickUp, Input.GetKey(KeyCode.E));
+        inputData.PickUpButton.Set(InputButton.PickUp, Input.GetKey(KeyCode.Mouse0));
+        inputData.Skill2Button.Set(InputButton.Skill2, Input.GetKey(KeyCode.E));
 
 
         input.Set(inputData);

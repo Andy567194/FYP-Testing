@@ -7,6 +7,7 @@ public class ManipulateEnergy : NetworkBehaviour
 {
 
     GameObject selectedObject;
+    public float useEnergyAmount = 0;
     public void AbosrbEnergy()
     {
         selectedObject = GetComponent<SelectObject>().selectedObject;
@@ -14,8 +15,31 @@ public class ManipulateEnergy : NetworkBehaviour
         {
             Vector3 storedForce = selectedObject.GetComponent<TimeControl>().storedForce;
             selectedObject.GetComponent<TimeControl>().storedForce = Vector3.zero;
-            EnergyBank energyBank = FindObjectOfType<EnergyBank>().GetComponent<EnergyBank>();
+            EnergyBank energyBank = FindObjectOfType<EnergyBank>();
             energyBank.AddEnergy(Mathf.Abs(storedForce.x) + Mathf.Abs(storedForce.y) + Mathf.Abs(storedForce.z));
         }
+    }
+
+    public void KnockbackPlayer()
+    {
+        if (FindObjectOfType<EnergyBank>().storedEnergy >= useEnergyAmount)
+        {
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject player in players)
+            {
+                if (player != gameObject)
+                {
+                    Rigidbody rb = player.GetComponent<Rigidbody>();
+                    rb.AddForce(Vector3.up * useEnergyAmount, ForceMode.Impulse);
+                    FindObjectOfType<EnergyBank>().UseEnergy(useEnergyAmount);
+                }
+            }
+        }
+    }
+
+    public void SetEnergyUsage(float scrollInput)
+    {
+        useEnergyAmount += scrollInput * 50;
+        useEnergyAmount = Mathf.Max(useEnergyAmount, 0);
     }
 }

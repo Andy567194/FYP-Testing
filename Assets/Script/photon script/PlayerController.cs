@@ -6,8 +6,6 @@ public class PlayerController : NetworkBehaviour
 {
     public Transform playerModel;
     [SerializeField]
-    private NetworkCharacterController _characterController;
-    [SerializeField]
     private MeshRenderer[] _visuals;
     [SerializeField]
     private Camera _camera;
@@ -27,15 +25,25 @@ public class PlayerController : NetworkBehaviour
     private NetworkButtons _jumpPreviousButton { get; set; }
     [Networked]
     private NetworkButtons _Skill1PreviousButton { get; set; }
+    [Networked]
+    private NetworkButtons _Skill2PreviousButton { get; set; }
 
     private TimeStopAreaSpawner timeStopAreaSpawner;
-    private Rigidbody _rigidbody;
+    private Rigidbody rb;
     public bool timeControlPlayer = false;
     ManipulateEnergy manipulateEnergy;
     public bool manipulateEnergyPlayer = false;
     public HealthBar healthBar;
 
     private ChangeDetector _changeDetector;
+    [SerializeField]
+    GameObject energyUseageText;
+
+    [SerializeField]
+    Transform groundCheck;
+    bool isGrounded;
+    [SerializeField]
+    float jumpHeight = 5f;
 
     public override void Spawned()
     {
@@ -68,12 +76,7 @@ public class PlayerController : NetworkBehaviour
             audioListener.enabled = false;
         }
 
-        _rigidbody = GetComponent<Rigidbody>();
-        if (_rigidbody == null)
-        {
-            _rigidbody = gameObject.AddComponent<Rigidbody>();
-        }
-        _rigidbody.useGravity = true;
+        rb = GetComponent<Rigidbody>();
 
         timeStopAreaSpawner = GetComponent<TimeStopAreaSpawner>();
         manipulateEnergy = GetComponent<ManipulateEnergy>();
@@ -95,6 +98,7 @@ public class PlayerController : NetworkBehaviour
                 timeControlPlayer = true;
                 manipulateEnergyPlayer = false;
                 manipulateEnergy.enabled = false;
+                energyUseageText.SetActive(false);
             }
             else if (i == 0 && manipulateEnergy != null && timeStopAreaSpawner != null)
             {
@@ -102,6 +106,8 @@ public class PlayerController : NetworkBehaviour
                 timeStopAreaSpawner.enabled = false;
                 manipulateEnergyPlayer = true;
                 manipulateEnergy.enabled = true;
+                energyUseageText.SetActive(true);
+                energyUseageText.GetComponent<Text>().text = "Use Energy Amount: 0";
             }
             else
             {
@@ -109,6 +115,7 @@ public class PlayerController : NetworkBehaviour
                 timeStopAreaSpawner.enabled = false;
                 manipulateEnergyPlayer = false;
                 manipulateEnergy.enabled = false;
+                energyUseageText.SetActive(false);
             }
         }
 
@@ -117,6 +124,8 @@ public class PlayerController : NetworkBehaviour
 
         // Initialize the health bar
         UpdateHealthBar();
+
+        FindObjectOfType<EnergyBank>().Rpc_UpdateStoredEnergy();
     }
 
     public override void FixedUpdateNetwork()
@@ -128,6 +137,9 @@ public class PlayerController : NetworkBehaviour
 
             var Skill1ButtonPressed = data.Skill1Button.GetPressed(_Skill1PreviousButton);
             _Skill1PreviousButton = data.Skill1Button;
+
+            var Skill2ButtonPressed = data.Skill2Button.GetPressed(_Skill2PreviousButton);
+            _Skill2PreviousButton = data.Skill2Button;
 
             Vector3 moveInput = Vector3.zero;
             if (data.MoveInput.x > 0)
@@ -146,13 +158,23 @@ public class PlayerController : NetworkBehaviour
             {
                 moveInput += Vector3.back;
             }
-            _characterController.Move(transform.rotation * moveInput * _speed * Runner.DeltaTime);
+            Vector3 tempRbVelocity = rb.velocity;
+            if (moveInput != Vector3.zero && rb != null)
+            {
+                rb.velocity = transform.rotation * moveInput * _speed;
+                rb.velocity = new Vector3(rb.velocity.x, tempRbVelocity.y, rb.velocity.z);
+            }
+            else
+            {
+                rb.velocity = new Vector3(0, tempRbVelocity.y, 0);
+            }
 
             HandlePitchYaw(data);
 
-            if (jumpButtonPressed.IsSet(InputButton.Jump))
+            isGrounded = Physics.CheckSphere(groundCheck.position, 0.2f, LayerMask.GetMask("Default"));
+            if (data.JumpButton.IsSet(InputButton.Jump) && isGrounded)
             {
-                _characterController.Jump();
+                rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
             }
             if (Skill1ButtonPressed.IsSet(InputButton.Skill1))
             {
@@ -163,6 +185,25 @@ public class PlayerController : NetworkBehaviour
                 if (manipulateEnergyPlayer && manipulateEnergy != null)
                 {
                     manipulateEnergy.AbosrbEnergy();
+                }
+            }
+            if (Skill2ButtonPressed.IsSet(InputButton.Skill2))
+            {
+                /*if (timeControlPlayer && timeStopAreaSpawner != null)
+                {
+                    timeStopAreaSpawner.SpawnObject();
+                }*/
+                if (manipulateEnergyPlayer && manipulateEnergy != null)
+                {
+                    manipulateEnergy.KnockbackPlayer();
+                }
+            }
+            if (data.ScrollInput != 0)
+            {
+                if (manipulateEnergyPlayer && manipulateEnergy != null)
+                {
+                    manipulateEnergy.SetEnergyUsage(data.ScrollInput);
+                    energyUseageText.GetComponent<Text>().text = "Use Energy Amount: " + manipulateEnergy.useEnergyAmount;
                 }
             }
         }

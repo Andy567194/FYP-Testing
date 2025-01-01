@@ -6,7 +6,8 @@ public enum InputButton
     Jump,
     Skill1,
 
-    PickUp
+    PickUp,
+    Skill2,
 }
 
 public struct InputData : INetworkInput
@@ -18,4 +19,5 @@ public struct InputData : INetworkInput
     public Angle Yaw;
     public NetworkButtons Skill1Button;
     public float ScrollInput;
+    public NetworkButtons Skill2Button;
 }

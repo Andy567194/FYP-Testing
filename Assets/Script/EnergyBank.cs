@@ -14,13 +14,19 @@ public class EnergyBank : NetworkBehaviour
         Rpc_UpdateStoredEnergy();
     }
 
+    public void UseEnergy(float energy)
+    {
+        storedEnergy -= energy;
+        Rpc_UpdateStoredEnergy();
+    }
+
     [Rpc(RpcSources.All, RpcTargets.All)]
-    void Rpc_UpdateStoredEnergy()
+    public void Rpc_UpdateStoredEnergy()
     {
         GameObject[] storedEnergyTexts = GameObject.FindGameObjectsWithTag("StoredEnergyText");
         foreach (GameObject storedEnergyText in storedEnergyTexts)
         {
-            storedEnergyText.GetComponent<Text>().text = "Stored Energy: " + storedEnergy;
+            storedEnergyText.GetComponent<Text>().text = "Stored Energy: " + Mathf.Round(storedEnergy);
         }
     }
 }
