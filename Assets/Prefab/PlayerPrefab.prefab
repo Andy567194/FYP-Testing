@@ -265,7 +265,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0552886cef49bb04bb10bc14cd9c61d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerModel: {fileID: 6587995363804895472}
   _visuals:
   - {fileID: 1977476881388839595}
   - {fileID: 2148459398865812351}
@@ -762,7 +761,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 119
+    m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

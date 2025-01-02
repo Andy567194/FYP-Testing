@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class PlayerController : NetworkBehaviour
 {
-    public Transform playerModel;
     [SerializeField]
     private MeshRenderer[] _visuals;
     [SerializeField]
@@ -43,7 +42,8 @@ public class PlayerController : NetworkBehaviour
 
     [SerializeField]
     Transform groundCheck;
-    bool isGrounded;
+    [Networked]
+    bool isGrounded { get; set; }
     [SerializeField]
     float jumpHeight = 5f;
 
@@ -59,12 +59,16 @@ public class PlayerController : NetworkBehaviour
 
             foreach (var visual in _visuals)
             {
-                visual.enabled = true;
+                visual.enabled = false;
             }
-            SetRenderLayerInChildren(playerModel, LayerMask.NameToLayer("LocalPlayerModel"));
             Camera.main.gameObject.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
+            foreach (Transform trans in transform.GetComponentsInChildren<Transform>(true))
+            {
+                trans.gameObject.layer = LayerMask.NameToLayer("LocalPlayerModel");
+            }
         }
         else
         {
@@ -180,7 +184,15 @@ public class PlayerController : NetworkBehaviour
             HandlePitchYaw(data);
 
             isGrounded = Physics.CheckSphere(groundCheck.position, 0.2f, LayerMask.GetMask("Default"));
-            if (data.JumpButton.IsSet(InputButton.Jump) && isGrounded)
+            if (timeControlPlayer)
+            {
+                Debug.Log("Player2: " + isGrounded);
+            }
+            else
+            {
+                Debug.Log("Player1: " + isGrounded);
+            }
+            if (jumpButtonPressed.IsSet(InputButton.Jump) && isGrounded)
             {
                 rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
             }
@@ -252,12 +264,13 @@ public class PlayerController : NetworkBehaviour
             Debug.Log($"Player took {damage} damage. Current HP: {Hp}");
             if (Hp <= 0)
             {
-                Respawn();
+                Rpc_Respawn();
             }
         }
     }
 
-    private void Respawn()
+    [Rpc]
+    private void Rpc_Respawn()
     {
         // Implement respawn logic here
         Hp = maxHP;
@@ -276,7 +289,7 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    public static void SetRenderLayerInChildren(Transform transform, int layerNumber)
+    public static void SetLayerInChildren(Transform transform, int layerNumber)
     {
         foreach (Transform trans in transform.GetComponentsInChildren<Transform>(true))
         {
