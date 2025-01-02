@@ -30,9 +30,11 @@ public class PlayerController : NetworkBehaviour
 
     private TimeStopAreaSpawner timeStopAreaSpawner;
     private Rigidbody rb;
-    public bool timeControlPlayer = false;
+    [Networked]
+    public bool timeControlPlayer { get; set; } = false;
     ManipulateEnergy manipulateEnergy;
-    public bool manipulateEnergyPlayer = false;
+    [Networked]
+    public bool manipulateEnergyPlayer { get; set; } = false;
     public HealthBar healthBar;
 
     private ChangeDetector _changeDetector;
@@ -96,14 +98,17 @@ public class PlayerController : NetworkBehaviour
             {
                 timeStopAreaSpawner.enabled = true;
                 timeControlPlayer = true;
-                manipulateEnergyPlayer = false;
-                manipulateEnergy.enabled = false;
-                energyUseageText.SetActive(false);
+                //manipulateEnergyPlayer = false;
+                //manipulateEnergy.enabled = false;
+                Destroy(manipulateEnergy);
+                //energyUseageText.SetActive(false);
+                Rpc_DisableEnergyUsageText();
             }
             else if (i == 0 && manipulateEnergy != null && timeStopAreaSpawner != null)
             {
-                timeControlPlayer = false;
-                timeStopAreaSpawner.enabled = false;
+                //timeControlPlayer = false;
+                //timeStopAreaSpawner.enabled = false;
+                Destroy(timeStopAreaSpawner);
                 manipulateEnergyPlayer = true;
                 manipulateEnergy.enabled = true;
                 energyUseageText.SetActive(true);
@@ -111,11 +116,14 @@ public class PlayerController : NetworkBehaviour
             }
             else
             {
-                timeControlPlayer = false;
-                timeStopAreaSpawner.enabled = false;
-                manipulateEnergyPlayer = false;
-                manipulateEnergy.enabled = false;
-                energyUseageText.SetActive(false);
+                //timeControlPlayer = false;
+                //timeStopAreaSpawner.enabled = false;
+                //manipulateEnergyPlayer = false;
+                //manipulateEnergy.enabled = false;
+                Destroy(timeStopAreaSpawner);
+                Destroy(manipulateEnergy);
+                //energyUseageText.SetActive(false);
+                Rpc_DisableEnergyUsageText();
             }
         }
 
@@ -271,6 +279,17 @@ public class PlayerController : NetworkBehaviour
     public static void SetRenderLayerInChildren(Transform transform, int layerNumber)
     {
         foreach (Transform trans in transform.GetComponentsInChildren<Transform>(true))
-            trans.gameObject.layer = layerNumber;
+        {
+            if (trans.GetComponent<Canvas>() == null)
+            {
+                trans.gameObject.layer = layerNumber;
+            }
+        }
+    }
+
+    [Rpc]
+    public void Rpc_DisableEnergyUsageText()
+    {
+        energyUseageText.SetActive(false);
     }
 }
