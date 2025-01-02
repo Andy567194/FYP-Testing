@@ -42,8 +42,7 @@ public class PlayerController : NetworkBehaviour
 
     [SerializeField]
     Transform groundCheck;
-    [Networked]
-    bool isGrounded { get; set; }
+    bool isGrounded;
     [SerializeField]
     float jumpHeight = 5f;
 
@@ -65,10 +64,7 @@ public class PlayerController : NetworkBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
-            foreach (Transform trans in transform.GetComponentsInChildren<Transform>(true))
-            {
-                trans.gameObject.layer = LayerMask.NameToLayer("LocalPlayerModel");
-            }
+            Rpc_SetLayerInChildren();
         }
         else
         {
@@ -184,15 +180,7 @@ public class PlayerController : NetworkBehaviour
             HandlePitchYaw(data);
 
             isGrounded = Physics.CheckSphere(groundCheck.position, 0.2f, LayerMask.GetMask("Default"));
-            if (timeControlPlayer)
-            {
-                Debug.Log("Player2: " + isGrounded);
-            }
-            else
-            {
-                Debug.Log("Player1: " + isGrounded);
-            }
-            if (jumpButtonPressed.IsSet(InputButton.Jump) && isGrounded)
+            if (isGrounded && jumpButtonPressed.IsSet(InputButton.Jump))
             {
                 rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
             }
@@ -288,15 +276,12 @@ public class PlayerController : NetworkBehaviour
             healthBar.SetHealth(Hp, maxHP);
         }
     }
-
-    public static void SetLayerInChildren(Transform transform, int layerNumber)
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    public void Rpc_SetLayerInChildren()
     {
         foreach (Transform trans in transform.GetComponentsInChildren<Transform>(true))
         {
-            if (trans.GetComponent<Canvas>() == null)
-            {
-                trans.gameObject.layer = layerNumber;
-            }
+            trans.gameObject.layer = LayerMask.NameToLayer("LocalPlayerModel");
         }
     }
 

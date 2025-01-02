@@ -278,7 +278,8 @@ MonoBehaviour:
   healthBar: {fileID: 3144322811727610082}
   energyUseageText: {fileID: 2855827866892970003}
   groundCheck: {fileID: 8486780815727696405}
-  jumpHeight: 3
+  _isGrounded: 0
+  jumpHeight: 5
 --- !u!54 &5109056489862770732
 Rigidbody:
   m_ObjectHideFlags: 0
