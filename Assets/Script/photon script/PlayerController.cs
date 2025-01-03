@@ -1,4 +1,5 @@
 using Fusion;
+using Fusion.Addons.Physics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -48,8 +49,7 @@ public class PlayerController : NetworkBehaviour
 
     public override void Spawned()
     {
-        if (Object.HasStateAuthority)
-            Hp = maxHP;
+        Hp = maxHP;
 
         if (Object.HasInputAuthority)
         {
@@ -246,25 +246,24 @@ public class PlayerController : NetworkBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (Object.HasStateAuthority)
+        Hp -= damage;
+        Debug.Log($"Player took {damage} damage. Current HP: {Hp}");
+        if (Hp <= 0)
         {
-            Hp -= damage;
-            Debug.Log($"Player took {damage} damage. Current HP: {Hp}");
-            if (Hp <= 0)
-            {
-                Rpc_Respawn();
-            }
+            Rpc_Respawn();
         }
     }
 
-    [Rpc]
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
     private void Rpc_Respawn()
     {
         // Implement respawn logic here
         Hp = maxHP;
         UpdateHealthBar();
         // Move player to respawn position
-        transform.position = new Vector3(3, 5, 0);
+        NetworkRigidbody3D networkRigidbody3d = GetComponent<NetworkRigidbody3D>();
+        networkRigidbody3d.Teleport(new Vector3(3, 5, 0), Quaternion.identity);
+        //transform.position = new Vector3(3, 5, 0);
         // Example respawn position
         Debug.Log("Player respawned");
     }
