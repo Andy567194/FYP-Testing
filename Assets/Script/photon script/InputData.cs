@@ -8,6 +8,7 @@ public enum InputButton
 
     PickUp,
     Skill2,
+    Skill3,
 }
 
 public struct InputData : INetworkInput
@@ -20,4 +21,5 @@ public struct InputData : INetworkInput
     public NetworkButtons Skill1Button;
     public float ScrollInput;
     public NetworkButtons Skill2Button;
+    public NetworkButtons Skill3Button;
 }

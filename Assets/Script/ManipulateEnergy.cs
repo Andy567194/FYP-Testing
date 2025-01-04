@@ -42,4 +42,24 @@ public class ManipulateEnergy : NetworkBehaviour
         useEnergyAmount += scrollInput * 50;
         useEnergyAmount = Mathf.Max(useEnergyAmount, 0);
     }
+
+    public void UseEnergy()
+    {
+        if (FindObjectOfType<EnergyBank>().storedEnergy >= useEnergyAmount)
+        {
+            selectedObject = GetComponent<SelectObject>().selectedObject;
+            if (selectedObject != null)
+            {
+                if (selectedObject.GetComponent<TimeControl>().timeStopped)
+                {
+                    selectedObject.GetComponent<TimeControl>().storedForce += Vector3.up * useEnergyAmount;
+                }
+                else
+                {
+                    selectedObject.GetComponent<Rigidbody>().AddForce(Vector3.up * useEnergyAmount, ForceMode.Impulse);
+                }
+                FindObjectOfType<EnergyBank>().UseEnergy(useEnergyAmount);
+            }
+        }
+    }
 }

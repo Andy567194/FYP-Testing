@@ -27,6 +27,8 @@ public class PlayerController : NetworkBehaviour
     private NetworkButtons _Skill1PreviousButton { get; set; }
     [Networked]
     private NetworkButtons _Skill2PreviousButton { get; set; }
+    [Networked]
+    private NetworkButtons _Skill3PreviousButton { get; set; }
 
     private TimeStopAreaSpawner timeStopAreaSpawner;
     private Rigidbody rb;
@@ -149,6 +151,9 @@ public class PlayerController : NetworkBehaviour
             var Skill2ButtonPressed = data.Skill2Button.GetPressed(_Skill2PreviousButton);
             _Skill2PreviousButton = data.Skill2Button;
 
+            var Skill3ButtonPressed = data.Skill3Button.GetPressed(_Skill3PreviousButton);
+            _Skill3PreviousButton = data.Skill3Button;
+
             Vector3 moveInput = Vector3.zero;
             if (data.MoveInput.x > 0)
             {
@@ -204,6 +209,13 @@ public class PlayerController : NetworkBehaviour
                 if (manipulateEnergyPlayer && manipulateEnergy != null)
                 {
                     manipulateEnergy.KnockbackPlayer();
+                }
+            }
+            if (Skill3ButtonPressed.IsSet(InputButton.Skill3))
+            {
+                if (manipulateEnergyPlayer && manipulateEnergy != null)
+                {
+                    manipulateEnergy.UseEnergy();
                 }
             }
             if (data.ScrollInput != 0)
