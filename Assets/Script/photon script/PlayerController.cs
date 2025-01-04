@@ -48,6 +48,7 @@ public class PlayerController : NetworkBehaviour
     bool isGrounded;
     [SerializeField]
     float jumpHeight = 5f;
+    public bool manipulatingObject = false;
 
     public override void Spawned()
     {
@@ -182,8 +183,14 @@ public class PlayerController : NetworkBehaviour
                 rb.velocity = new Vector3(0, tempRbVelocity.y, 0);
             }
 
-            HandlePitchYaw(data);
-
+            if (!manipulatingObject)
+            {
+                HandlePitchYaw(data);
+            }
+            else
+            {
+                manipulateObject(data);
+            }
             isGrounded = Physics.CheckSphere(groundCheck.position, 0.2f, LayerMask.GetMask("Default"));
             if (isGrounded && jumpButtonPressed.IsSet(InputButton.Jump))
             {
@@ -213,10 +220,18 @@ public class PlayerController : NetworkBehaviour
             }
             if (Skill3ButtonPressed.IsSet(InputButton.Skill3))
             {
-                if (manipulateEnergyPlayer && manipulateEnergy != null)
+                if (manipulateEnergyPlayer && manipulateEnergy != null && !manipulatingObject)
                 {
                     manipulateEnergy.UseEnergy();
                 }
+            }
+            if (data.Skill3Button.IsSet(InputButton.Skill3) && manipulateEnergyPlayer)
+            {
+                manipulatingObject = true;
+            }
+            else
+            {
+                manipulatingObject = false;
             }
             if (data.ScrollInput != 0)
             {
@@ -300,5 +315,18 @@ public class PlayerController : NetworkBehaviour
     public void Rpc_DisableEnergyUsageText()
     {
         energyUseageText.SetActive(false);
+    }
+
+    void manipulateObject(InputData data)
+    {
+        GameObject selectedObject = GetComponent<SelectObject>().selectedObject;
+        if (selectedObject != null)
+        {
+            selectedObject.transform.rotation *= Quaternion.Euler((float)data.Yaw, (float)data.Pitch, 0);
+            if (selectedObject.GetComponent<TimeControl>().timeStopped)
+            {
+                selectedObject.GetComponent<TimeControl>().storedForce = Quaternion.Euler((float)data.Yaw, (float)data.Pitch, 0) * selectedObject.GetComponent<TimeControl>().storedForce;
+            }
+        }
     }
 }
