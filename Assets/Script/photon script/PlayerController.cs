@@ -322,10 +322,12 @@ public class PlayerController : NetworkBehaviour
         GameObject selectedObject = GetComponent<SelectObject>().selectedObject;
         if (selectedObject != null)
         {
-            selectedObject.transform.rotation *= Quaternion.Euler((float)data.Yaw, (float)data.Pitch, 0);
+            selectedObject.transform.Rotate(Vector3.down, (float)data.Yaw);
+            selectedObject.transform.Rotate(Vector3.right, (float)data.Pitch);
+
             if (selectedObject.GetComponent<TimeControl>().timeStopped)
             {
-                selectedObject.GetComponent<TimeControl>().storedForce = Quaternion.Euler((float)data.Yaw, (float)data.Pitch, 0) * selectedObject.GetComponent<TimeControl>().storedForce;
+                selectedObject.GetComponent<TimeControl>().storedForce = selectedObject.transform.forward * selectedObject.GetComponent<TimeControl>().storedForce.magnitude;
             }
         }
     }
