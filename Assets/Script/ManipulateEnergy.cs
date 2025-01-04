@@ -5,12 +5,10 @@ using Fusion;
 
 public class ManipulateEnergy : NetworkBehaviour
 {
-
-    GameObject selectedObject;
     public float useEnergyAmount = 0;
     public void AbosrbEnergy()
     {
-        selectedObject = GetComponent<SelectObject>().selectedObject;
+        GameObject selectedObject = GetComponent<SelectObject>().selectedObject;
         if (selectedObject != null)
         {
             Vector3 storedForce = selectedObject.GetComponent<TimeControl>().storedForce;
@@ -50,7 +48,7 @@ public class ManipulateEnergy : NetworkBehaviour
     {
         if (FindObjectOfType<EnergyBank>().storedEnergy >= useEnergyAmount)
         {
-            selectedObject = GetComponent<SelectObject>().selectedObject;
+            GameObject selectedObject = GetComponent<SelectObject>().selectedObject;
             if (selectedObject != null)
             {
                 if (selectedObject.GetComponent<TimeControl>().timeStopped)

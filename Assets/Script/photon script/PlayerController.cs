@@ -208,10 +208,10 @@ public class PlayerController : NetworkBehaviour
             }
             if (Skill2ButtonPressed.IsSet(InputButton.Skill2))
             {
-                /*if (timeControlPlayer && timeStopAreaSpawner != null)
+                if (timeControlPlayer && timeStopAreaSpawner != null)
                 {
-                    timeStopAreaSpawner.SpawnObject();
-                }*/
+                    timeStopAreaSpawner.RewindObject();
+                }
                 if (manipulateEnergyPlayer && manipulateEnergy != null)
                 {
                     manipulateEnergy.KnockbackPlayer();

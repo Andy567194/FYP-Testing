@@ -1,68 +1,74 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
-public class TimeRewind : MonoBehaviour {
+public class TimeRewind : NetworkBehaviour
+{
     private Rigidbody rb;
     private List<TransformData> transformData; // Store position and rotation
-    private float recordTime = 500f; // Time to record positions
-    private float recordInterval = 0.1f; // How often to record positions
     private bool isRewinding = false;
-    private float cooldown = 0;
+    TimeControl timeControl;
+
 
     // Struct to hold position and rotation
-    private struct TransformData {
+    private struct TransformData
+    {
         public Vector3 position;
         public Quaternion rotation;
 
-        public TransformData(Vector3 pos, Quaternion rot) {
+        public TransformData(Vector3 pos, Quaternion rot)
+        {
             position = pos;
             rotation = rot;
         }
     }
 
-    void Start() {
+    void Start()
+    {
         rb = GetComponent<Rigidbody>();
         transformData = new List<TransformData>();
-        StartCoroutine(RecordTransform());
+        timeControl = GetComponent<TimeControl>();
     }
 
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.R)) // Press R to rewind
+    void Update()
+    {
+        if (isRewinding)
         {
-            isRewinding = true;
-        }
-        cooldown -= Time.deltaTime;
-        if (isRewinding && cooldown <= 0) {
-            rb.isKinematic = true;
-            Rewind();
-            cooldown = 0.03f;
+            Rpc_Rewind();
         }
     }
 
-    private IEnumerator RecordTransform() {
-        while (true) {
-            if (!isRewinding) {
-                // Store both position and rotation
-                transformData.Add(new TransformData(transform.position, transform.rotation));
-                if (transformData.Count > (recordTime / recordInterval)) {
-                    transformData.RemoveAt(0); // Remove oldest data
-                }
-            }
-            yield return new WaitForSeconds(recordInterval);
+    void LateUpdate()
+    {
+        if (!isRewinding && !timeControl.timeStopped)
+        {
+            // Store both position and rotation
+            transformData.Add(new TransformData(transform.position, transform.rotation));
         }
     }
 
-    private void Rewind() {
-        if (transformData.Count > 0) {
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    private void Rpc_Rewind()
+    {
+        if (transformData.Count > 0)
+        {
             // Get the last recorded transform data
             TransformData lastTransform = transformData[transformData.Count - 1];
             transform.position = lastTransform.position; // Move to the last recorded position
             transform.rotation = lastTransform.rotation; // Set the last recorded rotation
             transformData.RemoveAt(transformData.Count - 1); // Remove that data from the list
-        } else {
-            isRewinding = false; // Stop rewinding if there are no positions left
-            rb.isKinematic = false;
         }
+        else
+        {
+            setIsRewinding(false);
+        }
+    }
+
+    //[Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void setIsRewinding(bool isRewinding)
+    {
+        this.isRewinding = isRewinding;
+        rb.isKinematic = this.isRewinding;
     }
 }

@@ -84,4 +84,12 @@ public class TimeStopAreaSpawner : NetworkBehaviour
         storedForce += force;
     }
 
+    public void RewindObject()
+    {
+        GameObject selectedObject = GetComponent<SelectObject>().selectedObject;
+        if (selectedObject != null)
+        {
+            selectedObject.GetComponent<TimeRewind>().setIsRewinding(true);
+        }
+    }
 }

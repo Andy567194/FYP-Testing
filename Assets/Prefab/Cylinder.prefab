@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -4929216442879396593}
   - component: {fileID: -7031518252157891290}
   - component: {fileID: 1674496812262554234}
+  - component: {fileID: -3803799011394494041}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: TimeStoppable
@@ -198,6 +199,7 @@ MonoBehaviour:
   - {fileID: 6790546933848426516}
   - {fileID: -4929216442879396593}
   - {fileID: 1674496812262554234}
+  - {fileID: -3803799011394494041}
 --- !u!114 &1674496812262554234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,7 +212,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d4fb414afa91ae499b589ebfdbe3433, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeout: 100
+  timeout: 60
+--- !u!114 &-3803799011394494041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760498207128508713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b0fe1bf624d1a649a5f7f3d7a24cb2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5357289161362998004
 PrefabInstance:
   m_ObjectHideFlags: 0
