@@ -9,9 +9,13 @@ public class TimeStopArea : NetworkBehaviour
 
     void Start()
     {
-        MeshRenderer renderer = GetComponent<MeshRenderer>();
-        renderer.material = new Material(renderer.material);
-        renderer.material.color = new Color(1.0f, 0.0f, 0.0f, 0.5f);
+        MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
+        Debug.Log(renderers.Length);
+        foreach (MeshRenderer renderer in renderers)
+        {
+            renderer.material = new Material(renderer.material);
+            renderer.material.color = new Color(1.0f, 0.0f, 0.0f, 0.5f);
+        }
     }
 
     private void OnTriggerStay(Collider other)
