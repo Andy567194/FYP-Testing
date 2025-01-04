@@ -10,7 +10,6 @@ public class TimeStopArea : NetworkBehaviour
     void Start()
     {
         MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
-        Debug.Log(renderers.Length);
         foreach (MeshRenderer renderer in renderers)
         {
             renderer.material = new Material(renderer.material);

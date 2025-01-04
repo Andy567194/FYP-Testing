@@ -278,8 +278,8 @@ MonoBehaviour:
   healthBar: {fileID: 3144322811727610082}
   energyUseageText: {fileID: 2855827866892970003}
   groundCheck: {fileID: 8486780815727696405}
-  _isGrounded: 0
   jumpHeight: 5
+  manipulatingObject: 0
 --- !u!54 &5109056489862770732
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -322,6 +322,7 @@ MonoBehaviour:
   objectToSpawn: {fileID: 8182162656668968402, guid: 43162b4895d351843a047a88ecba5851, type: 3}
   _spawned:
     _value: 0
+  _storedForce: 0
 --- !u!114 &5476158691148093407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,6 +337,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedObject: {fileID: 0}
   highlightMaterial: {fileID: 2100000, guid: 756c7678505af0146a6008e682b3e68f, type: 2}
+  raycastLength: 4
 --- !u!114 &4974981536161001450
 MonoBehaviour:
   m_ObjectHideFlags: 0

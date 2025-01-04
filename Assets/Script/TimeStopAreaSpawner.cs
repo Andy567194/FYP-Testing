@@ -14,12 +14,20 @@ public class TimeStopAreaSpawner : NetworkBehaviour
     //[Networked] private Quaternion previewRotation { get; set; }
     //[Networked] private Vector3 spawnedPosition { get; set; }
     //[Networked] private Quaternion spawnedRotation { get; set; }
+    [Networked]
+    public float storedForce { get; set; } = 0;
 
     public override void FixedUpdateNetwork()
     {
         if (spawned && TSA != null)
         {
             TSA.transform.position = transform.position;
+        }
+        if (storedForce > 0 && !spawned)
+        {
+            Rigidbody rb = GetComponent<Rigidbody>();
+            rb.AddForce(GetComponentInChildren<Camera>().transform.forward * storedForce, ForceMode.Impulse);
+            storedForce = 0;
         }
     }
 
@@ -70,4 +78,10 @@ public class TimeStopAreaSpawner : NetworkBehaviour
             }
         }
     }
+
+    public void AddStoredForce(float force)
+    {
+        storedForce += force;
+    }
+
 }

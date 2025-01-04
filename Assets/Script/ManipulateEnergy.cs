@@ -29,8 +29,11 @@ public class ManipulateEnergy : NetworkBehaviour
             {
                 if (player != gameObject)
                 {
-                    Rigidbody rb = player.GetComponent<Rigidbody>();
-                    rb.AddForce(Vector3.up * useEnergyAmount, ForceMode.Impulse);
+                    TimeStopAreaSpawner timeStopAreaSpawner = player.GetComponent<TimeStopAreaSpawner>();
+                    if (timeStopAreaSpawner != null)
+                    {
+                        timeStopAreaSpawner.AddStoredForce(useEnergyAmount);
+                    }
                     FindObjectOfType<EnergyBank>().UseEnergy(useEnergyAmount);
                 }
             }

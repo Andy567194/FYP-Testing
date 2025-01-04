@@ -128,6 +128,7 @@ MonoBehaviour:
   _timeStopped: 0
   lineRenderer: {fileID: 0}
   takePowerButton: {fileID: 0}
+  _storedForce: {x: 0, y: 0, z: 0}
 --- !u!54 &5180018855895748188
 Rigidbody:
   m_ObjectHideFlags: 0

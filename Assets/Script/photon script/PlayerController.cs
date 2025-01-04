@@ -45,10 +45,10 @@ public class PlayerController : NetworkBehaviour
 
     [SerializeField]
     Transform groundCheck;
-    bool isGrounded;
+    bool isGrounded = false;
     [SerializeField]
     float jumpHeight = 5f;
-    public bool manipulatingObject = false;
+    bool manipulatingObject = false;
 
     public override void Spawned()
     {
@@ -99,33 +99,29 @@ public class PlayerController : NetworkBehaviour
             }
             if (i == 1 && timeStopAreaSpawner != null && manipulateEnergy != null)
             {
-                timeStopAreaSpawner.enabled = true;
                 timeControlPlayer = true;
-                //manipulateEnergyPlayer = false;
-                //manipulateEnergy.enabled = false;
-                Destroy(manipulateEnergy);
-                //energyUseageText.SetActive(false);
-                Rpc_DisableEnergyUsageText();
             }
             else if (i == 0 && manipulateEnergy != null && timeStopAreaSpawner != null)
             {
-                //timeControlPlayer = false;
-                //timeStopAreaSpawner.enabled = false;
-                Destroy(timeStopAreaSpawner);
                 manipulateEnergyPlayer = true;
+            }
+            if (timeControlPlayer)
+            {
+                Destroy(manipulateEnergy);
+                Rpc_DisableEnergyUsageText();
+                timeStopAreaSpawner.enabled = true;
+            }
+            else if (manipulateEnergyPlayer)
+            {
+                Destroy(timeStopAreaSpawner);
                 manipulateEnergy.enabled = true;
                 energyUseageText.SetActive(true);
                 energyUseageText.GetComponent<Text>().text = "Use Energy Amount: 0";
             }
             else
             {
-                //timeControlPlayer = false;
-                //timeStopAreaSpawner.enabled = false;
-                //manipulateEnergyPlayer = false;
-                //manipulateEnergy.enabled = false;
                 Destroy(timeStopAreaSpawner);
                 Destroy(manipulateEnergy);
-                //energyUseageText.SetActive(false);
                 Rpc_DisableEnergyUsageText();
             }
         }
@@ -178,11 +174,14 @@ public class PlayerController : NetworkBehaviour
                 rb.velocity = transform.rotation * moveInput * _speed;
                 rb.velocity = new Vector3(rb.velocity.x, tempRbVelocity.y, rb.velocity.z);
             }
+            if (isGrounded)
+            {
+                rb.drag = 10;
+            }
             else
             {
-                rb.velocity = new Vector3(0, tempRbVelocity.y, 0);
+                rb.drag = 0.5f;
             }
-
             if (!manipulatingObject)
             {
                 HandlePitchYaw(data);
