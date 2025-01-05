@@ -279,7 +279,6 @@ MonoBehaviour:
   energyUseageText: {fileID: 2855827866892970003}
   groundCheck: {fileID: 8486780815727696405}
   jumpHeight: 5
-  manipulatingObject: 0
 --- !u!54 &5109056489862770732
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -358,7 +357,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3401485072938351536}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 821d14b16ca169b4c8b761426cdd2b49, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

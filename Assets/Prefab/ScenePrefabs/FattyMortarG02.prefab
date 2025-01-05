@@ -4910,7 +4910,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5071,13 +5070,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2807081970771884467}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0.0000009207027, y: 2.5, z: -1.5227662}
+  m_LocalRotation: {x: -0.000000059604638, y: 0.96393836, z: 0.2661259, w: 0}
+  m_LocalPosition: {x: 0.0000009536745, y: 2.5, z: -1.522768}
   m_LocalScale: {x: 0.79999995, y: 0.8, z: 0.79999995}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5420640249904889006}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: -30.868, y: 180, z: 0}
 --- !u!1 &4737552517858804691
 GameObject:
   m_ObjectHideFlags: 0
@@ -5088,6 +5087,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5420640249904889006}
   - component: {fileID: 6814899401526282044}
+  - component: {fileID: 2181835992350058866}
+  - component: {fileID: 371820349238481016}
   m_Layer: 0
   m_Name: FattyMortarG02
   m_TagString: Untagged
@@ -5120,13 +5121,48 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4737552517858804691}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e6c494d392e2f71488e2e3beed878cda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   projectile: {fileID: 1786960713188794768, guid: b9b6b47f7be7fc543a5a4155ef9b6a6e, type: 3}
   ShootPosition: {fileID: 2807081970771884467}
+  cooldown: 1
+--- !u!114 &2181835992350058866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4737552517858804691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2644d030d4ad5840904c97e350cb17b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 2936222057628905393, guid: 11a3dd945e20f6349b6831d9f58ba879, type: 3}
+  force: 10
+  cooldown: 1
+  shootPosition: {fileID: 9216298668392606315}
+--- !u!114 &371820349238481016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4737552517858804691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 638076186
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 2181835992350058866}
 --- !u!1 &5509236808256405355
 GameObject:
   m_ObjectHideFlags: 0

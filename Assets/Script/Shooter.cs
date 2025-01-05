@@ -9,7 +9,21 @@ public class Shooter : NetworkBehaviour
     public GameObject item; // The prefab to instantiate
     public float force = 10f;
     public float cooldown = 1f;
+    [SerializeField]
+    private Transform shootPosition;
+    [SerializeField] bool bulletUseGravity = true;
     private float cooldownTimer = 0f;
+
+    public override void Spawned()
+    {
+        if (Object.HasStateAuthority)
+        {
+            if (shootPosition == null)
+            {
+                shootPosition = transform;
+            }
+        }
+    }
 
     public override void FixedUpdateNetwork()
     {
@@ -18,36 +32,18 @@ public class Shooter : NetworkBehaviour
             cooldownTimer -= Runner.DeltaTime;
             if (cooldownTimer <= 0)
             {
-                var cube = Runner.Spawn(item, transform.position, Quaternion.identity);
+                var cube = Runner.Spawn(item, shootPosition.position, Quaternion.Euler(this.shootPosition.rotation.eulerAngles));
                 var rb = cube.GetComponent<Rigidbody>();
                 if (rb != null)
                 {
                     rb.isKinematic = false; // Ensure Rigidbody is not kinematic
-                    rb.AddForce(Vector3.right * force, ForceMode.Impulse);
+                    if (!bulletUseGravity)
+                    {
+                        rb.useGravity = false;
+                    }
+                    rb.AddForce(rb.transform.forward * force, ForceMode.Impulse);
                 }
                 cooldownTimer = cooldown;
-            }
-        }
-    }
-
-    public void Shoot()
-    {
-        if (Object.HasStateAuthority)
-        {
-            var cube = Runner.Spawn(item, transform.position, Quaternion.identity);
-            var rb = cube.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.isKinematic = false; // Ensure Rigidbody is not kinematic
-                Debug.Log("Rigidbody found, applying force.");
-                Debug.Log($"Rigidbody isKinematic: {rb.isKinematic}");
-                Debug.Log($"Rigidbody mass: {rb.mass}");
-                Debug.Log($"Applying force: {Vector3.right * force}");
-                rb.AddForce(Vector3.right * force, ForceMode.Impulse);
-            }
-            else
-            {
-                Debug.LogWarning("No Rigidbody found on spawned item.");
             }
         }
     }

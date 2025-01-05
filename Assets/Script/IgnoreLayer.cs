@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,13 +12,13 @@ public class IgnoreLayer : MonoBehaviour
 
         if (myCollider != null)
         {
-            // Àò¨ú Player ¼hªº¯Á¤Þ
+            // ï¿½ï¿½ï¿½ Player ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             int playerLayer = LayerMask.NameToLayer("Player");
 
-            // ©¿²¤»P©Ò¦³¼hªº¸I¼²¡A°£¤F Player ¼h
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½Ò¦ï¿½ï¿½hï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½F Player ï¿½h
             for (int i = 0; i < 32; i++)
             {
-                if (i != playerLayer) // ½T«O¤£©¿²¤ Player ¼h
+                if (i != playerLayer) // ï¿½Tï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Player ï¿½h
                 {
                     Physics.IgnoreLayerCollision(myCollider.gameObject.layer, i, true);
                 }
@@ -26,3 +26,4 @@ public class IgnoreLayer : MonoBehaviour
         }
     }
 }
+*/

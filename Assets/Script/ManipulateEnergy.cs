@@ -11,8 +11,8 @@ public class ManipulateEnergy : NetworkBehaviour
         GameObject selectedObject = GetComponent<SelectObject>().selectedObject;
         if (selectedObject != null)
         {
-            Vector3 storedForce = selectedObject.GetComponent<TimeControl>().storedForce;
-            selectedObject.GetComponent<TimeControl>().storedForce = Vector3.zero;
+            Vector3 storedForce = selectedObject.GetComponentInParent<TimeControl>().storedForce;
+            selectedObject.GetComponentInParent<TimeControl>().storedForce = Vector3.zero;
             EnergyBank energyBank = FindObjectOfType<EnergyBank>();
             energyBank.AddEnergy(Mathf.Abs(storedForce.x) + Mathf.Abs(storedForce.y) + Mathf.Abs(storedForce.z));
         }

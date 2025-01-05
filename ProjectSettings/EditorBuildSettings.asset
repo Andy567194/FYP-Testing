@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level1.unity
     guid: 3b7118f89fbdf554598f8df06e93f3c3
+  - enabled: 0
+    path: Assets/Scenes/PICKUP.unity
+    guid: 94d4ef4623a64c3499f4092c629e1e0e
   m_configObjects: {}
