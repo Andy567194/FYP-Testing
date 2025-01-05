@@ -42,6 +42,11 @@ public class Shooter : NetworkBehaviour
                         rb.useGravity = false;
                     }
                     rb.AddForce(rb.transform.forward * force, ForceMode.Impulse);
+                    PlatformRotate90 platformRotate90 = cube.GetComponent<PlatformRotate90>();
+                    if (platformRotate90 != null)
+                    {
+                        platformRotate90.Rotate90();
+                    }
                 }
                 cooldownTimer = cooldown;
             }

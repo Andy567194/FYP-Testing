@@ -22,6 +22,10 @@ public class TimeStopArea : NetworkBehaviour
         if (other.CompareTag("TimeStoppable"))
         {
             TimeControl timeControl = other.GetComponentInParent<TimeControl>();
+            if (timeControl == null)
+            {
+                timeControl = other.GetComponent<TimeControl>();
+            }
             if (!timeControllableObjects.Contains(timeControl))
             {
                 timeControllableObjects.Add(timeControl);
