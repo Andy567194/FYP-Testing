@@ -17,6 +17,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     //[Networked, Capacity(12)] private NetworkDictionary<PlayerRef, PlayerController> Players => default;
 
     private NetworkRunner _runner;
+    [SerializeField] Transform playerSpawnPoint;
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
@@ -90,7 +91,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         // Create a unique position for the player
-        Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 5, 0);
+        Vector3 spawnPosition = playerSpawnPoint.position;
         NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
 
         // Assign input authority to the player object

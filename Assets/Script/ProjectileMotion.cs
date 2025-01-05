@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.FilePathAttribute;
 
 public class ProjectileMotion : MonoBehaviour
 {
@@ -9,12 +8,12 @@ public class ProjectileMotion : MonoBehaviour
     [Header("Linear will off use gravity")]
 
     public float forceMagnitude = 10f;
- 
+
 
     public int destroytime = 7;
 
     // Define the direction of the force
-    public Vector3 forceDirection ; // Default direction (Z-axis)
+    public Vector3 forceDirection; // Default direction (Z-axis)
 
     private Rigidbody rb;
 
@@ -34,12 +33,13 @@ public class ProjectileMotion : MonoBehaviour
         {
             rb.useGravity = false;
         }
-        else {
+        else
+        {
             rb.useGravity = true;
         }
         AngularMotion();
 
-        Destroy(gameObject,destroytime);
+        Destroy(gameObject, destroytime);
     }
 
     void FixedUpdate()
@@ -63,8 +63,8 @@ public class ProjectileMotion : MonoBehaviour
 
         // Apply the force to the Rigidbody
         rb.AddForce(force, ForceMode.Impulse);
-        
+
     }
 
-   
+
 }
