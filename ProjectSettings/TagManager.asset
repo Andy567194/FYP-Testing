@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - TimeStoppable
+  - Key
+  - Door
+  - Pickup
+  - StoredEnergyText
   layers:
   - Default
   - TransparentFX
@@ -13,7 +17,7 @@ TagManager:
   - Water
   - UI
   - Ground
-  - 
+  - LocalPlayerModel
   - 
   - 
   - 
