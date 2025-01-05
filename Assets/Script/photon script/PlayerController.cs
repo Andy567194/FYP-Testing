@@ -180,7 +180,7 @@ public class PlayerController : NetworkBehaviour
             }
             else
             {
-                rb.drag = 2f;
+                rb.drag = 5f;
             }
             if (!manipulatingObject)
             {

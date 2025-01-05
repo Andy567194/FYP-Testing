@@ -4763,15 +4763,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1527140834424836188, guid: 00b6ec2f8d829004b914d27feef70d8a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 19
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1527140834424836188, guid: 00b6ec2f8d829004b914d27feef70d8a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.913
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1527140834424836188, guid: 00b6ec2f8d829004b914d27feef70d8a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 57.92
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5169022539930739305, guid: 00b6ec2f8d829004b914d27feef70d8a, type: 3}
       propertyPath: m_Name
@@ -4779,15 +4779,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8803967919392908348, guid: 00b6ec2f8d829004b914d27feef70d8a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 15.05
+      value: 17.73
       objectReference: {fileID: 0}
     - target: {fileID: 8803967919392908348, guid: 00b6ec2f8d829004b914d27feef70d8a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.93
+      value: 7.094
       objectReference: {fileID: 0}
     - target: {fileID: 8803967919392908348, guid: 00b6ec2f8d829004b914d27feef70d8a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.21
+      value: 7.81
       objectReference: {fileID: 0}
     - target: {fileID: 8803967919392908348, guid: 00b6ec2f8d829004b914d27feef70d8a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -50745,9 +50745,17 @@ PrefabInstance:
       propertyPath: m_Convex
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5943137819985633134, guid: 3eced4a433707bf41b4bbf895d963af5, type: 3}
+      propertyPath: _timeStopped
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8569727641051241882, guid: 3eced4a433707bf41b4bbf895d963af5, type: 3}
       propertyPath: m_Name
       value: Wheel
+      objectReference: {fileID: 0}
+    - target: {fileID: 8569727641051241882, guid: 3eced4a433707bf41b4bbf895d963af5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8284438649948769156, guid: 3eced4a433707bf41b4bbf895d963af5, type: 3}
