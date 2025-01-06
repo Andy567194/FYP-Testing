@@ -51,9 +51,10 @@ public class ManipulateEnergy : NetworkBehaviour
             GameObject selectedObject = GetComponent<SelectObject>().selectedObject;
             if (selectedObject != null)
             {
-                if (selectedObject.GetComponent<TimeControl>().timeStopped)
+                TimeControl timeControl = selectedObject.GetComponentInParent<TimeControl>();
+                if (timeControl.timeStopped)
                 {
-                    selectedObject.GetComponent<TimeControl>().storedForce += Vector3.up * useEnergyAmount;
+                    timeControl.storedForce += Vector3.up * useEnergyAmount;
                 }
                 else
                 {
