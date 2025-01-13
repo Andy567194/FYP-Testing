@@ -171,10 +171,18 @@ public class PlayerController : NetworkBehaviour
                 moveInput += Vector3.back;
             }
             Vector3 tempRbVelocity = rb.velocity;
-            if (moveInput != Vector3.zero && rb != null)
+            if (moveInput != Vector3.zero && rb != null && isGrounded)
             {
-                rb.velocity = transform.rotation * moveInput * _speed;
-                rb.velocity = new Vector3(rb.velocity.x, tempRbVelocity.y, rb.velocity.z);
+                //rb.velocity = transform.rotation * moveInput * _speed;
+                //rb.velocity = new Vector3(rb.velocity.x, tempRbVelocity.y, rb.velocity.z);
+                //if (rb.velocity.magnitude <= _speed)
+                rb.AddForce(transform.rotation * moveInput * _speed, ForceMode.Force);
+            }
+            else if (moveInput != Vector3.zero && rb != null && !isGrounded)
+            {
+                //rb.velocity = transform.rotation * moveInput * _speed;
+                //rb.velocity = new Vector3(rb.velocity.x, tempRbVelocity.y, rb.velocity.z);
+                rb.AddForce(transform.rotation * moveInput * _speed / 10, ForceMode.Force);
             }
             if (isGrounded)
             {
