@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8495776674468655447}
   - component: {fileID: 2113115291271329239}
   - component: {fileID: 3204337292823040347}
+  - component: {fileID: -384805451600122393}
   m_Layer: 0
   m_Name: TRAP
   m_TagString: Untagged
@@ -141,6 +142,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 1017821472465471202}
   - {fileID: 2113115291271329239}
+  - {fileID: -384805451600122393}
 --- !u!54 &8495776674468655447
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -211,3 +213,15 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.82
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-384805451600122393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4075766778138163898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecdeb74cd4a9ca54987f42714bd479eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

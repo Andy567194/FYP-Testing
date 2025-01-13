@@ -3,25 +3,19 @@ using Fusion;
 
 public class Trap : NetworkBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionStay(Collision other)
     {
-        Debug.Log("Trap triggered by: " + other.name);
 
         //if (other.CompareTag("Player"))
         // {
         //   Debug.Log("Player tag detected");
 
-        var player = other.GetComponent<PlayerController>();
+        var player = other.gameObject.GetComponent<PlayerController>();
 
         if (player != null)
         {
-            Debug.Log("PlayerController component found");
             player.TakeDamage(25);
-            Runner.Despawn(Object);
-        }
-        else
-        {
-            Debug.LogWarning("PlayerController component not found on the player");
+            //Runner.Despawn(Object);
         }
     }
     // else

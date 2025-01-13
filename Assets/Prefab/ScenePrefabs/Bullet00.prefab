@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 3834827262752497781}
   - component: {fileID: 5875616723965528794}
   - component: {fileID: 7900269283886252262}
+  - component: {fileID: -7612837095316362419}
   m_Layer: 0
   m_Name: Bullet00
   m_TagString: TimeStoppable
@@ -126,6 +127,7 @@ MonoBehaviour:
   - {fileID: 7495414568582187438}
   - {fileID: -1012688737175923396}
   - {fileID: 5282180321188922188}
+  - {fileID: -7612837095316362419}
 --- !u!114 &-1012688737175923396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,6 +229,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2936222057628905393}
   m_Mesh: {fileID: 4300000, guid: b3b36bdff47225d478f6348be07f369e, type: 3}
+--- !u!114 &-7612837095316362419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2936222057628905393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecdeb74cd4a9ca54987f42714bd479eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5983746652414854124
 PrefabInstance:
   m_ObjectHideFlags: 0

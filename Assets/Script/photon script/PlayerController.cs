@@ -49,6 +49,8 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     float jumpHeight = 5f;
     bool manipulatingObject = false;
+    [SerializeField] float invincibleTime = 1f;
+    float invincibleTimer = 0f;
 
     public override void Spawned()
     {
@@ -180,7 +182,7 @@ public class PlayerController : NetworkBehaviour
             }
             else
             {
-                rb.drag = 5f;
+                rb.drag = 0.5f;
             }
             if (!manipulatingObject)
             {
@@ -253,6 +255,8 @@ public class PlayerController : NetworkBehaviour
                 UpdateHealthBar();
             }
         }
+
+        invincibleTimer -= Runner.DeltaTime;
     }
 
     private void HandlePitchYaw(InputData data)
@@ -272,23 +276,26 @@ public class PlayerController : NetworkBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (invincibleTimer >= 0)
+            return;
         Hp -= damage;
+        invincibleTimer = invincibleTime;
         Debug.Log($"Player took {damage} damage. Current HP: {Hp}");
         if (Hp <= 0)
         {
-            Rpc_Respawn();
+            Rpc_Respawn(new Vector3(17.73f, 7.094f, 7.81f));
         }
     }
 
     [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
-    private void Rpc_Respawn()
+    public void Rpc_Respawn(Vector3 respawnPosition)
     {
         // Implement respawn logic here
         Hp = maxHP;
         UpdateHealthBar();
         // Move player to respawn position
         NetworkRigidbody3D networkRigidbody3d = GetComponent<NetworkRigidbody3D>();
-        networkRigidbody3d.Teleport(new Vector3(3, 5, 0), Quaternion.identity);
+        networkRigidbody3d.Teleport(respawnPosition, Quaternion.identity);
         //transform.position = new Vector3(3, 5, 0);
         // Example respawn position
         Debug.Log("Player respawned");
