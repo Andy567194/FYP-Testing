@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
-using Fusion.Addons.Physics;
+
 
 public class Shooter : NetworkBehaviour
 {
@@ -13,6 +13,10 @@ public class Shooter : NetworkBehaviour
     private Transform shootPosition;
     [SerializeField] bool bulletUseGravity = true;
     private float cooldownTimer = 0f;
+    [Networked]
+    public bool active { get; set; } = false;
+    [Networked, Capacity(10)]
+    public NetworkLinkedList<NetworkObject> bullets { get; }
 
     public override void Spawned()
     {
@@ -29,8 +33,12 @@ public class Shooter : NetworkBehaviour
     {
         if (Object.HasStateAuthority)
         {
+            if (!active)
+            {
+                return;
+            }
             cooldownTimer -= Runner.DeltaTime;
-            if (cooldownTimer <= 0)
+            if (cooldownTimer <= 0 && bullets.Count < 10)
             {
                 var cube = Runner.Spawn(item, shootPosition.position, Quaternion.Euler(this.shootPosition.rotation.eulerAngles));
                 var rb = cube.GetComponent<Rigidbody>();
@@ -48,7 +56,15 @@ public class Shooter : NetworkBehaviour
                         platformRotate90.Rotate90();
                     }
                 }
+                bullets.Add(cube);
                 cooldownTimer = cooldown;
+            }
+            foreach (var bullet in bullets)
+            {
+                if (bullet == null)
+                {
+                    bullets.Remove(bullet);
+                }
             }
         }
     }
