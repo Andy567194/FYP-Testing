@@ -33,6 +33,7 @@ public class ShooterActivation : NetworkBehaviour
                     foreach (Shooter shooter in shooters)
                     {
                         shooter.active = false;
+                        shooter.destroyed = false;
                     }
                 }
             }

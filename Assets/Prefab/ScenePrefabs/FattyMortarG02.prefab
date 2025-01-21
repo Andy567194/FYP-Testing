@@ -5089,6 +5089,7 @@ GameObject:
   - component: {fileID: 6814899401526282044}
   - component: {fileID: 2181835992350058866}
   - component: {fileID: 371820349238481016}
+  - component: {fileID: 253869421977556418}
   m_Layer: 0
   m_Name: FattyMortarG02
   m_TagString: Untagged
@@ -5145,6 +5146,10 @@ MonoBehaviour:
   force: 10
   cooldown: 1
   shootPosition: {fileID: 9216298668392606315}
+  bulletUseGravity: 1
+  _active: 0
+  _bullets: []
+  _destroyed: 0
 --- !u!114 &371820349238481016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5163,6 +5168,27 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 2181835992350058866}
+--- !u!65 &253869421977556418
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4737552517858804691}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.850452, y: 2.780979, z: 1.7605574}
+  m_Center: {x: -0.0391594, y: 1.3973988, z: 0.26022363}
 --- !u!1 &5509236808256405355
 GameObject:
   m_ObjectHideFlags: 0

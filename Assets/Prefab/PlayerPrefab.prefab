@@ -271,7 +271,7 @@ MonoBehaviour:
   - {fileID: 7437077621175938863}
   _camera: {fileID: 4207702496644517324}
   maxHP: 100
-  _speed: 100
+  _speed: 50
   _Hp: 100
   _timeControlPlayer: 0
   _manipulateEnergyPlayer: 0

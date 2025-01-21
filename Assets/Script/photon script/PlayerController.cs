@@ -182,7 +182,7 @@ public class PlayerController : NetworkBehaviour
             {
                 //rb.velocity = transform.rotation * moveInput * _speed;
                 //rb.velocity = new Vector3(rb.velocity.x, tempRbVelocity.y, rb.velocity.z);
-                rb.AddForce(transform.rotation * moveInput * _speed / 7, ForceMode.Force);
+                rb.AddForce(transform.rotation * moveInput * _speed / 10, ForceMode.Force);
             }
             if (isGrounded)
             {

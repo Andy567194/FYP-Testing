@@ -17,6 +17,8 @@ public class Shooter : NetworkBehaviour
     public bool active { get; set; } = false;
     [Networked, Capacity(10)]
     public NetworkLinkedList<NetworkObject> bullets { get; }
+    [Networked] public bool destroyed { get; set; } = false;
+    ParticleSystem particleSystem;
 
     public override void Spawned()
     {
@@ -27,13 +29,14 @@ public class Shooter : NetworkBehaviour
                 shootPosition = transform;
             }
         }
+        particleSystem = GetComponentInChildren<ParticleSystem>();
     }
 
     public override void FixedUpdateNetwork()
     {
         if (Object.HasStateAuthority)
         {
-            if (!active)
+            if (!active || destroyed)
             {
                 return;
             }
@@ -56,6 +59,10 @@ public class Shooter : NetworkBehaviour
                         platformRotate90.Rotate90();
                     }
                 }
+                if (particleSystem != null)
+                {
+                    particleSystem.Play();
+                }
                 bullets.Add(cube);
                 cooldownTimer = cooldown;
             }
@@ -65,6 +72,17 @@ public class Shooter : NetworkBehaviour
                 {
                     bullets.Remove(bullet);
                 }
+            }
+        }
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (Object.HasStateAuthority)
+        {
+            if (other.gameObject.CompareTag("TimeStoppable"))
+            {
+                destroyed = true;
             }
         }
     }

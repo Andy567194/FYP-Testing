@@ -41,6 +41,11 @@ public class TimeStopArea : NetworkBehaviour
             TimeControl timeControl = other.GetComponentInParent<TimeControl>();
             timeControl.SetTimeStopped(false);
             timeControllableObjects.Remove(timeControl);
+            EnableGravity enableGravity = other.GetComponent<EnableGravity>();
+            if (enableGravity != null)
+            {
+                enableGravity.Enable();
+            }
         }
     }
 

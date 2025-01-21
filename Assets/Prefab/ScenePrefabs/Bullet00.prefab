@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 5875616723965528794}
   - component: {fileID: 7900269283886252262}
   - component: {fileID: -7612837095316362419}
+  - component: {fileID: 1231835831270669933}
   m_Layer: 0
   m_Name: Bullet00
   m_TagString: TimeStoppable
@@ -128,6 +129,7 @@ MonoBehaviour:
   - {fileID: -1012688737175923396}
   - {fileID: 5282180321188922188}
   - {fileID: -7612837095316362419}
+  - {fileID: 1231835831270669933}
 --- !u!114 &-1012688737175923396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,6 +241,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ecdeb74cd4a9ca54987f42714bd479eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1231835831270669933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2936222057628905393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa17ab107298af40afb5f89d0b010a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &5983746652414854124
