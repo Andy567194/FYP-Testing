@@ -260,6 +260,10 @@ PrefabInstance:
       propertyPath: StopTime
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11498850, guid: 50daa816369323b42b56093bb108296f, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 19810244, guid: 50daa816369323b42b56093bb108296f, type: 3}
       propertyPath: InitialModule.startSizeY.minMaxState
       value: 3

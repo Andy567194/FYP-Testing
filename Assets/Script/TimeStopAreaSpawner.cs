@@ -89,7 +89,7 @@ public class TimeStopAreaSpawner : NetworkBehaviour
         GameObject selectedObject = GetComponent<SelectObject>().selectedObject;
         if (selectedObject != null)
         {
-            selectedObject.GetComponent<TimeRewind>().setIsRewinding(true);
+            selectedObject.GetComponent<TimeRewind>().Rpc_setIsRewinding(true);
         }
     }
 }

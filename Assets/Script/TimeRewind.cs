@@ -24,27 +24,25 @@ public class TimeRewind : NetworkBehaviour
         }
     }
 
-    void Start()
+    public override void Spawned()
     {
         rb = GetComponent<Rigidbody>();
         transformData = new List<TransformData>();
         timeControl = GetComponent<TimeControl>();
     }
 
-    void Update()
+    public override void FixedUpdateNetwork()
     {
-        if (isRewinding)
+        if (HasStateAuthority)
         {
-            Rpc_Rewind();
-        }
-    }
-
-    void LateUpdate()
-    {
-        if (!isRewinding && !timeControl.timeStopped)
-        {
-            // Store both position and rotation
-            transformData.Add(new TransformData(transform.position, transform.rotation));
+            if (isRewinding)
+            {
+                Rpc_Rewind();
+            }
+            else if (!timeControl.timeStopped)
+            {
+                Rpc_Record();
+            }
         }
     }
 
@@ -61,12 +59,19 @@ public class TimeRewind : NetworkBehaviour
         }
         else
         {
-            setIsRewinding(false);
+            Rpc_setIsRewinding(false);
         }
     }
 
-    //[Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-    public void setIsRewinding(bool isRewinding)
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    void Rpc_Record()
+    {
+        // Store both position and rotation
+        transformData.Add(new TransformData(transform.position, transform.rotation));
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void Rpc_setIsRewinding(bool isRewinding)
     {
         this.isRewinding = isRewinding;
         rb.isKinematic = this.isRewinding;
