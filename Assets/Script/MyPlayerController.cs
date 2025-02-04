@@ -27,7 +27,7 @@ public class MyPlayerController : MonoBehaviour
     void Update()
     {
         // Check if the player is grounded
-        isGrounded = Physics.CheckSphere(transform.position + Vector3.down * GetComponent<Collider>().bounds.extents.y, 0.1f, LayerMask.GetMask("Ground"));
+        isGrounded = Physics.CheckSphere(transform.position + Vector3.down * GetComponent<Collider>().bounds.extents.y, 0.5f, LayerMask.GetMask("Ground"));
 
         // Mouse Look
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;

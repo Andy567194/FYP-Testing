@@ -201,6 +201,7 @@ GameObject:
   - component: {fileID: 6149602735082395760}
   - component: {fileID: 8805785020002115634}
   - component: {fileID: -1967685888418279853}
+  - component: {fileID: 6538477209387237405}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Player
@@ -218,7 +219,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.25, y: 1.5, z: 1.25}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2688698457127683525}
@@ -278,7 +279,7 @@ MonoBehaviour:
   healthBar: {fileID: 3144322811727610082}
   energyUseageText: {fileID: 2855827866892970003}
   groundCheck: {fileID: 8486780815727696405}
-  jumpHeight: 10
+  jumpHeight: 15
   invincibleTime: 1
 --- !u!54 &5109056489862770732
 Rigidbody:
@@ -409,6 +410,27 @@ MonoBehaviour:
     Position: 0.01
     Rotation: 0.01
     Scale: 0.01
+--- !u!65 &6538477209387237405
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3401485072938351536}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.25, y: 3, z: 1.25}
+  m_Center: {x: -0.006493926, y: 0, z: -0.02351201}
 --- !u!1 &4975174914968079830
 GameObject:
   m_ObjectHideFlags: 0
