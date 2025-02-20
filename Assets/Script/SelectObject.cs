@@ -7,7 +7,8 @@ public class SelectObject : NetworkBehaviour
 {
     public GameObject selectedObject;
     private Camera _camera;
-    public Material highlightMaterial;
+    public Material normalHighlightMaterial;
+    public Material antimatterHighlightMaterial;
     private Material originalMaterial;
     private GameObject lastHitObject;
     public float raycastLength = 4;
@@ -26,7 +27,7 @@ public class SelectObject : NetworkBehaviour
         }
 
         RaycastHit raycastHit;
-        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out raycastHit, raycastLength, ~LayerMask.GetMask("Ignore Raycast")) && raycastHit.collider.gameObject.CompareTag("TimeStoppable"))
+        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out raycastHit, raycastLength, ~LayerMask.GetMask("Ignore Raycast")) && (raycastHit.collider.gameObject.CompareTag("TimeStoppable") || raycastHit.collider.gameObject.CompareTag("Antimatter")))
         {
             selectedObject = raycastHit.collider.gameObject;
             Renderer hitRenderer = selectedObject.GetComponent<MeshRenderer>();
@@ -41,12 +42,15 @@ public class SelectObject : NetworkBehaviour
                     }
 
                     originalMaterial = hitRenderer.material;
-                    hitRenderer.material = highlightMaterial;
+                    if (selectedObject.CompareTag("TimeStoppable"))
+                        hitRenderer.material = normalHighlightMaterial;
+                    if (selectedObject.CompareTag("Antimatter"))
+                        hitRenderer.material = antimatterHighlightMaterial;
                     lastHitObject = selectedObject;
                 }
             }
 
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * raycastHit.distance, Color.yellow);
+            //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * raycastHit.distance, Color.yellow);
         }
         else if (lastHitObject != null)
         {

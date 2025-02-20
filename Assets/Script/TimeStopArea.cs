@@ -6,6 +6,8 @@ using Fusion;
 public class TimeStopArea : NetworkBehaviour
 {
     private List<TimeControl> timeControllableObjects = new List<TimeControl>();
+    private List<Antimatter> antimatterObjects = new List<Antimatter>();
+
 
     void Start()
     {
@@ -32,6 +34,18 @@ public class TimeStopArea : NetworkBehaviour
             }
             timeControl.SetTimeStopped(true);
         }
+        if (other.CompareTag("Antimatter"))
+        {
+            Antimatter antimatter = other.GetComponent<Antimatter>();
+            if (antimatter != null)
+            {
+                antimatter.SetTimeStopped(true);
+            }
+            if (!antimatterObjects.Contains(antimatter))
+            {
+                antimatterObjects.Add(antimatter);
+            }
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -47,6 +61,15 @@ public class TimeStopArea : NetworkBehaviour
                 enableGravity.Enable();
             }
         }
+        if (other.CompareTag("Antimatter"))
+        {
+            Antimatter antimatter = other.GetComponent<Antimatter>();
+            if (antimatter != null)
+            {
+                antimatter.SetTimeStopped(false);
+                antimatterObjects.Remove(antimatter);
+            }
+        }
     }
 
     private void OnDisable()
@@ -56,6 +79,11 @@ public class TimeStopArea : NetworkBehaviour
             timeControl.SetTimeStopped(false);
         }
         timeControllableObjects.Clear();
+        foreach (var antimatter in antimatterObjects)
+        {
+            antimatter.SetTimeStopped(false);
+        }
+        antimatterObjects.Clear();
     }
 
     private void OnDestroy()
@@ -65,5 +93,10 @@ public class TimeStopArea : NetworkBehaviour
             timeControl.SetTimeStopped(false);
         }
         timeControllableObjects.Clear();
+        foreach (var antimatter in antimatterObjects)
+        {
+            antimatter.SetTimeStopped(false);
+        }
+        antimatterObjects.Clear();
     }
 }

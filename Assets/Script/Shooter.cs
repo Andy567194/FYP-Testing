@@ -18,7 +18,7 @@ public class Shooter : NetworkBehaviour
     [Networked, Capacity(10)]
     public NetworkLinkedList<NetworkObject> bullets { get; }
     [Networked] public bool destroyed { get; set; } = false;
-    ParticleSystem particle;
+    ParticleSystem[] particles;
     public int maximumBullets = 5;
 
     public override void Spawned()
@@ -30,7 +30,7 @@ public class Shooter : NetworkBehaviour
                 shootPosition = transform;
             }
         }
-        particle = GetComponentInChildren<ParticleSystem>();
+        particles = GetComponentsInChildren<ParticleSystem>();
     }
 
     public override void FixedUpdateNetwork()
@@ -60,9 +60,9 @@ public class Shooter : NetworkBehaviour
                         platformRotate90.Rotate90();
                     }
                 }
-                if (particle != null)
+                if (particles != null)
                 {
-                    particle.Play();
+                    RPC_PlayParticle();
                 }
                 bullets.Add(cube);
                 cooldownTimer = cooldown;
@@ -85,6 +85,15 @@ public class Shooter : NetworkBehaviour
             {
                 destroyed = true;
             }
+        }
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_PlayParticle()
+    {
+        foreach (var particle in particles)
+        {
+            particle.Play();
         }
     }
 }

@@ -9,6 +9,7 @@ TagManager:
   - Door
   - Pickup
   - StoredEnergyText
+  - Antimatter
   layers:
   - Default
   - TransparentFX
