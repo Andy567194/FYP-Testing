@@ -152,7 +152,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     async void StartGame(GameMode mode)
     {
         // Create the Fusion runner and let it know that we will be providing user input
-        _runner = gameObject.AddComponent<NetworkRunner>();
+        _runner = gameObject.GetComponent<NetworkRunner>();
         _runner.ProvideInput = true;
 
         // Create the NetworkSceneInfo from the current scene
