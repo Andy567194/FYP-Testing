@@ -88,6 +88,7 @@ public class PlayerController : NetworkBehaviour
         timeStopAreaSpawner = GetComponent<TimeStopAreaSpawner>();
         manipulateEnergy = GetComponent<ManipulateEnergy>();
         BasicSpawner basicSpawner = FindObjectOfType<BasicSpawner>();
+        IsVisible isVisible = GetComponentInChildren<IsVisible>();
         if (basicSpawner != null)
         {
             int i = 0;
@@ -112,6 +113,7 @@ public class PlayerController : NetworkBehaviour
                 Destroy(manipulateEnergy);
                 Rpc_DisableEnergyUsageText();
                 timeStopAreaSpawner.enabled = true;
+                Destroy(isVisible);
             }
             else if (manipulateEnergyPlayer)
             {
@@ -229,6 +231,10 @@ public class PlayerController : NetworkBehaviour
             }
             if (Skill3ButtonPressed.IsSet(InputButton.Skill3))
             {
+                if (timeControlPlayer && timeStopAreaSpawner != null)
+                {
+                    timeStopAreaSpawner.ActivateRecordAndRewindPlayer();
+                }
                 if (manipulateEnergyPlayer && manipulateEnergy != null && !manipulatingObject)
                 {
                     manipulateEnergy.UseEnergy();
