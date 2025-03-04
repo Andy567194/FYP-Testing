@@ -8,6 +8,8 @@ using System;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
+
+
 public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField]
@@ -16,7 +18,20 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     public Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
     //[Networked, Capacity(12)] private NetworkDictionary<PlayerRef, PlayerController> Players => default;
 
+    public static BasicSpawner Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
     private NetworkRunner _runner;
+
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
@@ -125,12 +140,25 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
-        // Implementation needed
+        Debug.Log("Scene load completed.");
+
+        // Optionally, reposition players to new spawn points after the new scene loads
+        foreach (var player in runner.ActivePlayers)
+        {
+            if (_spawnedCharacters.TryGetValue(player, out NetworkObject playerObject))
+            {
+                var newSpawnPoint = GameObject.FindGameObjectWithTag("SpawnPoint");
+                if (newSpawnPoint != null)
+                {
+                    playerObject.transform.position = newSpawnPoint.transform.position;
+                }
+            }
+        }
     }
 
     public void OnSceneLoadStart(NetworkRunner runner)
     {
-        // Implementation needed
+        Debug.Log("Scene loading started.");
     }
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
@@ -167,7 +195,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         {
             GameMode = mode,
             SessionName = "TestRoom",
-            Scene = scene,
+            Scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex),
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>(),
         });
 
@@ -197,6 +225,24 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
+    private int nextSceneIndex = 1; // Set the initial next scene index
+
+    public void RequestLoadNextLevel()
+    {
+        if (_runner.IsServer)
+        {
+            nextSceneIndex = (SceneManager.GetActiveScene().buildIndex + 1) % SceneManager.sceneCountInBuildSettings;
+            SceneRef sceneRef = SceneRef.FromIndex(nextSceneIndex);
+            if (sceneRef.IsValid)
+            {
+                _runner.LoadScene(sceneRef, LoadSceneMode.Single);
+            }
+            else
+            {
+                Debug.LogError($"Failed to get a valid SceneRef for scene index {nextSceneIndex}");
+            }
+        }
+    }
     private void OnGUI()
     {
         if (_runner == null)

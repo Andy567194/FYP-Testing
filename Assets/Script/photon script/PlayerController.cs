@@ -56,6 +56,7 @@ public class PlayerController : NetworkBehaviour
 
         if (Object.HasInputAuthority)
         {
+
             _camera.enabled = true;
             _camera.GetComponent<AudioListener>().enabled = true;
 
@@ -293,7 +294,17 @@ public class PlayerController : NetworkBehaviour
         // Example respawn position
         Debug.Log("Player respawned");
     }
-
+    public void ReachFinishPoint()
+    {
+        if (Object.HasInputAuthority)
+        {
+            BasicSpawner basicSpawner = FindObjectOfType<BasicSpawner>();
+            if (basicSpawner != null)
+            {
+                basicSpawner.RequestLoadNextLevel(); // Call the correct method
+            }
+        }
+    }
     private void UpdateHealthBar()
     {
         if (healthBar != null)
