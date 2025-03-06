@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 72982797328617259}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ShootPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 5608049741676047878}
   - component: {fileID: 7018793732101791543}
   - component: {fileID: 177366066521464169}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CannonG_Barrel02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ Transform:
   m_GameObject: {fileID: 3613436950747774288}
   serializedVersion: 2
   m_LocalRotation: {x: 0.000000021855694, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 1.1999999, z: 0}
+  m_LocalPosition: {x: -0, y: 0.558, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -125,7 +125,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3706107975577544501}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,11 +140,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3944142646490317222}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.558, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6617533330596069823}
   - {fileID: 5608049741676047878}
   - {fileID: 3758134866678811766}
   m_Father: {fileID: 4904583897535420046}
@@ -163,7 +164,8 @@ GameObject:
   - component: {fileID: 79669988147192287}
   - component: {fileID: 1234544624382027276}
   - component: {fileID: 7955032731232957893}
-  m_Layer: 0
+  - component: {fileID: 7950101340741277422}
+  m_Layer: 2
   m_Name: FattyCannonG02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,9 +185,8 @@ Transform:
   m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3706107975577544501}
   - {fileID: 7287628115609293584}
-  - {fileID: 6617533330596069823}
+  - {fileID: 3706107975577544501}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!64 &8922937307251034142
@@ -245,6 +246,7 @@ MonoBehaviour:
   _active: 0
   _bullets: []
   _destroyed: 0
+  maximumBullets: 5
 --- !u!114 &1234544624382027276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,6 +265,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 79669988147192287}
+  - {fileID: 7950101340741277422}
 --- !u!65 &7955032731232957893
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -284,6 +287,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.3135002, y: 1.9974957, z: 2.2361703}
   m_Center: {x: -0.007209397, y: 1.0025622, z: -0.029736236}
+--- !u!114 &7950101340741277422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4904727048188980316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncScale: 0
+  SyncParent: 0
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0
 --- !u!1 &5385946080083625420
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,7 +314,7 @@ GameObject:
   - component: {fileID: 3758134866678811766}
   - component: {fileID: 5560888424218256963}
   - component: {fileID: 1238125634235768795}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CannonG_Guard00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -311,7 +330,7 @@ Transform:
   m_GameObject: {fileID: 5385946080083625420}
   serializedVersion: 2
   m_LocalRotation: {x: 0.000000021855694, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 1.1999999, z: 0}
+  m_LocalPosition: {x: -0, y: 0.558, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -376,7 +395,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6617533330596069823}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BulletPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -391,12 +410,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7777052638500592053}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.1934586, z: 2.4}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0, y: 0.6354585, z: 2.4000008}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4904583897535420046}
+  m_Father: {fileID: 3706107975577544501}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8534829191663548691
 GameObject:
@@ -409,7 +428,7 @@ GameObject:
   - component: {fileID: 3525973134771622147}
   - component: {fileID: 127434929913014702}
   - component: {fileID: 573687474450404931}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireFx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5255,7 +5274,7 @@ GameObject:
   - component: {fileID: 7287628115609293584}
   - component: {fileID: 7926121272381801503}
   - component: {fileID: 8499546438318750670}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CannonG_Plate00
   m_TagString: Untagged
   m_Icon: {fileID: 0}

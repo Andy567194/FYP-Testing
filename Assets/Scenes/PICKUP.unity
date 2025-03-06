@@ -301,10 +301,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FattyCannonG02
       objectReference: {fileID: 0}
-    - target: {fileID: 4904727048188980316, guid: 6449748e38587a044984c0994105ea7d, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1917,7 +1913,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7257920789035344997, guid: a5aab922bce5f4a40b85f37beeeb220c, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
