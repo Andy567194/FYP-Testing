@@ -20,6 +20,9 @@ public class Shooter : NetworkBehaviour
     [Networked] public bool destroyed { get; set; } = false;
     ParticleSystem[] particles;
     public int maximumBullets = 5;
+    Transform turret;
+    public Quaternion originalRotation;
+    public float transformResetTimer = 3;
 
     public override void Spawned()
     {
@@ -29,8 +32,13 @@ public class Shooter : NetworkBehaviour
             {
                 shootPosition = transform;
             }
+            particles = GetComponentsInChildren<ParticleSystem>();
+            turret = transform.Find("Turret");
+            if (turret != null)
+            {
+                originalRotation = turret.rotation;
+            }
         }
-        particles = GetComponentsInChildren<ParticleSystem>();
     }
 
     public override void FixedUpdateNetwork()
@@ -44,7 +52,7 @@ public class Shooter : NetworkBehaviour
             cooldownTimer -= Runner.DeltaTime;
             if (cooldownTimer <= 0 && bullets.Count < maximumBullets)
             {
-                var cube = Runner.Spawn(item, shootPosition.position, Quaternion.Euler(this.shootPosition.rotation.eulerAngles));
+                var cube = Runner.Spawn(item, shootPosition.position, Quaternion.Euler(shootPosition.rotation.eulerAngles));
                 var rb = cube.GetComponent<Rigidbody>();
                 if (rb != null)
                 {
@@ -72,6 +80,26 @@ public class Shooter : NetworkBehaviour
                 if (bullet == null)
                 {
                     bullets.Remove(bullet);
+                }
+            }
+            if (turret != null)
+            {
+                RaycastHit raycastHit;
+                if (Physics.Raycast(turret.position, turret.forward, out raycastHit, 100, ~LayerMask.GetMask("Ignore Raycast")) && raycastHit.collider.CompareTag("Player"))
+                {
+                    turret.transform.LookAt(raycastHit.collider.gameObject.transform);
+                }
+                else
+                {
+                    if (turret.transform.rotation != originalRotation)
+                    {
+                        transformResetTimer -= Runner.DeltaTime;
+                    }
+                    if (transformResetTimer <= 0)
+                    {
+                        turret.transform.rotation = originalRotation;
+                        transformResetTimer = 3;
+                    }
                 }
             }
         }
