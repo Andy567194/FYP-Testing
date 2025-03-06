@@ -20,7 +20,7 @@ public class MovingPlatform : NetworkBehaviour
         }
     }
 
-    void Update()
+    public override void FixedUpdateNetwork()
     {
         if (!HasStateAuthority) return;
 
