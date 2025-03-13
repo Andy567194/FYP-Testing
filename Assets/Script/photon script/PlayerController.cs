@@ -49,6 +49,8 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     float jumpHeight = 5f;
     bool manipulatingObject = false;
+    [SerializeField] float invincibleTime = 1f;
+    float invincibleTimer = 0f;
 
     public override void Spawned()
     {
@@ -87,6 +89,7 @@ public class PlayerController : NetworkBehaviour
         timeStopAreaSpawner = GetComponent<TimeStopAreaSpawner>();
         manipulateEnergy = GetComponent<ManipulateEnergy>();
         BasicSpawner basicSpawner = FindObjectOfType<BasicSpawner>();
+        IsVisible isVisible = GetComponentInChildren<IsVisible>();
         if (basicSpawner != null)
         {
             int i = 0;
@@ -111,6 +114,7 @@ public class PlayerController : NetworkBehaviour
                 Destroy(manipulateEnergy);
                 Rpc_DisableEnergyUsageText();
                 timeStopAreaSpawner.enabled = true;
+                Destroy(isVisible);
             }
             else if (manipulateEnergyPlayer)
             {
@@ -170,10 +174,18 @@ public class PlayerController : NetworkBehaviour
                 moveInput += Vector3.back;
             }
             Vector3 tempRbVelocity = rb.velocity;
-            if (moveInput != Vector3.zero && rb != null)
+            if (moveInput != Vector3.zero && rb != null && isGrounded)
             {
-                rb.velocity = transform.rotation * moveInput * _speed;
-                rb.velocity = new Vector3(rb.velocity.x, tempRbVelocity.y, rb.velocity.z);
+                //rb.velocity = transform.rotation * moveInput * _speed;
+                //rb.velocity = new Vector3(rb.velocity.x, tempRbVelocity.y, rb.velocity.z);
+                //if (rb.velocity.magnitude <= _speed)
+                rb.AddForce(transform.rotation * moveInput * _speed, ForceMode.Force);
+            }
+            else if (moveInput != Vector3.zero && rb != null && !isGrounded)
+            {
+                //rb.velocity = transform.rotation * moveInput * _speed;
+                //rb.velocity = new Vector3(rb.velocity.x, tempRbVelocity.y, rb.velocity.z);
+                rb.AddForce(transform.rotation * moveInput * _speed / 20, ForceMode.Force);
             }
             if (isGrounded)
             {
@@ -220,6 +232,10 @@ public class PlayerController : NetworkBehaviour
             }
             if (Skill3ButtonPressed.IsSet(InputButton.Skill3))
             {
+                if (timeControlPlayer && timeStopAreaSpawner != null)
+                {
+                    timeStopAreaSpawner.ActivateRecordAndRewindPlayer();
+                }
                 if (manipulateEnergyPlayer && manipulateEnergy != null && !manipulatingObject)
                 {
                     manipulateEnergy.UseEnergy();
@@ -254,6 +270,8 @@ public class PlayerController : NetworkBehaviour
                 UpdateHealthBar();
             }
         }
+
+        invincibleTimer -= Runner.DeltaTime;
     }
 
     private void HandlePitchYaw(InputData data)
@@ -273,23 +291,26 @@ public class PlayerController : NetworkBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (invincibleTimer >= 0)
+            return;
         Hp -= damage;
+        invincibleTimer = invincibleTime;
         Debug.Log($"Player took {damage} damage. Current HP: {Hp}");
         if (Hp <= 0)
         {
-            Rpc_Respawn();
+            Rpc_Respawn(new Vector3(17.73f, 7.094f, 7.81f));
         }
     }
 
     [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
-    private void Rpc_Respawn()
+    public void Rpc_Respawn(Vector3 respawnPosition)
     {
         // Implement respawn logic here
         Hp = maxHP;
         UpdateHealthBar();
         // Move player to respawn position
         NetworkRigidbody3D networkRigidbody3d = GetComponent<NetworkRigidbody3D>();
-        networkRigidbody3d.Teleport(new Vector3(3, 5, 0), Quaternion.identity);
+        networkRigidbody3d.Teleport(respawnPosition, Quaternion.identity);
         //transform.position = new Vector3(3, 5, 0);
         // Example respawn position
         Debug.Log("Player respawned");

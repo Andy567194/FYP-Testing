@@ -9,10 +9,10 @@ public class ManipulateEnergy : NetworkBehaviour
     public void AbosrbEnergy()
     {
         GameObject selectedObject = GetComponent<SelectObject>().selectedObject;
-        if (selectedObject != null)
+        if (selectedObject != null && selectedObject.CompareTag("TimeStoppable"))
         {
-            Vector3 storedForce = selectedObject.GetComponent<TimeControl>().storedForce;
-            selectedObject.GetComponent<TimeControl>().storedForce = Vector3.zero;
+            Vector3 storedForce = selectedObject.GetComponentInParent<TimeControl>().storedForce;
+            selectedObject.GetComponentInParent<TimeControl>().storedForce = Vector3.zero;
             EnergyBank energyBank = FindObjectOfType<EnergyBank>();
             energyBank.AddEnergy(Mathf.Abs(storedForce.x) + Mathf.Abs(storedForce.y) + Mathf.Abs(storedForce.z));
         }
@@ -49,11 +49,12 @@ public class ManipulateEnergy : NetworkBehaviour
         if (FindObjectOfType<EnergyBank>().storedEnergy >= useEnergyAmount)
         {
             GameObject selectedObject = GetComponent<SelectObject>().selectedObject;
-            if (selectedObject != null)
+            if (selectedObject != null && selectedObject.CompareTag("TimeStoppable"))
             {
-                if (selectedObject.GetComponent<TimeControl>().timeStopped)
+                TimeControl timeControl = selectedObject.GetComponentInParent<TimeControl>();
+                if (timeControl.timeStopped)
                 {
-                    selectedObject.GetComponent<TimeControl>().storedForce += Vector3.up * useEnergyAmount;
+                    timeControl.storedForce += Vector3.up * useEnergyAmount;
                 }
                 else
                 {

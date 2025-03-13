@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Fusion;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TimeStopAreaSpawner : NetworkBehaviour
 {
@@ -17,6 +19,28 @@ public class TimeStopAreaSpawner : NetworkBehaviour
     [Networked]
     public float storedForce { get; set; } = 0;
 
+    private List<TransformData> transformData = new List<TransformData>();
+
+    private struct TransformData
+    {
+        public Vector3 position;
+        //public Quaternion rotation;
+
+        //public TransformData(Vector3 pos, Quaternion rot)
+        public TransformData(Vector3 pos)
+        {
+            position = pos;
+            //rotation = rot;
+        }
+    }
+
+    [Networked]
+    bool isRecordingPlayer { get; set; } = false;
+    [Networked]
+    bool isRewindingPlayer { get; set; } = false;
+    float recordedTime = 0;
+    public Text recordPlayerText;
+
     public override void FixedUpdateNetwork()
     {
         if (spawned && TSA != null)
@@ -29,6 +53,15 @@ public class TimeStopAreaSpawner : NetworkBehaviour
             rb.AddForce(GetComponentInChildren<Camera>().transform.forward * storedForce, ForceMode.Impulse);
             storedForce = 0;
         }
+        if (isRecordingPlayer)
+        {
+            RecordPlayer();
+        }
+        if (isRewindingPlayer)
+        {
+            RewindPlayer();
+        }
+
     }
 
     /*
@@ -63,11 +96,15 @@ public class TimeStopAreaSpawner : NetworkBehaviour
 
     public void SpawnObject()
     {
+        if (isRecordingPlayer)
+        {
+            CancelRecordPlayer();
+            return;
+        }
         if (!spawned)
         {
             TSA = Runner.Spawn(objectToSpawn, transform.position, Quaternion.identity, Object.InputAuthority);
             spawned = true;
-
         }
         else
         {
@@ -89,7 +126,66 @@ public class TimeStopAreaSpawner : NetworkBehaviour
         GameObject selectedObject = GetComponent<SelectObject>().selectedObject;
         if (selectedObject != null)
         {
-            selectedObject.GetComponent<TimeRewind>().setIsRewinding(true);
+            selectedObject.GetComponent<TimeRewind>().Rpc_setIsRewinding(true);
+        }
+    }
+
+    void RecordPlayer()
+    {
+        Transform playerTransform = FindObjectOfType<IsVisible>().gameObject.transform.parent;
+        // Store both position and rotation
+        transformData.Add(new TransformData(playerTransform.position));
+        recordedTime += Runner.DeltaTime;
+        recordPlayerText.text = "Recording player... " + (recordedTime / 2).ToString("F0") + "s\nPress Q to rewind or press right mouse button to cancel";
+        playerTransform.Find("Canvas").Find("RecordingPlayer").GetComponent<Text>().enabled = true;
+        playerTransform.Find("Canvas").Find("RecordingPlayer").GetComponent<Text>().text = "Getting Recorded..." + (recordedTime / 2).ToString("F0") + "s";
+    }
+
+    void RewindPlayer()
+    {
+        if (transformData.Count > 0)
+        {
+            Transform playerTransform = FindObjectOfType<IsVisible>().gameObject.transform.parent;
+            playerTransform.Find("Canvas").Find("RecordingPlayer").GetComponent<Text>().text = "Getting Rewinded......";
+            // Get the last recorded transform data
+            TransformData lastTransform = transformData[transformData.Count - 1];
+            playerTransform.position = lastTransform.position; // Move to the last recorded position
+            //transform.rotation = lastTransform.rotation; // Set the last recorded rotation
+            transformData.RemoveAt(transformData.Count - 1); // Remove that data from the list
+        }
+        else
+        {
+            isRewindingPlayer = false;
+            Transform playerTransform = FindObjectOfType<IsVisible>().gameObject.transform.parent;
+            playerTransform.Find("Canvas").Find("RecordingPlayer").GetComponent<Text>().enabled = false;
+        }
+    }
+
+    public void ActivateRecordAndRewindPlayer()
+    {
+        if (!isRecordingPlayer && !isRewindingPlayer)
+        {
+            isRecordingPlayer = true;
+            recordedTime = 0;
+            recordPlayerText.enabled = true;
+        }
+        else if (isRecordingPlayer && recordedTime >= 2)
+        {
+            isRecordingPlayer = false;
+            isRewindingPlayer = true;
+            recordPlayerText.enabled = false;
+        }
+    }
+
+    public void CancelRecordPlayer()
+    {
+        if (isRecordingPlayer)
+        {
+            isRecordingPlayer = false;
+            recordPlayerText.enabled = false;
+            Transform playerTransform = FindObjectOfType<IsVisible>().gameObject.transform.parent;
+            playerTransform.Find("Canvas").Find("RecordingPlayer").GetComponent<Text>().enabled = false;
+            transformData.Clear();
         }
     }
 }

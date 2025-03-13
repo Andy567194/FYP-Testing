@@ -2,53 +2,126 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
-using Fusion.Addons.Physics;
+
 
 public class Shooter : NetworkBehaviour
 {
     public GameObject item; // The prefab to instantiate
     public float force = 10f;
     public float cooldown = 1f;
+    [SerializeField]
+    private Transform shootPosition;
+    [SerializeField] bool bulletUseGravity = true;
     private float cooldownTimer = 0f;
+    [Networked]
+    public bool active { get; set; } = false;
+    [Networked, Capacity(10)]
+    public NetworkLinkedList<NetworkObject> bullets { get; }
+    [Networked] public bool destroyed { get; set; } = false;
+    ParticleSystem[] particles;
+    public int maximumBullets = 5;
+    Transform turret;
+    public Quaternion originalRotation;
+    public float transformResetTimer = 3;
+
+    public override void Spawned()
+    {
+        if (Object.HasStateAuthority)
+        {
+            if (shootPosition == null)
+            {
+                shootPosition = transform;
+            }
+            particles = GetComponentsInChildren<ParticleSystem>();
+            turret = transform.Find("Turret");
+            if (turret != null)
+            {
+                originalRotation = turret.rotation;
+            }
+        }
+    }
 
     public override void FixedUpdateNetwork()
     {
         if (Object.HasStateAuthority)
         {
-            cooldownTimer -= Runner.DeltaTime;
-            if (cooldownTimer <= 0)
+            if (!active || destroyed)
             {
-                var cube = Runner.Spawn(item, transform.position, Quaternion.identity);
+                return;
+            }
+            cooldownTimer -= Runner.DeltaTime;
+            if (cooldownTimer <= 0 && bullets.Count < maximumBullets)
+            {
+                var cube = Runner.Spawn(item, shootPosition.position, Quaternion.Euler(shootPosition.rotation.eulerAngles));
                 var rb = cube.GetComponent<Rigidbody>();
                 if (rb != null)
                 {
                     rb.isKinematic = false; // Ensure Rigidbody is not kinematic
-                    rb.AddForce(Vector3.right * force, ForceMode.Impulse);
+                    if (!bulletUseGravity)
+                    {
+                        rb.useGravity = false;
+                    }
+                    rb.AddForce(rb.transform.forward * force, ForceMode.Impulse);
+                    PlatformRotate90 platformRotate90 = cube.GetComponent<PlatformRotate90>();
+                    if (platformRotate90 != null)
+                    {
+                        platformRotate90.Rotate90();
+                    }
                 }
+                if (particles != null)
+                {
+                    RPC_PlayParticle();
+                }
+                bullets.Add(cube);
                 cooldownTimer = cooldown;
+            }
+            foreach (var bullet in bullets)
+            {
+                if (bullet == null)
+                {
+                    bullets.Remove(bullet);
+                }
+            }
+            if (turret != null)
+            {
+                RaycastHit raycastHit;
+                if (Physics.Raycast(turret.position, turret.forward, out raycastHit, 100, ~LayerMask.GetMask("Ignore Raycast")) && raycastHit.collider.CompareTag("Player"))
+                {
+                    turret.transform.LookAt(raycastHit.collider.gameObject.transform);
+                }
+                else
+                {
+                    if (turret.transform.rotation != originalRotation)
+                    {
+                        transformResetTimer -= Runner.DeltaTime;
+                    }
+                    if (transformResetTimer <= 0)
+                    {
+                        turret.transform.rotation = originalRotation;
+                        transformResetTimer = 3;
+                    }
+                }
             }
         }
     }
 
-    public void Shoot()
+    private void OnCollisionEnter(Collision other)
     {
         if (Object.HasStateAuthority)
         {
-            var cube = Runner.Spawn(item, transform.position, Quaternion.identity);
-            var rb = cube.GetComponent<Rigidbody>();
-            if (rb != null)
+            if (other.gameObject.CompareTag("TimeStoppable"))
             {
-                rb.isKinematic = false; // Ensure Rigidbody is not kinematic
-                Debug.Log("Rigidbody found, applying force.");
-                Debug.Log($"Rigidbody isKinematic: {rb.isKinematic}");
-                Debug.Log($"Rigidbody mass: {rb.mass}");
-                Debug.Log($"Applying force: {Vector3.right * force}");
-                rb.AddForce(Vector3.right * force, ForceMode.Impulse);
+                destroyed = true;
             }
-            else
-            {
-                Debug.LogWarning("No Rigidbody found on spawned item.");
-            }
+        }
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_PlayParticle()
+    {
+        foreach (var particle in particles)
+        {
+            particle.Play();
         }
     }
 }

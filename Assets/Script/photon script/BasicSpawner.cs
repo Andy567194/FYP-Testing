@@ -31,6 +31,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         Instance = this;
     }
     private NetworkRunner _runner;
+    [SerializeField] Transform playerSpawnPoint;
 
 
     public void OnConnectedToServer(NetworkRunner runner)
@@ -105,7 +106,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         // Create a unique position for the player
-        Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 5, 0);
+        Vector3 spawnPosition = playerSpawnPoint.position;
         NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
 
         // Assign input authority to the player object
@@ -179,7 +180,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     async void StartGame(GameMode mode)
     {
         // Create the Fusion runner and let it know that we will be providing user input
-        _runner = gameObject.AddComponent<NetworkRunner>();
+        _runner = gameObject.GetComponent<NetworkRunner>();
         _runner.ProvideInput = true;
 
         // Create the NetworkSceneInfo from the current scene

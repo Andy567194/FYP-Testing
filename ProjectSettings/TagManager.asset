@@ -9,11 +9,15 @@ TagManager:
   - Door
   - Pickup
   - StoredEnergyText
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
   - Antimatter
   - SpawnPoint
 >>>>>>> Stashed changes
+=======
+  - Antimatter
+>>>>>>> main
   layers:
   - Default
   - TransparentFX
