@@ -31,40 +31,42 @@ public class TimeControl : NetworkBehaviour
 
     void Update()
     {
+        if (rb == null)
+        {
+            return;
+        }
         if (timeStopped)
         {
-            if (rb != null)
+            rb.isKinematic = true;
+            if (recovered)
             {
-                rb.isKinematic = true;
-                if (recovered)
-                {
-                    storedForce += tempVelocity * rb.mass;
-                }
-                recovered = false;
-                ShowForceDirection();
-                //takePowerButton.SetActive(true);
+                storedForce += tempVelocity * rb.mass;
             }
+            recovered = false;
+            ShowForceDirection();
+            //takePowerButton.SetActive(true);
         }
         else
         {
-            if (rb != null)
+            rb.isKinematic = false;
+            if (!recovered)
             {
-                rb.isKinematic = false;
-                if (!recovered)
-                {
-                    rb.AddForce(storedForce, ForceMode.Impulse);
-                    storedForce = Vector3.zero;
-                    recovered = true;
-                }
-                tempVelocity = rb.velocity;
-                lineRenderer.enabled = false;
-                //takePowerButton.SetActive(false);
+                rb.AddForce(storedForce, ForceMode.Impulse);
+                storedForce = Vector3.zero;
+                recovered = true;
             }
+            tempVelocity = rb.velocity;
+            lineRenderer.enabled = false;
+            //takePowerButton.SetActive(false);
         }
     }
 
     void OnCollisionEnter(Collision collision)
     {
+        if (rb == null)
+        {
+            return;
+        }
         if (timeStopped)
         {
             Vector3 force = collision.relativeVelocity * collision.rigidbody.mass;

@@ -10,6 +10,7 @@ TagManager:
   - Pickup
   - StoredEnergyText
   - Antimatter
+  - MovingPlatform
   layers:
   - Default
   - TransparentFX

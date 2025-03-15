@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 5289849927390540789}
   - component: {fileID: 1671013175492036526}
   - component: {fileID: 4020080428477845070}
+  - component: {fileID: -2119463517530418328}
+  - component: {fileID: -2632888306196704095}
   m_Layer: 0
   m_Name: RollingBall
   m_TagString: TimeStoppable
@@ -8552,15 +8554,9 @@ MonoBehaviour:
   m_Mesh: {fileID: 0}
   m_VersionIndex: 938
   m_IsSelectable: 1
-  m_SelectedFaces: 55000000
-  m_SelectedEdges:
-  - a: 255
-    b: 256
-  - a: 256
-    b: 257
-  - a: 257
-    b: 255
-  m_SelectedVertices: ff0000000001000001010000
+  m_SelectedFaces: 
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!114 &2422104015122163607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8705,3 +8701,44 @@ MonoBehaviour:
   force: 100
   cooldown: 3
   searchRadius: 100
+--- !u!114 &-2119463517530418328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6379914796334189846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 1711989697
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 4020080428477845070}
+  - {fileID: -2632888306196704095}
+--- !u!114 &-2632888306196704095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6379914796334189846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a591d221a634417e9827eb58e17de84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncScale: 0
+  SyncParent: 1
+  _interpolationTarget: {fileID: 0}
+  UsePreciseRotation: 0
+  UseRenderSleepThresholds: 1
+  RenderThresholds:
+    UseEnergy: 1
+    Position: 0.01
+    Rotation: 0.01
+    Scale: 0.01

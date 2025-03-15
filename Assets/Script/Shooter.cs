@@ -16,12 +16,12 @@ public class Shooter : NetworkBehaviour
     [Networked]
     public bool active { get; set; } = false;
     [Networked, Capacity(10)]
-    public NetworkLinkedList<NetworkObject> bullets { get; }
+    NetworkLinkedList<NetworkObject> bullets { get; }
     [Networked] public bool destroyed { get; set; } = false;
-    ParticleSystem[] particles;
+    //ParticleSystem[] particles { get; set; }
     public int maximumBullets = 5;
     Transform turret;
-    public Quaternion originalRotation;
+    Quaternion originalRotation;
     public float transformResetTimer = 3;
 
     public override void Spawned()
@@ -32,7 +32,7 @@ public class Shooter : NetworkBehaviour
             {
                 shootPosition = transform;
             }
-            particles = GetComponentsInChildren<ParticleSystem>();
+            //particles = GetComponentsInChildren<ParticleSystem>();
             turret = transform.Find("Turret");
             if (turret != null)
             {
@@ -45,9 +45,21 @@ public class Shooter : NetworkBehaviour
     {
         if (Object.HasStateAuthority)
         {
-            if (!active || destroyed)
+            if (destroyed)
             {
                 return;
+            }
+            if (!active)
+            {
+                ShooterActivation shooterActivation = FindObjectOfType<ShooterActivation>();
+                if (shooterActivation == null)
+                {
+                    active = true;
+                }
+                else
+                {
+                    return;
+                }
             }
             cooldownTimer -= Runner.DeltaTime;
             if (cooldownTimer <= 0 && bullets.Count < maximumBullets)
@@ -68,10 +80,7 @@ public class Shooter : NetworkBehaviour
                         platformRotate90.Rotate90();
                     }
                 }
-                if (particles != null)
-                {
-                    RPC_PlayParticle();
-                }
+                RPC_PlayParticle();
                 bullets.Add(cube);
                 cooldownTimer = cooldown;
             }
@@ -119,7 +128,7 @@ public class Shooter : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     private void RPC_PlayParticle()
     {
-        foreach (var particle in particles)
+        foreach (var particle in GetComponentsInChildren<ParticleSystem>())
         {
             particle.Play();
         }

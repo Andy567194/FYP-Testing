@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
-public class RollingBall : MonoBehaviour
+public class RollingBall : NetworkBehaviour
 {
     public float force = 10f;
     public float cooldown = 1f;
@@ -10,15 +11,18 @@ public class RollingBall : MonoBehaviour
     public float searchRadius = 10f;
     private Rigidbody rb;
 
-    void Start()
+    public override void Spawned()
     {
-        // 获取 Rigidbody 组件
         rb = GetComponent<Rigidbody>();
     }
 
-    void FixedUpdate()
+    public override void FixedUpdateNetwork()
     {
-        cooldownTimer -= Time.fixedDeltaTime;
+        if (!HasStateAuthority)
+        {
+            return;
+        }
+        cooldownTimer -= Runner.DeltaTime;
 
         if (cooldownTimer <= 0f)
         {
@@ -26,10 +30,6 @@ public class RollingBall : MonoBehaviour
             if (nearestPlayer != null)
             {
                 ApplyImpulse(nearestPlayer.transform);
-            }
-            else
-            {
-                rb.velocity = Vector3.zero; 
             }
 
             cooldownTimer = cooldown;
@@ -46,7 +46,7 @@ public class RollingBall : MonoBehaviour
         foreach (GameObject player in players)
         {
             float distance = Vector3.Distance(transform.position, player.transform.position);
-          
+
             if (distance < nearestDistance && distance <= searchRadius)
             {
                 nearestDistance = distance;
@@ -59,7 +59,7 @@ public class RollingBall : MonoBehaviour
 
     void ApplyImpulse(Transform target)
     {
-     
+
         Vector3 direction = (target.position - transform.position).normalized;
         rb.AddForce(direction * force, ForceMode.Impulse);
     }

@@ -125,6 +125,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3706107975577544501}
+  - component: {fileID: 3565332593484661016}
   m_Layer: 2
   m_Name: Turret
   m_TagString: Untagged
@@ -150,6 +151,22 @@ Transform:
   - {fileID: 3758134866678811766}
   m_Father: {fileID: 4904583897535420046}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3565332593484661016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3944142646490317222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncScale: 0
+  SyncParent: 0
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0
 --- !u!1 &4904727048188980316
 GameObject:
   m_ObjectHideFlags: 0
@@ -247,6 +264,8 @@ MonoBehaviour:
   _bullets: []
   _destroyed: 0
   maximumBullets: 5
+  originalRotation: {x: 0, y: 0, z: 0, w: 0}
+  transformResetTimer: 3
 --- !u!114 &1234544624382027276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,6 +285,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 79669988147192287}
   - {fileID: 7950101340741277422}
+  - {fileID: 3565332593484661016}
 --- !u!65 &7955032731232957893
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -15,7 +15,7 @@ public class Trap : NetworkBehaviour
         if (player != null)
         {
             player.TakeDamage(25);
-            //Runner.Despawn(Object);
+            Runner.Despawn(Object);
         }
     }
     // else

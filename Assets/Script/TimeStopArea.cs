@@ -7,6 +7,7 @@ public class TimeStopArea : NetworkBehaviour
 {
     private List<TimeControl> timeControllableObjects = new List<TimeControl>();
     private List<Antimatter> antimatterObjects = new List<Antimatter>();
+    private List<MovingPlatform> movingPlatformObjects = new List<MovingPlatform>();
 
 
     void Start()
@@ -46,6 +47,18 @@ public class TimeStopArea : NetworkBehaviour
                 antimatterObjects.Add(antimatter);
             }
         }
+        if (other.CompareTag("MovingPlatform"))
+        {
+            MovingPlatform movingPlatform = other.GetComponent<MovingPlatform>();
+            if (movingPlatform != null)
+            {
+                movingPlatform.SetTimeStopped(true);
+            }
+            if (!movingPlatformObjects.Contains(movingPlatform))
+            {
+                movingPlatformObjects.Add(movingPlatform);
+            }
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -70,6 +83,15 @@ public class TimeStopArea : NetworkBehaviour
                 antimatterObjects.Remove(antimatter);
             }
         }
+        if (other.CompareTag("MovingPlatform"))
+        {
+            MovingPlatform movingPlatform = other.GetComponent<MovingPlatform>();
+            if (movingPlatform != null)
+            {
+                movingPlatform.SetTimeStopped(false);
+            }
+            movingPlatformObjects.Remove(movingPlatform);
+        }
     }
 
     private void OnDisable()
@@ -84,6 +106,11 @@ public class TimeStopArea : NetworkBehaviour
             antimatter.SetTimeStopped(false);
         }
         antimatterObjects.Clear();
+        foreach (var movingPlatform in movingPlatformObjects)
+        {
+            movingPlatform.SetTimeStopped(false);
+        }
+        movingPlatformObjects.Clear();
     }
 
     private void OnDestroy()
@@ -98,5 +125,10 @@ public class TimeStopArea : NetworkBehaviour
             antimatter.SetTimeStopped(false);
         }
         antimatterObjects.Clear();
+        foreach (var movingPlatform in movingPlatformObjects)
+        {
+            movingPlatform.SetTimeStopped(false);
+        }
+        movingPlatformObjects.Clear();
     }
 }
