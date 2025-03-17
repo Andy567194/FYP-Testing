@@ -261,10 +261,8 @@ MonoBehaviour:
   shootPosition: {fileID: 6617533330596069823}
   bulletUseGravity: 0
   _active: 0
-  _bullets: []
   _destroyed: 0
   maximumBullets: 5
-  originalRotation: {x: 0, y: 0, z: 0, w: 0}
   transformResetTimer: 3
 --- !u!114 &1234544624382027276
 MonoBehaviour:
@@ -279,7 +277,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SortKey: 3314234787
-  ObjectInterest: 1
+  ObjectInterest: 0
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
