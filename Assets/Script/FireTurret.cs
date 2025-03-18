@@ -56,6 +56,10 @@ public class FireTurret : NetworkBehaviour
     //    GameObject.Destroy(gameObject);
     //}
 
+    [Networked] public bool active { get; set; } = false;
+    public bool firing;
+
+
     private void StartParticleSystems()
     {
         foreach (ParticleSystem p in gameObject.GetComponentsInChildren<ParticleSystem>())
@@ -84,8 +88,22 @@ public class FireTurret : NetworkBehaviour
             return;
         }
         Starting = true;
-
-        StartCoroutine(FlameControl());
+        if (!active)
+        {
+            ShooterActivation shooterActivation = FindObjectOfType<ShooterActivation>();
+            if (shooterActivation == null)
+            {
+                active = true;
+            }
+            else
+            {
+                return;
+            }
+        }
+        if (active)
+        {
+            StartCoroutine(FlameControl());
+        }
         // precalculate so we can multiply instead of divide every frame
         //stopTimeMultiplier = 1.0f / StopTime;
         //startTimeMultiplier = 1.0f / StartTime;
@@ -94,12 +112,13 @@ public class FireTurret : NetworkBehaviour
         //CreateExplosion(gameObject.transform.position, ForceRadius, ForceAmount);
 
         // start any particle system that is not in the list of manual start particle systems
-        StartParticleSystems();
+        //StartParticleSystems();
     }
 
     private IEnumerator FlameControl()
     {
-        while (true)
+        firing = true;
+        while (firing)
         {
             // Start the flame effect
             isFlameActive = true;
@@ -148,16 +167,33 @@ public class FireTurret : NetworkBehaviour
         //    // time to stop, no duration left
         //    Stop();
         //}
-        if (isFlameActive)
+        if (HasStateAuthority)
         {
-            RaycastHit[] hits = Physics.SphereCastAll(new Ray(transform.position, transform.TransformDirection(Vector3.forward)), fireRadius, fireDistance);
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 10, Color.yellow);
-            foreach (RaycastHit hit in hits)
+            if (active && !firing)
             {
-                PlayerController playerController = hit.collider.gameObject.GetComponent<PlayerController>();
-                if (playerController != null)
+                StartCoroutine(FlameControl());
+            }
+            if (!active)
+            {
+                if (firing)
                 {
-                    playerController.TakeDamage(fireDamage);
+                    StopCoroutine(FlameControl());
+                    StopParticleSystems();
+                    isFlameActive = false;
+                    firing = false;
+                }
+            }
+            if (isFlameActive)
+            {
+                RaycastHit[] hits = Physics.SphereCastAll(new Ray(transform.position, transform.TransformDirection(Vector3.forward)), fireRadius, fireDistance);
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 10, Color.yellow);
+                foreach (RaycastHit hit in hits)
+                {
+                    PlayerController playerController = hit.collider.gameObject.GetComponent<PlayerController>();
+                    if (playerController != null)
+                    {
+                        playerController.TakeDamage(fireDamage);
+                    }
                 }
             }
         }

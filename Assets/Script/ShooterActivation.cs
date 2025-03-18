@@ -6,6 +6,7 @@ using Fusion;
 public class ShooterActivation : NetworkBehaviour
 {
     [SerializeField] Shooter[] shooters;
+    [SerializeField] FireTurret[] fireTurrets;
     private void OnTriggerStay(Collider other)
     {
         if (HasStateAuthority)
@@ -17,6 +18,13 @@ public class ShooterActivation : NetworkBehaviour
                     foreach (Shooter shooter in shooters)
                     {
                         shooter.active = true;
+                    }
+                }
+                if (fireTurrets != null)
+                {
+                    foreach (FireTurret fireTurret in fireTurrets)
+                    {
+                        fireTurret.active = true;
                     }
                 }
             }
@@ -34,6 +42,13 @@ public class ShooterActivation : NetworkBehaviour
                     {
                         shooter.active = false;
                         shooter.destroyed = false;
+                    }
+                }
+                if (fireTurrets != null)
+                {
+                    foreach (FireTurret fireTurret in fireTurrets)
+                    {
+                        fireTurret.active = false;
                     }
                 }
             }
