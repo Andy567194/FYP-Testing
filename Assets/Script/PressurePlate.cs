@@ -8,6 +8,7 @@ public class PressurePlate : MonoBehaviour
     public float pressedHeight = 0.1f; // The height the plate will move down to when pressed
     public float pressSpeed = 1f; // Speed at which the plate moves down
     public float resetSpeed = 2f; // The speed at which the plate will return to its original position
+    public bool OnOffReverse = false;
     private Vector3 originalPosition; // The original position of the plate
     private float targetHeight; // The target height for the plate
     private bool isPressed = false; // Whether the plate is currently pressed
@@ -56,11 +57,26 @@ public class PressurePlate : MonoBehaviour
         }
         if (transform.position.y < originalPosition.y )
         {
-            Door.SetActive(false);
+            if (OnOffReverse)
+            {
+                Door.SetActive(true);
+            }
+            else {
+                Door.SetActive(false);
+            }
+            
         }
         else if(transform.position.y >= originalPosition.y)
         {
-            Door.SetActive(true);
+            
+            if (OnOffReverse)
+            {
+                Door.SetActive(false);
+            }
+            else
+            {
+                Door.SetActive(true);
+            }
         }
     }
 }
