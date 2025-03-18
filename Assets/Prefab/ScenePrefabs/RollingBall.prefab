@@ -8714,7 +8714,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SortKey: 1711989697
-  ObjectInterest: 0
+  ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
