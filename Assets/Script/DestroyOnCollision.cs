@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
-public class DestroyOnCollision : MonoBehaviour
+public class DestroyOnCollision : NetworkBehaviour
 {
     void OnCollisionEnter(Collision collision)
     {
-        // Check if the collided object has the tag 'TimeStoppable'
-        if (collision.gameObject.CompareTag("TimeStoppable"))
+        if (HasStateAuthority)
         {
-            // Destroy this game object
-            Destroy(gameObject);
+            // Check if the collided object has the tag 'TimeStoppable'
+            if (collision.gameObject.CompareTag("TimeStoppable"))
+            {
+                // Destroy this game object
+                Runner.Despawn(gameObject.GetComponent<NetworkObject>());
+            }
         }
     }
 }

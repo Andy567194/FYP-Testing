@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4753953085924462437}
   - component: {fileID: 1518580738390890037}
   - component: {fileID: 5224387840590918173}
+  - component: {fileID: -5674493692066136844}
   m_Layer: 0
   m_Name: DestroyableBlock
   m_TagString: Untagged
@@ -390,3 +391,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a24554d411ddf54089eaf9814f5f28b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-5674493692066136844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8820791080984763549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 3334077293
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 5224387840590918173}

@@ -202,7 +202,7 @@ public class PlayerController : NetworkBehaviour
             {
                 manipulateObject(data);
             }
-            isGrounded = Physics.CheckSphere(groundCheck.position, 0.2f, LayerMask.GetMask("Default"));
+            isGrounded = Physics.CheckSphere(groundCheck.position, 0.3f, LayerMask.GetMask("Default"));
             if (isGrounded && jumpButtonPressed.IsSet(InputButton.Jump))
             {
                 rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
