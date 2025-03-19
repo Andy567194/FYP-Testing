@@ -8,15 +8,16 @@ public class MovingPlatform : NetworkBehaviour
     public float speed = 2f; // Speed of movement
 
     private Vector3 targetPosition;
-    private bool movingToB = true;
+    private bool movingToB = false; // Tracks direction
     [Networked] public bool timeStopped { get; set; } = false;
+    [Networked] private int playersOnPlatform { get; set; } = 0; // Tracks number of players on platform
 
     public override void Spawned()
     {
         if (HasStateAuthority)
         {
             transform.position = pointA;
-            targetPosition = pointB;
+            targetPosition = pointA; // Start at pointA by default
         }
     }
 
@@ -24,18 +25,43 @@ public class MovingPlatform : NetworkBehaviour
     {
         if (HasStateAuthority)
         {
-            // Move the platform
+            // Move the platform if not time-stopped
             if (!timeStopped)
             {
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Runner.DeltaTime);
-            }
 
-            // Switch target position if platform reaches its destination
-            if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
-            {
-                movingToB = !movingToB;
-                targetPosition = movingToB ? pointB : pointA;
+                // Update target based on player presence
+                if (playersOnPlatform > 0)
+                {
+                    // Move to pointB if players are on the platform
+                    targetPosition = pointB;
+                    movingToB = true;
+                }
+                else if (Vector3.Distance(transform.position, pointA) > 0.1f)
+                {
+                    // Return to pointA if no players are on it (and not already at pointA)
+                    targetPosition = pointA;
+                    movingToB = false;
+                }
             }
+        }
+    }
+
+    // Detect when a player enters the platform
+    private void OnTriggerEnter(Collider other)
+    {
+        if (HasStateAuthority && other.CompareTag("Player")) // Ensure the object has the "Player" tag
+        {
+            playersOnPlatform++;
+        }
+    }
+
+    // Detect when a player leaves the platform
+    private void OnTriggerExit(Collider other)
+    {
+        if (HasStateAuthority && other.CompareTag("Player"))
+        {
+            playersOnPlatform = Mathf.Max(0, playersOnPlatform - 1); // Prevent negative count
         }
     }
 
