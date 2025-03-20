@@ -48,8 +48,9 @@ public class PlayerInteraction : NetworkBehaviour
     // }
     void TryPickUpObject()
     {
+        Transform cameraTransform = GetComponentInChildren<Camera>().transform;
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, 2f))
+        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, 2f, ~LayerMask.GetMask("Ignore Raycast") | ~LayerMask.GetMask("LocalPlayerModel")))
         {
             if (hit.collider.CompareTag("Pickup"))
             {

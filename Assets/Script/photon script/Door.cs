@@ -14,6 +14,8 @@ public class Door : NetworkBehaviour
             Debug.Log("Door unlocked!");
             // For example, you can disable the collider to simulate the door being opened
             GetComponent<Collider>().enabled = false;
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (rb != null) rb.isKinematic = false;
         }
     }
 }

@@ -4,9 +4,11 @@ using Fusion;
 using Fusion.Sockets;
 using System.Collections.Generic;
 using System;
+using System.Threading.Tasks;
 //using static UnityEditor.Experimental.GraphView.GraphView;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using Fusion.Addons.Physics;
 
 public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -14,7 +16,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     private float _mouseSensitivity = 10f;
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     public Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
-    //[Networked, Capacity(12)] private NetworkDictionary<PlayerRef, PlayerController> Players => default;
+    private List<PlayerRef> _playersToRespawn = new List<PlayerRef>(); // Track players to respawn after scene change
 
     private NetworkRunner _runner;
     [SerializeField] Transform playerSpawnPoint;
@@ -69,7 +71,6 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         inputData.Skill2Button.Set(InputButton.Skill2, Input.GetKey(KeyCode.E));
         inputData.Skill3Button.Set(InputButton.Skill3, Input.GetKey(KeyCode.Q));
 
-
         input.Set(inputData);
     }
 
@@ -90,21 +91,32 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        // Create a unique position for the player
-        Vector3 spawnPosition = playerSpawnPoint.position;
-        NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
-
-        // Assign input authority to the player object
-        networkPlayerObject.AssignInputAuthority(player);
-
-        // Keep track of the player avatars for easy access
-        _spawnedCharacters.Add(player, networkPlayerObject);
-
-        // Log whether the player has InputAuthority
-        Debug.Log($"Player {player} joined. Has InputAuthority: {networkPlayerObject.HasInputAuthority}");
-
+        Debug.Log($"OnPlayerJoined called for Player {player}, IsServer: {runner.IsServer}");
+        SpawnPlayer(player);
     }
+    private void SpawnPlayer(PlayerRef player)
+    {
+        // Only the host (server) should spawn NetworkObjects
+        if (_runner.IsServer)
+        {
+            // Create a unique position for the player
+            Vector3 spawnPosition = playerSpawnPoint.position;
+            NetworkObject networkPlayerObject = _runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
 
+            // Assign input authority to the player object
+            networkPlayerObject.AssignInputAuthority(player);
+
+            // Keep track of the player avatars for easy access
+            _spawnedCharacters[player] = networkPlayerObject;
+
+            // Log whether the player has InputAuthority
+            Debug.Log($"Player {player} spawned by host. Has InputAuthority: {networkPlayerObject.HasInputAuthority}");
+        }
+        else
+        {
+            Debug.Log($"Player {player} not spawned - client lacks authority.");
+        }
+    }
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
         if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
@@ -124,14 +136,41 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         // Implementation needed
     }
 
-    public void OnSceneLoadDone(NetworkRunner runner)
+    public async void OnSceneLoadDone(NetworkRunner runner)
     {
-        // Implementation needed
+        // After the scene loads, respawn players (only on the host)
+        if (runner.IsServer)
+        {
+            // Delay to ensure despawn and spawn don't happen in the same tick
+            await Task.Delay(100); // Wait 100ms to avoid same-tick spawn/despawn
+
+            foreach (var player in _playersToRespawn)
+            {
+                // Respawn the player in the new scene
+                SpawnPlayer(player);
+                Debug.Log($"Scene loaded - Respawned Player {player} at {playerSpawnPoint.position}");
+            }
+            _playersToRespawn.Clear(); // Clear the list after respawning
+        }
     }
 
     public void OnSceneLoadStart(NetworkRunner runner)
     {
-        // Implementation needed
+        // Before the scene unloads, despawn all players and store their PlayerRefs
+        if (runner.IsServer)
+        {
+            _playersToRespawn.Clear();
+            foreach (var player in _spawnedCharacters)
+            {
+                if (player.Value != null)
+                {
+                    _playersToRespawn.Add(player.Key); // Store PlayerRef for respawning
+                    //runner.Despawn(player.Value);
+                    //Debug.Log($"Despawning Player {player.Key} before scene change.");
+                }
+            }
+            //_spawnedCharacters.Clear(); // Clear the dictionary to avoid stale references
+        }
     }
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
@@ -148,7 +187,10 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     {
 
     }
-
+    private void Start()
+    {
+        StartGame(GameMode.AutoHostOrClient);
+    }
     async void StartGame(GameMode mode)
     {
         // Create the Fusion runner and let it know that we will be providing user input
@@ -163,53 +205,32 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
         }
 
+        // Use a unique session name for testing
+        string sessionName = "TestRoom_";
         // Start or join (depends on gamemode) a session with a specific name
         await _runner.StartGame(new StartGameArgs()
         {
             GameMode = mode,
-            SessionName = "TestRoom",
+            SessionName = sessionName,
             Scene = scene,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>(),
+
         });
 
-        // Ensure the host has input authority
-        if (mode == GameMode.Host)
-        {
-            foreach (var player in _runner.ActivePlayers)
-            {
-                if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
-                {
-                    networkObject.AssignInputAuthority(player);
-                    Debug.Log($"Host player {player} assigned input authority: {networkObject.HasInputAuthority}");
-                }
-            }
-        }
-        else if (mode == GameMode.Client)
-        {
-            // Ensure the client has input authority
-            foreach (var player in _runner.ActivePlayers)
-            {
-                if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
-                {
-                    networkObject.AssignInputAuthority(player);
-                    Debug.Log($"Client player {player} assigned input authority: {networkObject.HasInputAuthority}");
-                }
-            }
-        }
+        Debug.Log($"Started game with session name: {sessionName}");
     }
-
-    private void OnGUI()
-    {
-        if (_runner == null)
-        {
-            if (GUI.Button(new Rect(0, 0, 200, 40), "Host"))
-            {
-                StartGame(GameMode.Host);
-            }
-            if (GUI.Button(new Rect(0, 40, 200, 40), "Join"))
-            {
-                StartGame(GameMode.Client);
-            }
-        }
-    }
+    // private void OnGUI()
+    // {
+    //    if (_runner == null)
+    //  {
+    //    if (GUI.Button(new Rect(0, 0, 200, 40), "Host"))
+    //  {
+    //    StartGame(GameMode.Host);
+    //}
+    //if (GUI.Button(new Rect(0, 40, 200, 40), "Join"))
+    //{
+    //   StartGame(GameMode.Client);
+    //  /}
+    //}/
+    //}
 }
