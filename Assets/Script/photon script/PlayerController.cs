@@ -54,7 +54,6 @@ public class PlayerController : NetworkBehaviour
     bool manipulatingObject = false;
     [SerializeField] float invincibleTime = 1f;
     float invincibleTimer = 0f;
-    Speaker speaker;
     [SerializeField] Sprite openMicSprite, offMicSprite;
 
     public override void Spawned()
@@ -75,7 +74,6 @@ public class PlayerController : NetworkBehaviour
             Cursor.visible = false;
 
             Rpc_SetLayerInChildren();
-            speaker = GetComponent<Speaker>();
         }
         else
         {
@@ -268,12 +266,7 @@ public class PlayerController : NetworkBehaviour
             }
             if (VoiceChatButtonPressed.IsSet(InputButton.VoiceChat))
             {
-                speaker.enabled = !speaker.enabled;
-                Image mic = transform.Find("Canvas").Find("mic").GetComponent<Image>();
-                if (mic != null && openMicSprite != null && offMicSprite != null)
-                {
-                    mic.sprite = speaker.enabled ? openMicSprite : offMicSprite;
-                }
+                Rpc_SetMicOnOff();
             }
         }
 
@@ -411,6 +404,18 @@ public class PlayerController : NetworkBehaviour
             {
                 selectedObject.GetComponent<TimeControl>().storedForce = selectedObject.transform.forward * selectedObject.GetComponent<TimeControl>().storedForce.magnitude;
             }
+        }
+    }
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void Rpc_SetMicOnOff()
+    {
+        Debug.Log("Rpc_SetMicOnOff called");
+        Speaker speaker = GetComponent<Speaker>();
+        speaker.enabled = !speaker.enabled;
+        Image mic = transform.Find("Canvas").Find("mic").GetComponent<Image>();
+        if (mic != null && openMicSprite != null && offMicSprite != null)
+        {
+            mic.sprite = speaker.enabled ? openMicSprite : offMicSprite;
         }
     }
 }

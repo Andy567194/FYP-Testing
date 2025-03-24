@@ -208,7 +208,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         }
 
         // Use a unique session name for testing
-        string sessionName = "TestRoom_andy";
+        string sessionName = "TestRoom_";
         // Start or join (depends on gamemode) a session with a specific name
         await _runner.StartGame(new StartGameArgs()
         {
