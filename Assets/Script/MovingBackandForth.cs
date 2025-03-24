@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
-public class MovingBackandForth : MonoBehaviour
+public class MovingBackandForth : NetworkBehaviour
 {
     public enum Axis { X, Y, Z }
     public Axis moveAxis = Axis.X;
@@ -10,27 +11,30 @@ public class MovingBackandForth : MonoBehaviour
 
     private Vector3 direction;
 
-    void Start()
+    public override void Spawned()
     {
-        // Set initial direction based on the selected axis
-        switch (moveAxis)
+        if (HasStateAuthority)
         {
-            case Axis.X:
-                direction = Vector3.right;
-                Debug.Log("Moving along X axis");
-                break;
-            case Axis.Y:
-                direction = Vector3.up;
-                Debug.Log("Moving along Y axis");
-                break;
-            case Axis.Z:
-                direction = Vector3.forward;
-                Debug.Log("Moving along Z axis");
-                break;
+            // Set initial direction based on the selected axis
+            switch (moveAxis)
+            {
+                case Axis.X:
+                    direction = Vector3.right;
+                    Debug.Log("Moving along X axis");
+                    break;
+                case Axis.Y:
+                    direction = Vector3.up;
+                    Debug.Log("Moving along Y axis");
+                    break;
+                case Axis.Z:
+                    direction = Vector3.forward;
+                    Debug.Log("Moving along Z axis");
+                    break;
+            }
         }
     }
 
-    void Update()
+    public override void FixedUpdateNetwork()
     {
         // Move the object along the specified axis
         transform.Translate(direction * speed * Time.deltaTime);
@@ -38,7 +42,10 @@ public class MovingBackandForth : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        // Reverse the direction when a collision is detected
-        direction = -direction;
+        if (HasStateAuthority)
+        {
+            // Reverse the direction when a collision is detected
+            direction = -direction;
+        }
     }
 }
