@@ -8,7 +8,7 @@ public class TimeStopArea : NetworkBehaviour
     private List<TimeControl> timeControllableObjects = new List<TimeControl>();
     private List<Antimatter> antimatterObjects = new List<Antimatter>();
     private List<MovingPlatform> movingPlatformObjects = new List<MovingPlatform>();
-
+    private List<PressurePlate> pressurePlateObjects = new List<PressurePlate>();
 
     void Start()
     {
@@ -59,6 +59,18 @@ public class TimeStopArea : NetworkBehaviour
                 movingPlatformObjects.Add(movingPlatform);
             }
         }
+        if (other.CompareTag("PressurePlate"))
+        {
+            PressurePlate pressurePlate = other.GetComponent<PressurePlate>();
+            if (pressurePlate != null)
+            {
+                pressurePlate.SetTimeStopped(true);
+            }
+            if (!pressurePlateObjects.Contains(pressurePlate))
+            {
+                pressurePlateObjects.Add(pressurePlate);
+            }
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -92,6 +104,15 @@ public class TimeStopArea : NetworkBehaviour
             }
             movingPlatformObjects.Remove(movingPlatform);
         }
+        if (other.CompareTag("PressurePlate"))
+        {
+            PressurePlate pressurePlate = other.GetComponent<PressurePlate>();
+            if (pressurePlate != null)
+            {
+                pressurePlate.SetTimeStopped(false);
+                pressurePlateObjects.Remove(pressurePlate);
+            }
+        }
     }
 
     private void OnDisable()
@@ -111,6 +132,11 @@ public class TimeStopArea : NetworkBehaviour
             movingPlatform.SetTimeStopped(false);
         }
         movingPlatformObjects.Clear();
+        foreach (var pressurePlate in pressurePlateObjects)
+        {
+            pressurePlate.SetTimeStopped(false);
+        }
+        pressurePlateObjects.Clear();
     }
 
     private void OnDestroy()
@@ -130,5 +156,10 @@ public class TimeStopArea : NetworkBehaviour
             movingPlatform.SetTimeStopped(false);
         }
         movingPlatformObjects.Clear();
+        foreach (var pressurePlate in pressurePlateObjects)
+        {
+            pressurePlate.SetTimeStopped(false);
+        }
+        pressurePlateObjects.Clear();
     }
 }

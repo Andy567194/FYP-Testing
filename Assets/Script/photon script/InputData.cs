@@ -9,6 +9,7 @@ public enum InputButton
     PickUp,
     Skill2,
     Skill3,
+    VoiceChat,
 }
 
 public struct InputData : INetworkInput
@@ -22,4 +23,5 @@ public struct InputData : INetworkInput
     public float ScrollInput;
     public NetworkButtons Skill2Button;
     public NetworkButtons Skill3Button;
+    public NetworkButtons VoiceChatButton;
 }

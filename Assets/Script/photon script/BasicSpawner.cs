@@ -70,6 +70,8 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         inputData.PickUpButton.Set(InputButton.PickUp, Input.GetKey(KeyCode.Mouse0));
         inputData.Skill2Button.Set(InputButton.Skill2, Input.GetKey(KeyCode.E));
         inputData.Skill3Button.Set(InputButton.Skill3, Input.GetKey(KeyCode.Q));
+        inputData.VoiceChatButton.Set(InputButton.VoiceChat, Input.GetKey(KeyCode.V));
+
 
         input.Set(inputData);
     }
@@ -206,7 +208,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         }
 
         // Use a unique session name for testing
-        string sessionName = "TestRoom_";
+        string sessionName = "TestRoom_andy";
         // Start or join (depends on gamemode) a session with a specific name
         await _runner.StartGame(new StartGameArgs()
         {

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
-public class PressurePlate : MonoBehaviour
+public class PressurePlate : NetworkBehaviour
 {
     public GameObject Door;
     public float pressedHeight = 0.1f; // The height the plate will move down to when pressed
@@ -12,9 +13,10 @@ public class PressurePlate : MonoBehaviour
     private Vector3 originalPosition; // The original position of the plate
     private float targetHeight; // The target height for the plate
     private bool isPressed = false; // Whether the plate is currently pressed
-    
+    [Networked] public bool timeStopped { get; set; } = false;
 
-    private void Start()
+
+    public override void Spawned()
     {
         // Store the original position of the plate
         originalPosition = transform.position;
@@ -31,7 +33,7 @@ public class PressurePlate : MonoBehaviour
             isPressed = true;
         }
 
-        
+
     }
 
     private void OnCollisionExit(Collision collision)
@@ -43,8 +45,12 @@ public class PressurePlate : MonoBehaviour
         }
     }
 
-    private void Update()
+    public override void FixedUpdateNetwork()
     {
+        if (timeStopped)
+        {
+            return;
+        }
         // Move the plate towards the target height
         float step = (isPressed ? pressSpeed : resetSpeed) * Time.deltaTime;
         float newY = Mathf.MoveTowards(transform.position.y, targetHeight, step);
@@ -55,28 +61,40 @@ public class PressurePlate : MonoBehaviour
         {
             targetHeight = originalPosition.y;
         }
-        if (transform.position.y < originalPosition.y )
+        if (transform.position.y < originalPosition.y)
         {
             if (OnOffReverse)
             {
-                Door.SetActive(true);
-            }
-            else {
-                Door.SetActive(false);
-            }
-            
-        }
-        else if(transform.position.y >= originalPosition.y)
-        {
-            
-            if (OnOffReverse)
-            {
-                Door.SetActive(false);
+                Rpc_SetDoorActive(true);
             }
             else
             {
-                Door.SetActive(true);
+                Rpc_SetDoorActive(false);
+            }
+
+        }
+        else if (transform.position.y >= originalPosition.y)
+        {
+
+            if (OnOffReverse)
+            {
+                Rpc_SetDoorActive(false);
+            }
+            else
+            {
+                Rpc_SetDoorActive(true);
             }
         }
+    }
+
+    public void SetTimeStopped(bool timeStopped)
+    {
+        this.timeStopped = timeStopped;
+    }
+
+    [Rpc]
+    public void Rpc_SetDoorActive(bool active)
+    {
+        Door.SetActive(active);
     }
 }

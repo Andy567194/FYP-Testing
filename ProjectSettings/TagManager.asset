@@ -11,6 +11,7 @@ TagManager:
   - StoredEnergyText
   - Antimatter
   - MovingPlatform
+  - PressurePlate
   layers:
   - Default
   - TransparentFX

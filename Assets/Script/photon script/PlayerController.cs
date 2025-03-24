@@ -1,5 +1,6 @@
 using Fusion;
 using Fusion.Addons.Physics;
+using Photon.Voice.Unity;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,6 +30,8 @@ public class PlayerController : NetworkBehaviour
     private NetworkButtons _Skill2PreviousButton { get; set; }
     [Networked]
     private NetworkButtons _Skill3PreviousButton { get; set; }
+    [Networked]
+    private NetworkButtons _VoiceChatPreviousButton { get; set; }
 
     private TimeStopAreaSpawner timeStopAreaSpawner;
     private Rigidbody rb;
@@ -51,6 +54,8 @@ public class PlayerController : NetworkBehaviour
     bool manipulatingObject = false;
     [SerializeField] float invincibleTime = 1f;
     float invincibleTimer = 0f;
+    Speaker speaker;
+    [SerializeField] Sprite openMicSprite, offMicSprite;
 
     public override void Spawned()
     {
@@ -70,6 +75,7 @@ public class PlayerController : NetworkBehaviour
             Cursor.visible = false;
 
             Rpc_SetLayerInChildren();
+            speaker = GetComponent<Speaker>();
         }
         else
         {
@@ -154,6 +160,10 @@ public class PlayerController : NetworkBehaviour
 
             var Skill3ButtonPressed = data.Skill3Button.GetPressed(_Skill3PreviousButton);
             _Skill3PreviousButton = data.Skill3Button;
+
+            var VoiceChatButtonPressed = data.VoiceChatButton.GetPressed(_VoiceChatPreviousButton);
+            _VoiceChatPreviousButton = data.VoiceChatButton;
+
 
             Vector3 moveInput = Vector3.zero;
             if (data.MoveInput.x > 0)
@@ -254,6 +264,15 @@ public class PlayerController : NetworkBehaviour
                 {
                     manipulateEnergy.SetEnergyUsage(data.ScrollInput);
                     energyUseageText.GetComponent<Text>().text = "Use Energy Amount: " + manipulateEnergy.useEnergyAmount;
+                }
+            }
+            if (VoiceChatButtonPressed.IsSet(InputButton.VoiceChat))
+            {
+                speaker.enabled = !speaker.enabled;
+                Image mic = transform.Find("Canvas").Find("mic").GetComponent<Image>();
+                if (mic != null && openMicSprite != null && offMicSprite != null)
+                {
+                    mic.sprite = speaker.enabled ? openMicSprite : offMicSprite;
                 }
             }
         }
