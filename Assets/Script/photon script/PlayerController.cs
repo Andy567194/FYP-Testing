@@ -301,11 +301,16 @@ public class PlayerController : NetworkBehaviour
         {
             // Define spawn points
             Vector3 defaultSpawn = new Vector3(17.73f, 7.094f, 7.81f);
+            Vector3 phase1Spawn = new Vector3(33.36f, 8.990735f, 94.4f);// Adjust these coordinates
+            Vector3 phase2Spawn = new Vector3(33.36f, 8.990735f, 94.4f);// Adjust these coordinates
             Vector3 phase3Spawn = new Vector3(33.36f, 8.990735f, 94.4f);    // Adjust these coordinates
-            Vector3 phase4Spawn = new Vector3(36.34f, 2.56f, 156.89f);  // Adjust these coordinates
+            Vector3 phase4Spawn = new Vector3(36.34f, 11.97f, 156.89f);  // Adjust these coordinates
             Vector3 phase5Spawn = new Vector3(-13.5f, 9.29f, 216f);  // Adjust these coordinates
 
             // Find phase region GameObjects
+
+            GameObject phase1Region = GameObject.Find("ShooterActivation 1");
+            GameObject phase2Region = GameObject.Find("ShooterActivation 2");
             GameObject phase3Region = GameObject.Find("ShooterActivation 3");
             GameObject phase4Region = GameObject.Find("ShooterActivation 4");
             GameObject phase5Region = GameObject.Find("ShooterActivation 5");
@@ -322,6 +327,14 @@ public class PlayerController : NetworkBehaviour
             else if (phase3Region != null && phase3Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
             {
                 Rpc_Respawn(phase3Spawn);
+            }
+            else if (phase2Region != null && phase2Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
+            {
+                Rpc_Respawn(phase2Spawn);
+            }
+            else if (phase1Region != null && phase1Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
+            {
+                Rpc_Respawn(phase1Spawn);
             }
             else
             {
