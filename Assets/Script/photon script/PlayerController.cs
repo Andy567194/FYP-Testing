@@ -369,7 +369,7 @@ public class PlayerController : NetworkBehaviour
   }
 } */
 
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    [Rpc]
     public void Rpc_Respawn(Vector3 respawnPosition)
     {
         // Implement respawn logic here
