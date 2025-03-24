@@ -296,53 +296,53 @@ public class PlayerController : NetworkBehaviour
         Hp -= damage;
         invincibleTimer = invincibleTime;
         Debug.Log($"Player took {damage} damage. Current HP: {Hp}");
-
-        if (Hp <= 0)
-        {
-            // Define spawn points
-            Vector3 defaultSpawn = new Vector3(17.73f, 7.094f, 7.81f);
-            Vector3 phase1Spawn = new Vector3(33.36f, 8.990735f, 94.4f);// Adjust these coordinates
-            Vector3 phase2Spawn = new Vector3(33.36f, 8.990735f, 94.4f);// Adjust these coordinates
-            Vector3 phase3Spawn = new Vector3(33.36f, 8.990735f, 94.4f);    // Adjust these coordinates
-            Vector3 phase4Spawn = new Vector3(36.34f, 11.97f, 156.89f);  // Adjust these coordinates
-            Vector3 phase5Spawn = new Vector3(-13.5f, 9.29f, 216f);  // Adjust these coordinates
-
-            // Find phase region GameObjects
-
-            GameObject phase1Region = GameObject.Find("ShooterActivation 1");
-            GameObject phase2Region = GameObject.Find("ShooterActivation 2");
-            GameObject phase3Region = GameObject.Find("ShooterActivation 3");
-            GameObject phase4Region = GameObject.Find("ShooterActivation 4");
-            GameObject phase5Region = GameObject.Find("ShooterActivation 5");
-
-            // Check each region and spawn accordingly
-            if (phase5Region != null && phase5Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
-            {
-                Rpc_Respawn(phase5Spawn);
-            }
-            else if (phase4Region != null && phase4Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
-            {
-                Rpc_Respawn(phase4Spawn);
-            }
-            else if (phase3Region != null && phase3Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
-            {
-                Rpc_Respawn(phase3Spawn);
-            }
-            else if (phase2Region != null && phase2Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
-            {
-                Rpc_Respawn(phase2Spawn);
-            }
-            else if (phase1Region != null && phase1Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
-            {
-                Rpc_Respawn(phase1Spawn);
-            }
-            else
-            {
-                // Fallback to default spawn if not in any specific region
-                Rpc_Respawn(defaultSpawn);
-            }
-        }
     }
+    /*  if (Hp <= 0)
+      {
+          // Define spawn points
+          Vector3 defaultSpawn = new Vector3(17.73f, 7.094f, 7.81f);
+          Vector3 phase1Spawn = new Vector3(33.36f, 8.990735f, 94.4f);// Adjust these coordinates
+          Vector3 phase2Spawn = new Vector3(33.36f, 8.990735f, 94.4f);// Adjust these coordinates
+          Vector3 phase3Spawn = new Vector3(33.36f, 8.990735f, 94.4f);    // Adjust these coordinates
+          Vector3 phase4Spawn = new Vector3(36.34f, 11.97f, 156.89f);  // Adjust these coordinates
+          Vector3 phase5Spawn = new Vector3(-13.5f, 9.29f, 216f);  // Adjust these coordinates
+
+          // Find phase region GameObjects
+
+          GameObject phase1Region = GameObject.Find("ShooterActivation 1");
+          GameObject phase2Region = GameObject.Find("ShooterActivation 2");
+          GameObject phase3Region = GameObject.Find("ShooterActivation 3");
+          GameObject phase4Region = GameObject.Find("ShooterActivation 4");
+          GameObject phase5Region = GameObject.Find("ShooterActivation 5");
+
+          // Check each region and spawn accordingly
+          if (phase5Region != null && phase5Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
+          {
+              Rpc_Respawn(phase5Spawn);
+          }
+          else if (phase4Region != null && phase4Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
+          {
+              Rpc_Respawn(phase4Spawn);
+          }
+          else if (phase3Region != null && phase3Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
+          {
+              Rpc_Respawn(phase3Spawn);
+          }
+          else if (phase2Region != null && phase2Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
+          {
+              Rpc_Respawn(phase2Spawn);
+          }
+          else if (phase1Region != null && phase1Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
+          {
+              Rpc_Respawn(phase1Spawn);
+          }
+          else
+          {
+              // Fallback to default spawn if not in any specific region
+              Rpc_Respawn(defaultSpawn);
+          }
+      }
+  } */
 
     [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
     public void Rpc_Respawn(Vector3 respawnPosition)
