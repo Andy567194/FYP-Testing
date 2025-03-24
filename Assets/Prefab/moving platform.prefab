@@ -103,7 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointA: {x: 0, y: 0, z: 0}
   pointB: {x: 0, y: 0, z: 0}
-  speed: 2
+  speed: 4
   _timeStopped: 0
 --- !u!114 &1049534212209017131
 MonoBehaviour:
