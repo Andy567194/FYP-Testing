@@ -32,12 +32,12 @@ public class ShooterActivation : NetworkBehaviour
                 }
 
                 // Check player's health and trigger respawn if dead
-                PlayerController playerHealth = other.GetComponent<PlayerController>(); // Assuming your player script is named PlayerHealth
-                if (playerHealth != null && playerHealth.Hp <= 0)
+                PlayerController playerController = other.GetComponent<PlayerController>(); // Assuming your player script is named PlayerHealth
+                if (playerController != null)
                 {
                     if (respawnPoint != null)
                     {
-                        playerHealth.Rpc_Respawn(respawnPoint.transform.position);
+                        playerController.respawnPoint = respawnPoint.transform;
                     }
                     else
                     {
