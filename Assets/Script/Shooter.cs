@@ -22,7 +22,8 @@ public class Shooter : NetworkBehaviour
     public int maximumBullets = 5;
     Transform turret;
     Quaternion originalRotation;
-    public float transformResetTimer = 3;
+    float transformResetTimer = 3;
+    public float bulletLifetime = 5;
 
     public override void Spawned()
     {
@@ -78,6 +79,11 @@ public class Shooter : NetworkBehaviour
                     if (platformRotate90 != null)
                     {
                         platformRotate90.Rotate90();
+                    }
+                    ObjectTimeout objectTimeout = cube.GetComponent<ObjectTimeout>();
+                    if (objectTimeout != null)
+                    {
+                        objectTimeout.timeout = bulletLifetime;
                     }
                 }
                 RPC_PlayParticle();
