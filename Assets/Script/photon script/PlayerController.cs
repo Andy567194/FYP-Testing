@@ -317,7 +317,7 @@ public class PlayerController : NetworkBehaviour
             }
             else
             {
-                Rpc_Respawn(GameObject.Find("BasicSpawner").transform.Find("PlayerSpawnPoint").transform.position);
+                Rpc_Respawn(Vector3.zero);
             }
 
         }
