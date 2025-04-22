@@ -167,11 +167,11 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
                 if (player.Value != null)
                 {
                     _playersToRespawn.Add(player.Key); // Store PlayerRef for respawning
-                    //runner.Despawn(player.Value);
-                    //Debug.Log($"Despawning Player {player.Key} before scene change.");
+                    runner.Despawn(player.Value);
+                    Debug.Log($"Despawning Player {player.Key} before scene change.");
                 }
             }
-            //_spawnedCharacters.Clear(); // Clear the dictionary to avoid stale references
+            _spawnedCharacters.Clear(); // Clear the dictionary to avoid stale references
         }
     }
 
