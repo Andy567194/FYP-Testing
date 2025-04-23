@@ -103,7 +103,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         {
             // Create a unique position for the player
             Vector3 spawnPosition = playerSpawnPoint.position;
-            NetworkObject networkPlayerObject = _runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
+            NetworkObject networkPlayerObject = _runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
 
             // Assign input authority to the player object
             networkPlayerObject.AssignInputAuthority(player);
@@ -167,11 +167,11 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
                 if (player.Value != null)
                 {
                     _playersToRespawn.Add(player.Key); // Store PlayerRef for respawning
-                    //runner.Despawn(player.Value);
-                    //Debug.Log($"Despawning Player {player.Key} before scene change.");
+                    runner.Despawn(player.Value);
+                    Debug.Log($"Despawning Player {player.Key} before scene change.");
                 }
             }
-            //_spawnedCharacters.Clear(); // Clear the dictionary to avoid stale references
+            _spawnedCharacters.Clear(); // Clear the dictionary to avoid stale references
         }
     }
 

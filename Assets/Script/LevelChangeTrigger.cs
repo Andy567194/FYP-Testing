@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelChangeTrigger : NetworkBehaviour
 {
-    [Networked] private bool hasTriggered { get; set; } = false; // Networked to sync across clients
+    [Networked] public bool hasTriggered { get; set; } = false; // Networked to sync across clients
 
     // Called when another collider enters this trigger
     private void OnTriggerEnter(Collider other)
@@ -55,12 +55,12 @@ public class LevelChangeTrigger : NetworkBehaviour
             if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
             {
                 string nextSceneName = SceneManager.GetSceneByBuildIndex(nextSceneIndex).name;
-                //if (string.IsNullOrEmpty(nextSceneName))
-                //{
-                //    // If the scene isn't loaded yet, use the path to extract the name
-                //    string scenePath = SceneUtility.GetScenePathByBuildIndex(nextSceneIndex);
-                //    nextSceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
-                //}
+                if (string.IsNullOrEmpty(nextSceneName))
+                {
+                    // If the scene isn't loaded yet, use the path to extract the name
+                    string scenePath = SceneUtility.GetScenePathByBuildIndex(nextSceneIndex);
+                    nextSceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
+                }
 
                 // Load the next scene for all clients
                 Debug.Log($"Loading scene: {nextSceneName} (index: {nextSceneIndex})");
