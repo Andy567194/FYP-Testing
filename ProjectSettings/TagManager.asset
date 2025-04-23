@@ -12,6 +12,9 @@ TagManager:
   - Antimatter
   - MovingPlatform
   - PressurePlate
+  - LV1CUBE
+  - LV2CUBE
+  - LV3CUBE
   layers:
   - Default
   - TransparentFX
