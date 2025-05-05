@@ -9,6 +9,8 @@ public class TimeStopArea : NetworkBehaviour
     private List<Antimatter> antimatterObjects = new List<Antimatter>();
     private List<MovingPlatform> movingPlatformObjects = new List<MovingPlatform>();
     private List<PressurePlate> pressurePlateObjects = new List<PressurePlate>();
+    private List<FireTurret> fireTurretsObjects = new List<FireTurret>();
+
 
     void Start()
     {
@@ -71,6 +73,18 @@ public class TimeStopArea : NetworkBehaviour
                 pressurePlateObjects.Add(pressurePlate);
             }
         }
+        if (other.CompareTag("FireTurret"))
+        {
+            FireTurret fireTurret = other.GetComponentInChildren<FireTurret>();
+            if (fireTurret != null)
+            {
+                fireTurret.RPC_SetTimeStop(true);
+            }
+            if (!fireTurretsObjects.Contains(fireTurret))
+            {
+                fireTurretsObjects.Add(fireTurret);
+            }
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -113,6 +127,15 @@ public class TimeStopArea : NetworkBehaviour
                 pressurePlateObjects.Remove(pressurePlate);
             }
         }
+        if (other.CompareTag("FireTurret"))
+        {
+            FireTurret fireTurret = other.GetComponentInChildren<FireTurret>();
+            if (fireTurret != null)
+            {
+                fireTurret.RPC_SetTimeStop(false);
+                fireTurretsObjects.Remove(fireTurret);
+            }
+        }
     }
 
     private void OnDisable()
@@ -137,6 +160,11 @@ public class TimeStopArea : NetworkBehaviour
             pressurePlate.SetTimeStopped(false);
         }
         pressurePlateObjects.Clear();
+        foreach (var fireTurret in fireTurretsObjects)
+        {
+            fireTurret.RPC_SetTimeStop(false);
+        }
+        fireTurretsObjects.Clear();
     }
 
     private void OnDestroy()
@@ -161,5 +189,10 @@ public class TimeStopArea : NetworkBehaviour
             pressurePlate.SetTimeStopped(false);
         }
         pressurePlateObjects.Clear();
+        foreach (var fireTurret in fireTurretsObjects)
+        {
+            fireTurret.RPC_SetTimeStop(false);
+        }
+        fireTurretsObjects.Clear();
     }
 }

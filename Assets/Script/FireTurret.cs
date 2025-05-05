@@ -58,7 +58,8 @@ public class FireTurret : NetworkBehaviour
 
     [Networked] public bool active { get; set; } = false;
     public bool firing;
-
+    [Networked] public bool timeStop { get; set; } = false;
+    Coroutine co;
 
     private void StartParticleSystems()
     {
@@ -102,7 +103,7 @@ public class FireTurret : NetworkBehaviour
         }
         if (active)
         {
-            StartCoroutine(FlameControl());
+            co = StartCoroutine(FlameControl());
         }
         // precalculate so we can multiply instead of divide every frame
         //stopTimeMultiplier = 1.0f / StopTime;
@@ -171,13 +172,13 @@ public class FireTurret : NetworkBehaviour
         {
             if (active && !firing)
             {
-                StartCoroutine(FlameControl());
+                co = StartCoroutine(FlameControl());
             }
-            if (!active)
+            if (!active || timeStop)
             {
                 if (firing)
                 {
-                    StopCoroutine(FlameControl());
+                    StopCoroutine(co);
                     StopParticleSystems();
                     isFlameActive = false;
                     firing = false;
@@ -285,5 +286,11 @@ public class FireTurret : NetworkBehaviour
         {
             AudioSource.Stop();
         }
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_SetTimeStop(bool timeStop)
+    {
+        this.timeStop = timeStop;
     }
 }

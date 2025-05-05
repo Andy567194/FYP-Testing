@@ -15,6 +15,7 @@ TagManager:
   - LV1CUBE
   - LV2CUBE
   - LV3CUBE
+  - FireTurret
   layers:
   - Default
   - TransparentFX
