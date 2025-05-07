@@ -24,6 +24,7 @@ public class Shooter : NetworkBehaviour
     Quaternion originalRotation;
     float transformResetTimer = 3;
     public float bulletLifetime = 5;
+    [SerializeField] float sightDistance = 100;
 
     public override void Spawned()
     {
@@ -100,7 +101,7 @@ public class Shooter : NetworkBehaviour
             if (turret != null)
             {
                 RaycastHit raycastHit;
-                if (Physics.Raycast(turret.position, turret.forward, out raycastHit, 100, ~LayerMask.GetMask("Ignore Raycast")) && raycastHit.collider.CompareTag("Player"))
+                if (Physics.Raycast(turret.position, turret.forward, out raycastHit, sightDistance, ~LayerMask.GetMask("Ignore Raycast")) && raycastHit.collider.CompareTag("Player"))
                 {
                     turret.transform.LookAt(raycastHit.collider.gameObject.transform);
                 }
