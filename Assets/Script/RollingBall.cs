@@ -10,6 +10,7 @@ public class RollingBall : NetworkBehaviour
     private float cooldownTimer = 0f;
     public float searchRadius = 10f;
     private Rigidbody rb;
+    bool timeStopped = false;
 
     public override void Spawned()
     {
@@ -26,12 +27,14 @@ public class RollingBall : NetworkBehaviour
 
         if (cooldownTimer <= 0f)
         {
-            GameObject nearestPlayer = FindNearestPlayer();
-            if (nearestPlayer != null)
+            if (!timeStopped)
             {
-                ApplyImpulse(nearestPlayer.transform);
+                GameObject nearestPlayer = FindNearestPlayer();
+                if (nearestPlayer != null)
+                {
+                    ApplyImpulse(nearestPlayer.transform);
+                }
             }
-
             cooldownTimer = cooldown;
         }
 
@@ -62,5 +65,12 @@ public class RollingBall : NetworkBehaviour
 
         Vector3 direction = (target.position - transform.position).normalized;
         rb.AddForce(direction * force, ForceMode.Impulse);
+    }
+    public void SetTimeStopped(bool stopped)
+    {
+        timeStopped = stopped;
+        rb.isKinematic = stopped; // Disable physics when time is stopped
+        if (stopped)
+            rb.velocity = Vector3.zero; // Stop the ball's movement
     }
 }

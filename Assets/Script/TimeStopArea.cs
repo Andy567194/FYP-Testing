@@ -10,6 +10,7 @@ public class TimeStopArea : NetworkBehaviour
     private List<MovingPlatform> movingPlatformObjects = new List<MovingPlatform>();
     private List<PressurePlate> pressurePlateObjects = new List<PressurePlate>();
     private List<FireTurret> fireTurretsObjects = new List<FireTurret>();
+    private List<RollingBall> rollingBallObjects = new List<RollingBall>();
 
 
     void Start()
@@ -85,6 +86,18 @@ public class TimeStopArea : NetworkBehaviour
                 fireTurretsObjects.Add(fireTurret);
             }
         }
+        if (other.CompareTag("RollingBall"))
+        {
+            RollingBall rollingBall = other.GetComponent<RollingBall>();
+            if (rollingBall != null)
+            {
+                rollingBall.SetTimeStopped(true);
+            }
+            if (!rollingBallObjects.Contains(rollingBall))
+            {
+                rollingBallObjects.Add(rollingBall);
+            }
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -136,6 +149,15 @@ public class TimeStopArea : NetworkBehaviour
                 fireTurretsObjects.Remove(fireTurret);
             }
         }
+        if (other.CompareTag("RollingBall"))
+        {
+            RollingBall rollingBall = other.GetComponent<RollingBall>();
+            if (rollingBall != null)
+            {
+                rollingBall.SetTimeStopped(false);
+                rollingBallObjects.Remove(rollingBall);
+            }
+        }
     }
 
     private void OnDisable()
@@ -165,6 +187,11 @@ public class TimeStopArea : NetworkBehaviour
             fireTurret.RPC_SetTimeStop(false);
         }
         fireTurretsObjects.Clear();
+        foreach (var rollingBall in rollingBallObjects)
+        {
+            rollingBall.SetTimeStopped(false);
+        }
+        rollingBallObjects.Clear();
     }
 
     private void OnDestroy()
@@ -194,5 +221,10 @@ public class TimeStopArea : NetworkBehaviour
             fireTurret.RPC_SetTimeStop(false);
         }
         fireTurretsObjects.Clear();
+        foreach (var rollingBall in rollingBallObjects)
+        {
+            rollingBall.SetTimeStopped(false);
+        }
+        rollingBallObjects.Clear();
     }
 }
