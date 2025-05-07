@@ -6,6 +6,31 @@ public class LevelChangeTrigger : NetworkBehaviour
 {
     [Networked] public bool hasTriggered { get; set; } = false; // Networked to sync across clients
 
+    [SerializeField] private int targetSceneIndex = -1; // Set the target scene index in the Inspector (-1 means no target set)
+
+    public override void Spawned()
+    {
+        // Ensure the trigger is only active for the host
+        if (HasStateAuthority)
+        {
+            if (SceneManager.GetActiveScene().name == "LevelSelect")
+            {
+                BasicSpawner basicSpawner = FindObjectOfType<BasicSpawner>();
+                if (basicSpawner != null)
+                {
+                    if (basicSpawner.playerProgress + 1 >= targetSceneIndex)
+                    {
+                        gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        gameObject.SetActive(false);
+                    }
+                }
+            }
+        }
+    }
+
     // Called when another collider enters this trigger
     private void OnTriggerEnter(Collider other)
     {
@@ -47,9 +72,7 @@ public class LevelChangeTrigger : NetworkBehaviour
     {
         if (HasStateAuthority) // Ensure only the host initiates the scene load
         {
-            // Get the current scene's build index
-            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-            int nextSceneIndex = currentSceneIndex + 1;
+            int nextSceneIndex = targetSceneIndex >= 0 ? targetSceneIndex : SceneManager.GetActiveScene().buildIndex + 1;
 
             // Check if the next scene index is valid
             if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
@@ -70,11 +93,19 @@ public class LevelChangeTrigger : NetworkBehaviour
                 {
                     basicSpawner.changedScene = true; // Notify the spawner about the scene load
                 }
-                Debug.Log($"Host triggered scene load from index {currentSceneIndex} to {nextSceneName} (index {nextSceneIndex})");
+                Debug.Log($"Host triggered scene load to {nextSceneName} (index {nextSceneIndex})");
+                if (SceneManager.GetActiveScene().name == "Level1" && basicSpawner.playerProgress == 0)
+                    basicSpawner.playerProgress += 1; // Update player progress
+                else if (SceneManager.GetActiveScene().name == "Level2" && basicSpawner.playerProgress == 1)
+                    basicSpawner.playerProgress += 1; // Update player progress
+                else if (SceneManager.GetActiveScene().name == "Level3" && basicSpawner.playerProgress == 2)
+                    basicSpawner.playerProgress += 1; // Update player progress
+                else if (SceneManager.GetActiveScene().name == "Level4 Tentative" && basicSpawner.playerProgress == 3)
+                    basicSpawner.playerProgress += 1; // Update player progress
             }
             else
             {
-                Debug.LogWarning("No next scene available in Build Settings!");
+                Debug.LogWarning("No valid scene available in Build Settings for the specified index!");
             }
         }
     }

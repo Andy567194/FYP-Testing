@@ -21,6 +21,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     private NetworkRunner _runner;
     [SerializeField] Transform playerSpawnPoint;
     public bool changedScene = false;
+    public int playerProgress = 0;
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
