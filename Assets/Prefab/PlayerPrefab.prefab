@@ -363,6 +363,7 @@ MonoBehaviour:
   invincibleTime: 1
   openMicSprite: {fileID: 21300000, guid: 8b30eafdd67aa474f88dda9bcd9f89c3, type: 3}
   offMicSprite: {fileID: 21300000, guid: 3578911b737fe8349ab1848ebc6e50c1, type: 3}
+  respawnPoint: {fileID: 0}
 --- !u!54 &5109056489862770732
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -420,7 +421,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedObject: {fileID: 0}
-  normalHighlightMaterial: {fileID: 2100000, guid: 756c7678505af0146a6008e682b3e68f, type: 2}
+  normalHighlightMaterial: {fileID: 2100000, guid: c2adcca1012d292448d4070be68e72ff, type: 2}
   antimatterHighlightMaterial: {fileID: 2100000, guid: 23ff770829f492644899537b19ff2ec5, type: 2}
   raycastLength: 4
 --- !u!114 &4974981536161001450
