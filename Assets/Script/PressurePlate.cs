@@ -8,13 +8,12 @@ public class PressurePlate : NetworkBehaviour
     public GameObject Door;
     public float pressedHeight = 0.1f; // The height the plate will move down to when pressed
     public float pressSpeed = 1f; // Speed at which the plate moves down
-    public float resetSpeed = 2f; // The speed at which the plate will return to its original position
+    public float resetSpeed = 2f; // The speed at which the plate returns to its original position
     public bool OnOffReverse = false;
     private Vector3 originalPosition; // The original position of the plate
     private float targetHeight; // The target height for the plate
     private bool isPressed = false; // Whether the plate is currently pressed
     [Networked] public bool timeStopped { get; set; } = false;
-
 
     public override void Spawned()
     {
@@ -25,21 +24,21 @@ public class PressurePlate : NetworkBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // Check if the object colliding with the plate is a rigidbody
-        if (collision.rigidbody != null)
+        // Check if the object colliding with the plate is a player or rolling ball
+        if (collision.rigidbody != null &&
+            (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("TimeStoppable") || collision.gameObject.CompareTag("RollingBall")))
         {
             // Set target height to pressed height
             targetHeight = originalPosition.y - pressedHeight;
             isPressed = true;
         }
-
-
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        // Check if the object exiting the collision is a rigidbody
-        if (collision.rigidbody != null)
+        // Check if the object exiting the collision is a player or rolling ball
+        if (collision.rigidbody != null &&
+            (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("TimeStoppable")))
         {
             isPressed = false;
         }
@@ -51,6 +50,7 @@ public class PressurePlate : NetworkBehaviour
         {
             return;
         }
+
         // Move the plate towards the target height
         float step = (isPressed ? pressSpeed : resetSpeed) * Time.deltaTime;
         float newY = Mathf.MoveTowards(transform.position.y, targetHeight, step);
@@ -61,29 +61,15 @@ public class PressurePlate : NetworkBehaviour
         {
             targetHeight = originalPosition.y;
         }
+
+        // Handle door activation based on plate position
         if (transform.position.y < originalPosition.y)
         {
-            if (OnOffReverse)
-            {
-                Rpc_SetDoorActive(true);
-            }
-            else
-            {
-                Rpc_SetDoorActive(false);
-            }
-
+            Rpc_SetDoorActive(OnOffReverse ? true : false);
         }
         else if (transform.position.y >= originalPosition.y)
         {
-
-            if (OnOffReverse)
-            {
-                Rpc_SetDoorActive(false);
-            }
-            else
-            {
-                Rpc_SetDoorActive(true);
-            }
+            Rpc_SetDoorActive(OnOffReverse ? false : true);
         }
     }
 
