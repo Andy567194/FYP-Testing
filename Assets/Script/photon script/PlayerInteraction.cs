@@ -50,7 +50,7 @@ public class PlayerInteraction : NetworkBehaviour
     {
         Transform cameraTransform = GetComponentInChildren<Camera>().transform;
         RaycastHit hit;
-        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, 2f, ~LayerMask.GetMask("Ignore Raycast") | ~LayerMask.GetMask("LocalPlayerModel")))
+        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, 5f, ~LayerMask.GetMask("Ignore Raycast") | ~LayerMask.GetMask("LocalPlayerModel")))
         {
             if (hit.collider.CompareTag("Pickup"))
             {
