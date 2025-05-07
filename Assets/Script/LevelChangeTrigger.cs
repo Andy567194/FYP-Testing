@@ -65,6 +65,11 @@ public class LevelChangeTrigger : NetworkBehaviour
                 // Load the next scene for all clients
                 Debug.Log($"Loading scene: {nextSceneName} (index: {nextSceneIndex})");
                 Runner.LoadScene(nextSceneName);
+                BasicSpawner basicSpawner = FindObjectOfType<BasicSpawner>();
+                if (basicSpawner != null)
+                {
+                    basicSpawner.changedScene = true; // Notify the spawner about the scene load
+                }
                 Debug.Log($"Host triggered scene load from index {currentSceneIndex} to {nextSceneName} (index {nextSceneIndex})");
             }
             else

@@ -20,6 +20,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     private NetworkRunner _runner;
     [SerializeField] Transform playerSpawnPoint;
+    public bool changedScene = false;
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
@@ -101,9 +102,18 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         // Only the host (server) should spawn NetworkObjects
         if (_runner.IsServer)
         {
-            // Create a unique position for the player
-            Vector3 spawnPosition = playerSpawnPoint.position;
-            NetworkObject networkPlayerObject = _runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
+            NetworkObject networkPlayerObject;
+            if (!changedScene)
+            {
+                // Create a unique position for the player
+                Vector3 spawnPosition = playerSpawnPoint.position;
+                networkPlayerObject = _runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
+            }
+            else
+            {
+                networkPlayerObject = _runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
+
+            }
 
             // Assign input authority to the player object
             networkPlayerObject.AssignInputAuthority(player);

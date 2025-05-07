@@ -3071,6 +3071,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1527140834424836188, guid: 00b6ec2f8d829004b914d27feef70d8a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -29.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 1527140834424836188, guid: 00b6ec2f8d829004b914d27feef70d8a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 36.48
+      objectReference: {fileID: 0}
     - target: {fileID: 5169022539930739305, guid: 00b6ec2f8d829004b914d27feef70d8a, type: 3}
       propertyPath: m_Name
       value: BasicSpawner
