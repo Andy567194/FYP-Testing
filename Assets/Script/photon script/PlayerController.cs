@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class PlayerController : NetworkBehaviour
 {
     [SerializeField]
-    private MeshRenderer[] _visuals;
+    private SkinnedMeshRenderer[] _visuals;
     [SerializeField]
     private Camera _camera;
     [SerializeField]
@@ -56,6 +56,7 @@ public class PlayerController : NetworkBehaviour
     float invincibleTimer = 0f;
     [SerializeField] Sprite openMicSprite, offMicSprite;
     public Transform respawnPoint;
+    Animator animator;
 
     public override void Spawned()
     {
@@ -142,6 +143,8 @@ public class PlayerController : NetworkBehaviour
         UpdateHealthBar();
 
         FindObjectOfType<EnergyBank>().Rpc_UpdateStoredEnergy();
+
+        animator = GetComponent<Animator>();
     }
 
     public override void FixedUpdateNetwork()
@@ -184,16 +187,16 @@ public class PlayerController : NetworkBehaviour
             Vector3 tempRbVelocity = rb.velocity;
             if (moveInput != Vector3.zero && rb != null && isGrounded)
             {
-                //rb.velocity = transform.rotation * moveInput * _speed;
-                //rb.velocity = new Vector3(rb.velocity.x, tempRbVelocity.y, rb.velocity.z);
-                //if (rb.velocity.magnitude <= _speed)
                 rb.AddForce(transform.rotation * moveInput * _speed, ForceMode.Force);
+                animator.SetBool("isWalking", true);
             }
             else if (moveInput != Vector3.zero && rb != null && !isGrounded)
             {
-                //rb.velocity = transform.rotation * moveInput * _speed;
-                //rb.velocity = new Vector3(rb.velocity.x, tempRbVelocity.y, rb.velocity.z);
                 rb.AddForce(transform.rotation * moveInput * _speed / 20, ForceMode.Force);
+            }
+            else
+            {
+                animator.SetBool("isWalking", false);
             }
             if (isGrounded)
             {
@@ -212,9 +215,11 @@ public class PlayerController : NetworkBehaviour
                 manipulateObject(data);
             }
             isGrounded = Physics.CheckSphere(groundCheck.position, 0.3f, LayerMask.GetMask("Default"));
+            animator.SetBool("onGround", isGrounded);
             if (isGrounded && jumpButtonPressed.IsSet(InputButton.Jump))
             {
                 rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+                animator.SetTrigger("jump");
             }
             if (Skill1ButtonPressed.IsSet(InputButton.Skill1))
             {
@@ -284,6 +289,8 @@ public class PlayerController : NetworkBehaviour
         }
 
         invincibleTimer -= Runner.DeltaTime;
+
+        //Rpc_SetAnimator();
     }
 
     private void HandlePitchYaw(InputData data)
@@ -431,4 +438,14 @@ public class PlayerController : NetworkBehaviour
             mic.sprite = speaker.enabled ? openMicSprite : offMicSprite;
         }
     }
+    /*
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    void Rpc_SetAnimator()
+    {
+        if (animator != null)
+        {
+            animator.SetBool("onGround", isGrounded);
+            animator.SetBool("isWalking", rb.velocity.magnitude > 0.1f);
+        }
+    }*/
 }

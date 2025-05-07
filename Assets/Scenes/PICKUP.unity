@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748171, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2395,19 +2395,7 @@ PrefabInstance:
       objectReference: {fileID: 1668311390}
     - target: {fileID: 3872653844869054267, guid: 26aedc24315920347815cc91d51e3b63, type: 3}
       propertyPath: m_VersionIndex
-      value: 950
-      objectReference: {fileID: 0}
-    - target: {fileID: 3872653844869054267, guid: 26aedc24315920347815cc91d51e3b63, type: 3}
-      propertyPath: m_SelectedEdges.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3872653844869054267, guid: 26aedc24315920347815cc91d51e3b63, type: 3}
-      propertyPath: m_SelectedFaces.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3872653844869054267, guid: 26aedc24315920347815cc91d51e3b63, type: 3}
-      propertyPath: m_SelectedVertices.Array.size
-      value: 0
+      value: 956
       objectReference: {fileID: 0}
     - target: {fileID: 4897436013087009837, guid: 26aedc24315920347815cc91d51e3b63, type: 3}
       propertyPath: m_Mesh
@@ -2423,7 +2411,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6379914796334189846, guid: 26aedc24315920347815cc91d51e3b63, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9205634385589130388, guid: 26aedc24315920347815cc91d51e3b63, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3567,6 +3555,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: door
       objectReference: {fileID: 0}
+    - target: {fileID: 7416569824669936948, guid: c2a81b5d026f59a4dba83388e581aa50, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3764,3 +3756,4 @@ SceneRoots:
   - {fileID: 8394366401915982609}
   - {fileID: 1067684600}
   - {fileID: 993886969}
+  - {fileID: 191313241}
