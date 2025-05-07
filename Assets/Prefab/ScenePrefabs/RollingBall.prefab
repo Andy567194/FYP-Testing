@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 4020080428477845070}
   - component: {fileID: -2119463517530418328}
   - component: {fileID: -2632888306196704095}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RollingBall
   m_TagString: RollingBall
   m_Icon: {fileID: 0}
@@ -33,7 +33,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6379914796334189846}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.5, y: 6.5, z: 105}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8552,7 +8552,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 938
+  m_VersionIndex: 953
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
