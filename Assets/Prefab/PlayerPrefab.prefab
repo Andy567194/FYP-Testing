@@ -2091,6 +2091,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3505242661690524433}
   - component: {fileID: 558966902257772537}
+  - component: {fileID: 7293776646894019056}
   m_Layer: 0
   m_Name: HumanM_BodyMesh
   m_TagString: Untagged
@@ -2218,6 +2219,19 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.000000029802322, y: -0.116351575, z: 0.06372296}
     m_Extent: {x: 0.91471505, y: 0.96387196, z: 0.24963298}
   m_DirtyAABB: 0
+--- !u!114 &7293776646894019056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5983093802926152802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f7caa2ceeb2f2440bf788b87654b153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isVisible: 0
 --- !u!1 &6246865691964718058
 GameObject:
   m_ObjectHideFlags: 0
