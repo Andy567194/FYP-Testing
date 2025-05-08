@@ -293,6 +293,51 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48d9138619269de4283fe41272fa487f, type: 3}
+--- !u!1 &460042408
+GameObject:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 460042410}
+  - component: {fileID: 460042409}
+  m_Layer: 0
+  m_Name: _FungusState
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &460042409
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 460042408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61dddfdc5e0e44ca298d8f46f7f5a915, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedFlowchart: {fileID: 0}
+--- !u!4 &460042410
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 460042408}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &928049972
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -304,6 +349,10 @@ PrefabInstance:
     - target: {fileID: 1075225414284015241, guid: 48d9138619269de4283fe41272fa487f, type: 3}
       propertyPath: m_Name
       value: ChangeScene (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1075225414284015241, guid: 48d9138619269de4283fe41272fa487f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4762137798099233194, guid: 48d9138619269de4283fe41272fa487f, type: 3}
       propertyPath: SortKey
@@ -434,6 +483,10 @@ PrefabInstance:
     - target: {fileID: 1075225414284015241, guid: 48d9138619269de4283fe41272fa487f, type: 3}
       propertyPath: m_Name
       value: ChangeScene (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1075225414284015241, guid: 48d9138619269de4283fe41272fa487f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4762137798099233194, guid: 48d9138619269de4283fe41272fa487f, type: 3}
       propertyPath: SortKey
@@ -804,6 +857,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BasicSpawner
       objectReference: {fileID: 0}
+    - target: {fileID: 5169022539930739305, guid: 00b6ec2f8d829004b914d27feef70d8a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8803967919392908348, guid: 00b6ec2f8d829004b914d27feef70d8a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -863,3 +920,4 @@ SceneRoots:
   - {fileID: 369671807}
   - {fileID: 928049972}
   - {fileID: 1145790115}
+  - {fileID: 460042410}

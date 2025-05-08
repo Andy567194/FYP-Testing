@@ -11,24 +11,27 @@ public class LevelChangeTrigger : NetworkBehaviour
     public override void Spawned()
     {
         // Ensure the trigger is only active for the host
-        if (HasStateAuthority)
+
+        Debug.Log(SceneManager.GetActiveScene().name);
+        if (SceneManager.GetActiveScene().name == "LevelSelect")
         {
-            if (SceneManager.GetActiveScene().name == "LevelSelect")
+            Debug.Log("LevelSelect scene loaded - Setting trigger active");
+            BasicSpawner basicSpawner = FindObjectOfType<BasicSpawner>();
+            if (basicSpawner != null)
             {
-                BasicSpawner basicSpawner = FindObjectOfType<BasicSpawner>();
-                if (basicSpawner != null)
+                if (basicSpawner.playerProgress + 1 >= targetSceneIndex)
                 {
-                    if (basicSpawner.playerProgress + 1 >= targetSceneIndex)
-                    {
-                        gameObject.SetActive(true);
-                    }
-                    else
-                    {
-                        gameObject.SetActive(false);
-                    }
+                    Debug.Log($"Player progress {basicSpawner.playerProgress} allows scene change to index {targetSceneIndex}");
+                    Rpc_SetActive(true);
+                }
+                else
+                {
+                    Rpc_SetActive(false);
+                    Debug.Log($"Player progress {basicSpawner.playerProgress} does not allow scene change to index {targetSceneIndex}");
                 }
             }
         }
+
     }
 
     // Called when another collider enters this trigger
@@ -94,13 +97,13 @@ public class LevelChangeTrigger : NetworkBehaviour
                     basicSpawner.changedScene = true; // Notify the spawner about the scene load
                 }
                 Debug.Log($"Host triggered scene load to {nextSceneName} (index {nextSceneIndex})");
-                if (SceneManager.GetActiveScene().name == "Level1" && basicSpawner.playerProgress == 0)
+                if (SceneManager.GetActiveScene().name == "Level1" && basicSpawner.playerProgress <= 0)
                     basicSpawner.playerProgress += 1; // Update player progress
-                else if (SceneManager.GetActiveScene().name == "Level2" && basicSpawner.playerProgress == 1)
+                else if (SceneManager.GetActiveScene().name == "Level2" && basicSpawner.playerProgress <= 1)
                     basicSpawner.playerProgress += 1; // Update player progress
-                else if (SceneManager.GetActiveScene().name == "Level3" && basicSpawner.playerProgress == 2)
+                else if (SceneManager.GetActiveScene().name == "Level3" && basicSpawner.playerProgress <= 2)
                     basicSpawner.playerProgress += 1; // Update player progress
-                else if (SceneManager.GetActiveScene().name == "Level4 Tentative" && basicSpawner.playerProgress == 3)
+                else if (SceneManager.GetActiveScene().name == "Level4 Tentative" && basicSpawner.playerProgress <= 3)
                     basicSpawner.playerProgress += 1; // Update player progress
             }
             else
@@ -108,5 +111,10 @@ public class LevelChangeTrigger : NetworkBehaviour
                 Debug.LogWarning("No valid scene available in Build Settings for the specified index!");
             }
         }
+    }
+    [Rpc]
+    void Rpc_SetActive(bool active)
+    {
+        gameObject.SetActive(active);
     }
 }
