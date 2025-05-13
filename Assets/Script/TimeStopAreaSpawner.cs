@@ -135,6 +135,10 @@ public class TimeStopAreaSpawner : NetworkBehaviour
             {
                 selectedObject.GetComponent<RewindBridge>().RPC_Rewind();
             }
+            if (selectedObject.GetComponent<Shooter>() != null)
+            {
+                selectedObject.GetComponent<Shooter>().Rpc_Rewind();
+            }
         }
     }
 

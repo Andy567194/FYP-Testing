@@ -54,7 +54,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 4207702496644517324}
-  m_PlaneDistance: 0.8
+  m_PlaneDistance: 0.2
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -1070,6 +1070,7 @@ MonoBehaviour:
   selectedObject: {fileID: 0}
   normalHighlightMaterial: {fileID: 2100000, guid: c2adcca1012d292448d4070be68e72ff, type: 2}
   antimatterHighlightMaterial: {fileID: 2100000, guid: 23ff770829f492644899537b19ff2ec5, type: 2}
+  turretHighlightMaterial: {fileID: 2100000, guid: 2c0ec2fa1adf7c04590cb9050194953b, type: 2}
   raycastLength: 6
 --- !u!114 &4974981536161001450
 MonoBehaviour:
@@ -2456,7 +2457,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.16
   far clip plane: 1000
   field of view: 60
   orthographic: 0
