@@ -32,6 +32,7 @@ public class ManipulateEnergy : NetworkBehaviour
                     {
                         timeStopAreaSpawner.AddStoredForce(useEnergyAmount);
                     }
+                    Rpc_playBuffParticle(player.GetComponent<NetworkObject>());
                     FindObjectOfType<EnergyBank>().UseEnergy(useEnergyAmount);
                 }
             }
@@ -63,5 +64,12 @@ public class ManipulateEnergy : NetworkBehaviour
                 FindObjectOfType<EnergyBank>().UseEnergy(useEnergyAmount);
             }
         }
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void Rpc_playBuffParticle(NetworkObject playerObject)
+    {
+        GameObject buff = playerObject.gameObject.transform.Find("Buff").gameObject;
+        buff.SetActive(true);
     }
 }

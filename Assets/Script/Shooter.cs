@@ -103,7 +103,8 @@ public class Shooter : NetworkBehaviour
                 RaycastHit raycastHit;
                 if (Physics.Raycast(turret.position, turret.forward, out raycastHit, sightDistance, ~LayerMask.GetMask("Ignore Raycast")) && raycastHit.collider.CompareTag("Player"))
                 {
-                    turret.transform.LookAt(raycastHit.collider.gameObject.transform);
+                    Vector3 targetPosition = raycastHit.collider.bounds.center;
+                    turret.transform.LookAt(targetPosition);
                 }
                 else
                 {

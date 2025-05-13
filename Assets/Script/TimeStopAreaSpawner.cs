@@ -38,7 +38,7 @@ public class TimeStopAreaSpawner : NetworkBehaviour
     bool isRecordingPlayer { get; set; } = false;
     [Networked]
     bool isRewindingPlayer { get; set; } = false;
-    float recordedTime = 0;
+    [Networked] float recordedTime { get; set; } = 0;
     public Text recordPlayerText;
 
     public override void FixedUpdateNetwork()
@@ -52,6 +52,7 @@ public class TimeStopAreaSpawner : NetworkBehaviour
             Rigidbody rb = GetComponent<Rigidbody>();
             rb.AddForce(GetComponentInChildren<Camera>().transform.forward * storedForce, ForceMode.Impulse);
             storedForce = 0;
+            Rpc_stopBuffParticle();
         }
         if (isRecordingPlayer)
         {
@@ -143,9 +144,9 @@ public class TimeStopAreaSpawner : NetworkBehaviour
         // Store both position and rotation
         transformData.Add(new TransformData(playerTransform.position));
         recordedTime += Runner.DeltaTime;
-        recordPlayerText.text = "Recording player... " + (recordedTime / 2).ToString("F0") + "s\nPress Q to rewind or press right mouse button to cancel";
+        recordPlayerText.text = "Recording player... " + recordedTime.ToString("F0") + "s\nPress Q to rewind or press right mouse button to cancel";
         playerTransform.Find("Canvas").Find("RecordingPlayer").GetComponent<Text>().enabled = true;
-        playerTransform.Find("Canvas").Find("RecordingPlayer").GetComponent<Text>().text = "Getting Recorded..." + (recordedTime / 2).ToString("F0") + "s";
+        playerTransform.Find("Canvas").Find("RecordingPlayer").GetComponent<Text>().text = "Getting Recorded..." + recordedTime.ToString("F0") + "s";
     }
 
     void RewindPlayer()
@@ -165,6 +166,7 @@ public class TimeStopAreaSpawner : NetworkBehaviour
             isRewindingPlayer = false;
             Transform playerTransform = FindObjectOfType<IsVisible>().gameObject.transform.parent;
             playerTransform.Find("Canvas").Find("RecordingPlayer").GetComponent<Text>().enabled = false;
+            Rpc_stopRewindParticle();
         }
     }
 
@@ -175,12 +177,15 @@ public class TimeStopAreaSpawner : NetworkBehaviour
             isRecordingPlayer = true;
             recordedTime = 0;
             recordPlayerText.enabled = true;
+            Rpc_playRecordParticle();
         }
-        else if (isRecordingPlayer && recordedTime >= 2)
+        else if (isRecordingPlayer && recordedTime >= 0.5)
         {
             isRecordingPlayer = false;
             isRewindingPlayer = true;
             recordPlayerText.enabled = false;
+            Rpc_stopRecordParticle();
+            Rpc_startRewindParticle();
         }
     }
 
@@ -193,6 +198,43 @@ public class TimeStopAreaSpawner : NetworkBehaviour
             Transform playerTransform = FindObjectOfType<IsVisible>().gameObject.transform.parent;
             playerTransform.Find("Canvas").Find("RecordingPlayer").GetComponent<Text>().enabled = false;
             transformData.Clear();
+            Rpc_stopRecordParticle();
         }
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void Rpc_stopBuffParticle()
+    {
+        GameObject buff = transform.Find("Buff").gameObject;
+        buff.SetActive(false);
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void Rpc_playRecordParticle()
+    {
+        Transform playerTransform = FindObjectOfType<IsVisible>().gameObject.transform.parent;
+        GameObject plexus = playerTransform.Find("Plexus").gameObject;
+        plexus.SetActive(true);
+    }
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void Rpc_stopRecordParticle()
+    {
+        Transform playerTransform = FindObjectOfType<IsVisible>().gameObject.transform.parent;
+        GameObject plexus = playerTransform.Find("Plexus").gameObject;
+        plexus.SetActive(false);
+    }
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void Rpc_startRewindParticle()
+    {
+        Transform playerTransform = FindObjectOfType<IsVisible>().gameObject.transform.parent;
+        GameObject rewind = playerTransform.Find("Magic circle").gameObject;
+        rewind.SetActive(true);
+    }
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void Rpc_stopRewindParticle()
+    {
+        Transform playerTransform = FindObjectOfType<IsVisible>().gameObject.transform.parent;
+        GameObject rewind = playerTransform.Find("Magic circle").gameObject;
+        rewind.SetActive(false);
     }
 }
