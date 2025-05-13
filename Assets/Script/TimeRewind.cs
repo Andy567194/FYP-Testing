@@ -7,7 +7,7 @@ public class TimeRewind : NetworkBehaviour
 {
     private Rigidbody rb;
     private List<TransformData> transformData; // Store position and rotation
-    private bool isRewinding = false;
+    public bool isRewinding = false;
     TimeControl timeControl;
 
 

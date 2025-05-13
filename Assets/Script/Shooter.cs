@@ -103,7 +103,8 @@ public class Shooter : NetworkBehaviour
                 RaycastHit raycastHit;
                 if (Physics.Raycast(turret.position, turret.forward, out raycastHit, sightDistance, ~LayerMask.GetMask("Ignore Raycast")) && raycastHit.collider.CompareTag("Player"))
                 {
-                    turret.transform.LookAt(raycastHit.collider.gameObject.transform);
+                    Vector3 targetPosition = raycastHit.collider.bounds.center;
+                    turret.transform.LookAt(targetPosition);
                 }
                 else
                 {
@@ -123,12 +124,10 @@ public class Shooter : NetworkBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (Object.HasStateAuthority)
+        if (!destroyed && other.gameObject.CompareTag("TimeStoppable"))
         {
-            if (other.gameObject.CompareTag("TimeStoppable"))
-            {
-                destroyed = true;
-            }
+            destroyed = true;
+            Rpc_playDestroyParticle();
         }
     }
 
@@ -139,5 +138,43 @@ public class Shooter : NetworkBehaviour
         {
             particle.Play();
         }
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    void Rpc_playDestroyParticle()
+    {
+        GameObject destroyParticle = transform.Find("Sparks flashing yellow").gameObject;
+        destroyParticle.SetActive(true);
+        GameObject explosion = transform.Find("Explosion").gameObject;
+        Debug.Log("Explosion activated");
+        explosion.SetActive(true);
+        StartCoroutine(DisableAfterDelay(explosion, 0.9f));
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    void Rpc_stopDestroyParticle()
+    {
+        GameObject destroyParticle = transform.Find("Sparks flashing yellow").gameObject;
+        destroyParticle.SetActive(false);
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void Rpc_Rewind()
+    {
+        if (destroyed)
+        {
+            destroyed = false;
+            Rpc_stopDestroyParticle();
+            GameObject destroyParticle = transform.Find("Magic circle").gameObject;
+            destroyParticle.SetActive(true);
+            StartCoroutine(DisableAfterDelay(destroyParticle, 1f));
+        }
+    }
+
+    IEnumerator DisableAfterDelay(GameObject obj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        obj.SetActive(false);
+        Debug.Log("Particle deactivated");
     }
 }

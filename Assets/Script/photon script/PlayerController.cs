@@ -411,11 +411,11 @@ public class PlayerController : NetworkBehaviour
     {
         energyUseageText.SetActive(false);
     }
-
+    /*
     void manipulateObject(InputData data)
     {
         GameObject selectedObject = GetComponent<SelectObject>().selectedObject;
-        if (selectedObject != null)
+        if (selectedObject != null && !selectedObject.CompareTag("Turret"))
         {
             selectedObject.transform.Rotate(Vector3.down, (float)data.Yaw);
             selectedObject.transform.Rotate(Vector3.right, (float)data.Pitch);
@@ -425,7 +425,28 @@ public class PlayerController : NetworkBehaviour
                 selectedObject.GetComponent<TimeControl>().storedForce = selectedObject.transform.forward * selectedObject.GetComponent<TimeControl>().storedForce.magnitude;
             }
         }
+    }*/
+
+    void manipulateObject(InputData data)
+    {
+        GameObject selectedObject = GetComponent<SelectObject>().selectedObject;
+        // Assuming the camera represents the player's view
+
+        if (selectedObject != null && !selectedObject.CompareTag("Turret"))
+        {
+            // Rotate relative to the player's local axes
+            selectedObject.transform.Rotate(_camera.transform.right, -(float)data.Pitch, Space.World);
+            selectedObject.transform.Rotate(_camera.transform.up, (float)data.Yaw, Space.World);
+
+            if (selectedObject.GetComponent<TimeControl>().timeStopped)
+            {
+                selectedObject.GetComponent<TimeControl>().storedForce = selectedObject.transform.forward * selectedObject.GetComponent<TimeControl>().storedForce.magnitude;
+            }
+        }
     }
+
+
+
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void Rpc_SetMicOnOff()
     {

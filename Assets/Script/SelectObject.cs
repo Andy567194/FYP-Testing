@@ -9,6 +9,7 @@ public class SelectObject : NetworkBehaviour
     private Camera _camera;
     public Material normalHighlightMaterial;
     public Material antimatterHighlightMaterial;
+    public Material turretHighlightMaterial;
     private Material originalMaterial;
     private GameObject lastHitObject;
     public float raycastLength = 4;
@@ -27,10 +28,10 @@ public class SelectObject : NetworkBehaviour
         }
 
         RaycastHit raycastHit;
-        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out raycastHit, raycastLength, ~LayerMask.GetMask("Ignore Raycast")) && (raycastHit.collider.gameObject.CompareTag("TimeStoppable") || raycastHit.collider.gameObject.CompareTag("Antimatter")))
+        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out raycastHit, raycastLength, ~LayerMask.GetMask("Ignore Raycast")) && (raycastHit.collider.gameObject.CompareTag("TimeStoppable") || raycastHit.collider.gameObject.CompareTag("Antimatter") || raycastHit.collider.gameObject.CompareTag("Turret")))
         {
             selectedObject = raycastHit.collider.gameObject;
-            Renderer hitRenderer = selectedObject.GetComponent<MeshRenderer>();
+            Renderer hitRenderer = selectedObject.GetComponentInChildren<MeshRenderer>();
 
             if (hitRenderer != null)
             {
@@ -46,6 +47,8 @@ public class SelectObject : NetworkBehaviour
                         hitRenderer.material = normalHighlightMaterial;
                     if (selectedObject.CompareTag("Antimatter"))
                         hitRenderer.material = antimatterHighlightMaterial;
+                    if (selectedObject.CompareTag("Turret"))
+                        hitRenderer.material = turretHighlightMaterial;
                     lastHitObject = selectedObject;
                 }
             }
@@ -54,7 +57,7 @@ public class SelectObject : NetworkBehaviour
         }
         else if (lastHitObject != null)
         {
-            lastHitObject.GetComponent<MeshRenderer>().material = originalMaterial;
+            lastHitObject.GetComponentInChildren<MeshRenderer>().material = originalMaterial;
             lastHitObject = null;
             selectedObject = null;
         }
