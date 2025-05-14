@@ -63,6 +63,7 @@ public class PlayerController : NetworkBehaviour
     // Added networked property for player name
     [Networked]
     public string PlayerName { get; set; }
+    public Text playerNameText;
 
     public override void Spawned()
     {
@@ -154,6 +155,8 @@ public class PlayerController : NetworkBehaviour
         FindObjectOfType<EnergyBank>().Rpc_UpdateStoredEnergy();
 
         animator = GetComponent<Animator>();
+
+        UpdatePlayerNameUI();
     }
 
     public override void FixedUpdateNetwork()
@@ -299,7 +302,13 @@ public class PlayerController : NetworkBehaviour
 
         invincibleTimer -= Runner.DeltaTime;
 
-        //Rpc_SetAnimator();
+        foreach (var change in _changeDetector.DetectChanges(this))
+        {
+            if (change == nameof(PlayerName))
+            {
+                UpdatePlayerNameUI();
+            }
+        }
     }
 
     private void HandlePitchYaw(InputData data)
@@ -400,16 +409,21 @@ public class PlayerController : NetworkBehaviour
     }
 
     // Added RPC to set the player name
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
     public void RPC_SetPlayerName(string name)
     {
         if (!string.IsNullOrEmpty(name))
         {
             PlayerName = name;
+            UpdatePlayerNameUI();
         }
-        else
+    }
+
+    private void UpdatePlayerNameUI()
+    {
+        if (playerNameText != null)
         {
-            Debug.LogWarning("Attempted to set empty player name");
+            playerNameText.text = PlayerName;
         }
     }
 }
