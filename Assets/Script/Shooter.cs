@@ -25,6 +25,7 @@ public class Shooter : NetworkBehaviour
     float transformResetTimer = 3;
     public float bulletLifetime = 5;
     [SerializeField] float sightDistance = 100;
+    [Networked] public bool timeStopped { get; set; } = false;
 
     public override void Spawned()
     {
@@ -40,17 +41,6 @@ public class Shooter : NetworkBehaviour
             {
                 originalRotation = turret.rotation;
             }
-        }
-    }
-
-    public override void FixedUpdateNetwork()
-    {
-        if (Object.HasStateAuthority)
-        {
-            if (destroyed)
-            {
-                return;
-            }
             if (!active)
             {
                 ShooterActivation shooterActivation = FindObjectOfType<ShooterActivation>();
@@ -58,10 +48,17 @@ public class Shooter : NetworkBehaviour
                 {
                     active = true;
                 }
-                else
-                {
-                    return;
-                }
+            }
+        }
+    }
+
+    public override void FixedUpdateNetwork()
+    {
+        if (Object.HasStateAuthority)
+        {
+            if (destroyed || timeStopped)
+            {
+                return;
             }
             cooldownTimer -= Runner.DeltaTime;
             if (cooldownTimer <= 0 && bullets.Count < maximumBullets)
@@ -176,5 +173,11 @@ public class Shooter : NetworkBehaviour
         yield return new WaitForSeconds(delay);
         obj.SetActive(false);
         Debug.Log("Particle deactivated");
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void Rpc_SetTimeStopped(bool timeStopped)
+    {
+        this.timeStopped = timeStopped;
     }
 }

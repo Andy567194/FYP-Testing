@@ -11,6 +11,7 @@ public class TimeStopArea : NetworkBehaviour
     private List<PressurePlate> pressurePlateObjects = new List<PressurePlate>();
     private List<FireTurret> fireTurretsObjects = new List<FireTurret>();
     private List<RollingBall> rollingBallObjects = new List<RollingBall>();
+    private List<Shooter> shooterObjects = new List<Shooter>();
 
 
     void Start()
@@ -98,6 +99,18 @@ public class TimeStopArea : NetworkBehaviour
                 rollingBallObjects.Add(rollingBall);
             }
         }
+        if (other.CompareTag("Turret"))
+        {
+            Shooter shooter = other.GetComponent<Shooter>();
+            if (shooter != null)
+            {
+                shooter.Rpc_SetTimeStopped(true);
+            }
+            if (!shooterObjects.Contains(shooter))
+            {
+                shooterObjects.Add(shooter);
+            }
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -158,6 +171,15 @@ public class TimeStopArea : NetworkBehaviour
                 rollingBallObjects.Remove(rollingBall);
             }
         }
+        if (other.CompareTag("Turret"))
+        {
+            Shooter shooter = other.GetComponent<Shooter>();
+            if (shooter != null)
+            {
+                shooter.Rpc_SetTimeStopped(false);
+                shooterObjects.Remove(shooter);
+            }
+        }
     }
 
     private void OnDisable()
@@ -192,6 +214,11 @@ public class TimeStopArea : NetworkBehaviour
             rollingBall.SetTimeStopped(false);
         }
         rollingBallObjects.Clear();
+        foreach (var shooter in shooterObjects)
+        {
+            shooter.Rpc_SetTimeStopped(false);
+        }
+        shooterObjects.Clear();
     }
 
     private void OnDestroy()
@@ -226,5 +253,10 @@ public class TimeStopArea : NetworkBehaviour
             rollingBall.SetTimeStopped(false);
         }
         rollingBallObjects.Clear();
+        foreach (var shooter in shooterObjects)
+        {
+            shooter.Rpc_SetTimeStopped(false);
+        }
+        shooterObjects.Clear();
     }
 }

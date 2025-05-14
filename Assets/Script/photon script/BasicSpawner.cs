@@ -5,10 +5,12 @@ using Fusion.Sockets;
 using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
-//using static UnityEditor.Experimental.GraphView.GraphView;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Fusion.Addons.Physics;
+
+using TMPro;
+using UnityEngine.UI;
 
 public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -23,9 +25,14 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     public bool changedScene = false;
     public int playerProgress = 0;
 
+    [SerializeField] private TMP_InputField nameInput;
+    [SerializeField] private Button createRoomButton;
+    [SerializeField] private Transform sessionListContent;
+    [SerializeField] private GameObject sessionListItemPrefab;
+    [SerializeField] private int gameSceneIndex = 1; // Set to your game scene's build index
+
     public void OnConnectedToServer(NetworkRunner runner)
     {
-        Debug.Log("Connected to server");
 
     }
 
@@ -188,7 +195,22 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
-        // Implementation needed
+        foreach (Transform child in sessionListContent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (var session in sessionList)
+        {
+            if (session.IsVisible && session.IsOpen)
+            {
+                GameObject item = Instantiate(sessionListItemPrefab, sessionListContent);
+                TMP_Text text = item.GetComponentInChildren<TMP_Text>();
+                text.text = $"{session.Name} ({session.PlayerCount}/{session.MaxPlayers})";
+                Button joinButton = item.GetComponentInChildren<Button>();
+                joinButton.onClick.AddListener(() => JoinRoom(session.Name));
+            }
+        }
     }
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
@@ -200,10 +222,14 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     {
 
     }
-    private void Start()
+    void Start()
     {
-        StartGame(GameMode.AutoHostOrClient);
+        _runner = GetComponent<NetworkRunner>();
+        _runner.AddCallbacks(this);
+        _runner.JoinSessionLobby(SessionLobby.ClientServer);
+        DontDestroyOnLoad(gameObject); // Ensure runner persists across scenes
     }
+
     async void StartGame(GameMode mode)
     {
         // Create the Fusion runner and let it know that we will be providing user input
@@ -246,4 +272,43 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     //  /}
     //}/
     //}
+
+    public async void CreateRoom()
+    {
+        string playerName = nameInput.text;
+        if (string.IsNullOrEmpty(playerName))
+        {
+            Debug.LogError("Player name cannot be empty");
+            return;
+        }
+        PlayerSettings.PlayerName = playerName;
+
+        string sessionName = playerName + "'s Room";
+        await _runner.StartGame(new StartGameArgs()
+        {
+            GameMode = GameMode.Host,
+            SessionName = sessionName,
+            Scene = SceneRef.FromIndex(gameSceneIndex),
+            SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>(),
+        });
+    }
+
+    public async void JoinRoom(string sessionName)
+    {
+        string playerName = nameInput.text;
+        if (string.IsNullOrEmpty(playerName))
+        {
+            Debug.LogError("Player name cannot be empty");
+            return;
+        }
+        PlayerSettings.PlayerName = playerName;
+
+        await _runner.StartGame(new StartGameArgs()
+        {
+            GameMode = GameMode.Client,
+            SessionName = sessionName,
+            Scene = SceneRef.FromIndex(gameSceneIndex),
+            SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>(),
+        });
+    }
 }

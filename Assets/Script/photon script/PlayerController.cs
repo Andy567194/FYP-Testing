@@ -51,12 +51,18 @@ public class PlayerController : NetworkBehaviour
     bool isGrounded = false;
     [SerializeField]
     float jumpHeight = 5f;
+    [SerializeField]
+    float gravity = 5f;
     bool manipulatingObject = false;
     [SerializeField] float invincibleTime = 1f;
     float invincibleTimer = 0f;
     [SerializeField] Sprite openMicSprite, offMicSprite;
     public Transform respawnPoint;
     Animator animator;
+
+    // Added networked property for player name
+    [Networked]
+    public string PlayerName { get; set; }
 
     public override void Spawned()
     {
@@ -76,6 +82,9 @@ public class PlayerController : NetworkBehaviour
             Cursor.visible = false;
 
             Rpc_SetLayerInChildren();
+
+            // Set the player name from the lobby settings
+            RPC_SetPlayerName(PlayerSettings.PlayerName);
         }
         else
         {
@@ -166,7 +175,6 @@ public class PlayerController : NetworkBehaviour
             var VoiceChatButtonPressed = data.VoiceChatButton.GetPressed(_VoiceChatPreviousButton);
             _VoiceChatPreviousButton = data.VoiceChatButton;
 
-
             Vector3 moveInput = Vector3.zero;
             if (data.MoveInput.x > 0)
             {
@@ -205,6 +213,7 @@ public class PlayerController : NetworkBehaviour
             else
             {
                 rb.drag = 0.5f;
+                rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
             }
             if (!manipulatingObject)
             {
@@ -326,67 +335,16 @@ public class PlayerController : NetworkBehaviour
             {
                 Rpc_Respawn(Vector3.zero);
             }
-
         }
     }
-
-    /*
-      // Define spawn points
-      Vector3 defaultSpawn = new Vector3(17.73f, 7.094f, 7.81f);
-      Vector3 phase1Spawn = new Vector3(33.36f, 8.990735f, 94.4f);// Adjust these coordinates
-      Vector3 phase2Spawn = new Vector3(33.36f, 8.990735f, 94.4f);// Adjust these coordinates
-      Vector3 phase3Spawn = new Vector3(33.36f, 8.990735f, 94.4f);    // Adjust these coordinates
-      Vector3 phase4Spawn = new Vector3(36.34f, 11.97f, 156.89f);  // Adjust these coordinates
-      Vector3 phase5Spawn = new Vector3(-13.5f, 9.29f, 216f);  // Adjust these coordinates
-
-      // Find phase region GameObjects
-
-      GameObject phase1Region = GameObject.Find("ShooterActivation 1");
-      GameObject phase2Region = GameObject.Find("ShooterActivation 2");
-      GameObject phase3Region = GameObject.Find("ShooterActivation 3");
-      GameObject phase4Region = GameObject.Find("ShooterActivation 4");
-      GameObject phase5Region = GameObject.Find("ShooterActivation 5");
-
-      // Check each region and spawn accordingly
-      if (phase5Region != null && phase5Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
-      {
-          Rpc_Respawn(phase5Spawn);
-      }
-      else if (phase4Region != null && phase4Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
-      {
-          Rpc_Respawn(phase4Spawn);
-      }
-      else if (phase3Region != null && phase3Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
-      {
-          Rpc_Respawn(phase3Spawn);
-      }
-      else if (phase2Region != null && phase2Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
-      {
-          Rpc_Respawn(phase2Spawn);
-      }
-      else if (phase1Region != null && phase1Region.GetComponent<Collider>()?.bounds.Contains(transform.position) == true)
-      {
-          Rpc_Respawn(phase1Spawn);
-      }
-      else
-      {
-          // Fallback to default spawn if not in any specific region
-          Rpc_Respawn(defaultSpawn);
-      }
-  }
-} */
 
     [Rpc]
     public void Rpc_Respawn(Vector3 respawnPosition)
     {
-        // Implement respawn logic here
         Hp = maxHP;
         UpdateHealthBar();
-        // Move player to respawn position
         NetworkRigidbody3D networkRigidbody3d = GetComponent<NetworkRigidbody3D>();
         networkRigidbody3d.Teleport(respawnPosition, Quaternion.identity);
-        //transform.position = new Vector3(3, 5, 0);
-        // Example respawn position
         Debug.Log("Player respawned");
     }
 
@@ -397,6 +355,7 @@ public class PlayerController : NetworkBehaviour
             healthBar.SetHealth(Hp, maxHP);
         }
     }
+
     [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
     public void Rpc_SetLayerInChildren()
     {
@@ -411,7 +370,7 @@ public class PlayerController : NetworkBehaviour
     {
         energyUseageText.SetActive(false);
     }
-    /*
+
     void manipulateObject(InputData data)
     {
         GameObject selectedObject = GetComponent<SelectObject>().selectedObject;
@@ -425,27 +384,7 @@ public class PlayerController : NetworkBehaviour
                 selectedObject.GetComponent<TimeControl>().storedForce = selectedObject.transform.forward * selectedObject.GetComponent<TimeControl>().storedForce.magnitude;
             }
         }
-    }*/
-
-    void manipulateObject(InputData data)
-    {
-        GameObject selectedObject = GetComponent<SelectObject>().selectedObject;
-        // Assuming the camera represents the player's view
-
-        if (selectedObject != null && !selectedObject.CompareTag("Turret"))
-        {
-            // Rotate relative to the player's local axes
-            selectedObject.transform.Rotate(_camera.transform.right, -(float)data.Pitch, Space.World);
-            selectedObject.transform.Rotate(_camera.transform.up, (float)data.Yaw, Space.World);
-
-            if (selectedObject.GetComponent<TimeControl>().timeStopped)
-            {
-                selectedObject.GetComponent<TimeControl>().storedForce = selectedObject.transform.forward * selectedObject.GetComponent<TimeControl>().storedForce.magnitude;
-            }
-        }
     }
-
-
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void Rpc_SetMicOnOff()
@@ -459,14 +398,18 @@ public class PlayerController : NetworkBehaviour
             mic.sprite = speaker.enabled ? openMicSprite : offMicSprite;
         }
     }
-    /*
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
-    void Rpc_SetAnimator()
+
+    // Added RPC to set the player name
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_SetPlayerName(string name)
     {
-        if (animator != null)
+        if (!string.IsNullOrEmpty(name))
         {
-            animator.SetBool("onGround", isGrounded);
-            animator.SetBool("isWalking", rb.velocity.magnitude > 0.1f);
+            PlayerName = name;
         }
-    }*/
+        else
+        {
+            Debug.LogWarning("Attempted to set empty player name");
+        }
+    }
 }

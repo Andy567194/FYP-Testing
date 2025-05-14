@@ -45,7 +45,7 @@ public class TimeStopAreaSpawner : NetworkBehaviour
     {
         if (spawned && TSA != null)
         {
-            TSA.transform.position = transform.position;
+            TSA.transform.position = GetComponent<Collider>().bounds.center;
         }
         if (storedForce > 0 && !spawned)
         {
