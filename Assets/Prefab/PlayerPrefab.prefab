@@ -1006,7 +1006,8 @@ MonoBehaviour:
   healthBar: {fileID: 3144322811727610082}
   energyUseageText: {fileID: 2855827866892970003}
   groundCheck: {fileID: 8486780815727696405}
-  jumpHeight: 15
+  jumpHeight: 20
+  gravity: 10
   invincibleTime: 1
   openMicSprite: {fileID: 21300000, guid: 8b30eafdd67aa474f88dda9bcd9f89c3, type: 3}
   offMicSprite: {fileID: 21300000, guid: 3578911b737fe8349ab1848ebc6e50c1, type: 3}
