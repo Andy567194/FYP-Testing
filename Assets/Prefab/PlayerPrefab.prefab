@@ -122,6 +122,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eff146445f79e254b889be4a5052efb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillIcons:
+  - {fileID: 21300000, guid: bc491bdf7a879cd409da4208fca87825, type: 3}
+  - {fileID: 21300000, guid: 0d5a3b36a56963d4babab4fe7d7ae94a, type: 3}
+  - {fileID: 21300000, guid: 9b0dea4509bd7824b92aa5421c63b2d7, type: 3}
+  - {fileID: 21300000, guid: a4fbbce81fd83cc4ab9cd3ef0fc85d54, type: 3}
+  - {fileID: 21300000, guid: 19ac13db75570e64e80f69ad4343d095, type: 3}
+  - {fileID: 21300000, guid: 89d6c582f54b574408aecde404676a41, type: 3}
+  skillObjects:
+  - {fileID: 7156856367315300022}
+  - {fileID: 4054440976509075810}
+  - {fileID: 5112750660314326288}
 --- !u!1 &31219260435736574
 GameObject:
   m_ObjectHideFlags: 0
@@ -1154,6 +1165,7 @@ MonoBehaviour:
   - {fileID: -1967685888418279853}
   - {fileID: 6507067208268790593}
   - {fileID: 3326443103264263932}
+  - {fileID: 5370568064015192293}
 --- !u!114 &528073394489392325
 MonoBehaviour:
   m_ObjectHideFlags: 0

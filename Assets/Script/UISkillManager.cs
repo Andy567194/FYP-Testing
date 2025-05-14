@@ -1,18 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using Fusion;
 
-public class UISkillManager : MonoBehaviour
+public class UISkillManager : NetworkBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] Sprite[] skillIcons;
+    [SerializeField] Image[] skillObjects;
+    public override void Spawned()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        PlayerController playerController = GetComponentInParent<PlayerController>();
+        if (playerController != null)
+        {
+            if (playerController.timeControlPlayer)
+            {
+                skillObjects[0].sprite = skillIcons[0];
+                skillObjects[1].sprite = skillIcons[1];
+                skillObjects[2].sprite = skillIcons[2];
+            }
+            else
+            {
+                skillObjects[0].sprite = skillIcons[3];
+                skillObjects[1].sprite = skillIcons[4];
+                skillObjects[2].sprite = skillIcons[5];
+            }
+        }
     }
 }
