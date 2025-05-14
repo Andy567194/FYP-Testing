@@ -51,6 +51,8 @@ public class PlayerController : NetworkBehaviour
     bool isGrounded = false;
     [SerializeField]
     float jumpHeight = 5f;
+    [SerializeField]
+    float gravity = 5f;
     bool manipulatingObject = false;
     [SerializeField] float invincibleTime = 1f;
     float invincibleTimer = 0f;
@@ -205,6 +207,7 @@ public class PlayerController : NetworkBehaviour
             else
             {
                 rb.drag = 0.5f;
+                rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
             }
             if (!manipulatingObject)
             {
@@ -411,7 +414,8 @@ public class PlayerController : NetworkBehaviour
     {
         energyUseageText.SetActive(false);
     }
-    /*
+
+    //rotate the object based on world axis
     void manipulateObject(InputData data)
     {
         GameObject selectedObject = GetComponent<SelectObject>().selectedObject;
@@ -425,12 +429,12 @@ public class PlayerController : NetworkBehaviour
                 selectedObject.GetComponent<TimeControl>().storedForce = selectedObject.transform.forward * selectedObject.GetComponent<TimeControl>().storedForce.magnitude;
             }
         }
-    }*/
-
+    }
+    /*
+    //rotate the object based on player's view
     void manipulateObject(InputData data)
     {
         GameObject selectedObject = GetComponent<SelectObject>().selectedObject;
-        // Assuming the camera represents the player's view
 
         if (selectedObject != null && !selectedObject.CompareTag("Turret"))
         {
@@ -443,7 +447,7 @@ public class PlayerController : NetworkBehaviour
                 selectedObject.GetComponent<TimeControl>().storedForce = selectedObject.transform.forward * selectedObject.GetComponent<TimeControl>().storedForce.magnitude;
             }
         }
-    }
+    }*/
 
 
 
