@@ -23,7 +23,28 @@ public class ObjectTimeout : NetworkBehaviour
     {
         if (Object.HasStateAuthority)
         {
-            if (!timeControl.timeStopped && !timeRewind.isRewinding)
+            if (timeControl != null && timeRewind != null)
+            {
+                if (!timeControl.timeStopped && !timeRewind.isRewinding)
+                {
+                    timer -= Time.deltaTime;
+                }
+            }
+            else if (timeControl != null)
+            {
+                if (!timeControl.timeStopped)
+                {
+                    timer -= Time.deltaTime;
+                }
+            }
+            else if (timeRewind != null)
+            {
+                if (!timeRewind.isRewinding)
+                {
+                    timer -= Time.deltaTime;
+                }
+            }
+            else
             {
                 timer -= Time.deltaTime;
             }

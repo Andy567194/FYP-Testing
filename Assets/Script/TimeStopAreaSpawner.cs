@@ -120,6 +120,10 @@ public class TimeStopAreaSpawner : NetworkBehaviour
     public void AddStoredForce(float force)
     {
         storedForce += force;
+        if (storedForce > 0)
+        {
+            Rpc_playBuffParticle();
+        }
     }
 
     public void RewindObject()
@@ -204,6 +208,12 @@ public class TimeStopAreaSpawner : NetworkBehaviour
             transformData.Clear();
             Rpc_stopRecordParticle();
         }
+    }
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void Rpc_playBuffParticle()
+    {
+        GameObject buff = transform.Find("Buff").gameObject;
+        buff.SetActive(true);
     }
 
     [Rpc(RpcSources.All, RpcTargets.All)]
