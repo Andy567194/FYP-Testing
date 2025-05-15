@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748171, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -753,6 +753,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3153538529812742076, guid: 8fefbf5541d77e54fbb804a3ae143c90, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 3153538529812742076, guid: 8fefbf5541d77e54fbb804a3ae143c90, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3153538529812742076, guid: 8fefbf5541d77e54fbb804a3ae143c90, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -146
       objectReference: {fileID: 0}
@@ -892,6 +900,18 @@ PrefabInstance:
       propertyPath: m_Text
       value: Enter your name
       objectReference: {fileID: 0}
+    - target: {fileID: 5688569787372884802, guid: 8fefbf5541d77e54fbb804a3ae143c90, type: 3}
+      propertyPath: m_text
+      value: "Enter your name\u200B"
+      objectReference: {fileID: 0}
+    - target: {fileID: 5688569787372884802, guid: 8fefbf5541d77e54fbb804a3ae143c90, type: 3}
+      propertyPath: m_fontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5688569787372884802, guid: 8fefbf5541d77e54fbb804a3ae143c90, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 6012684712106124488, guid: 8fefbf5541d77e54fbb804a3ae143c90, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -917,8 +937,20 @@ PrefabInstance:
       value: BasicSpawner, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6553874154693555765, guid: 8fefbf5541d77e54fbb804a3ae143c90, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6553874154693555765, guid: 8fefbf5541d77e54fbb804a3ae143c90, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6553874154693555765, guid: 8fefbf5541d77e54fbb804a3ae143c90, type: 3}
+      propertyPath: m_fontSize
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6553874154693555765, guid: 8fefbf5541d77e54fbb804a3ae143c90, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6561739424018825879, guid: 8fefbf5541d77e54fbb804a3ae143c90, type: 3}
       propertyPath: m_AnchorMax.x
@@ -962,7 +994,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7427302377260134951, guid: 8fefbf5541d77e54fbb804a3ae143c90, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -291.5
+      value: -291.49954
       objectReference: {fileID: 0}
     - target: {fileID: 7427302377260134951, guid: 8fefbf5541d77e54fbb804a3ae143c90, type: 3}
       propertyPath: m_AnchoredPosition.y

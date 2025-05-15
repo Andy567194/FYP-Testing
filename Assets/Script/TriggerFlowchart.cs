@@ -1,5 +1,4 @@
-﻿//Copy Right by Vincent Lam 2021
-using UnityEngine;
+﻿using UnityEngine;
 using Fungus;
 
 public class TriggerFlowchart : MonoBehaviour
@@ -57,7 +56,6 @@ public class TriggerFlowchart : MonoBehaviour
         if (Vector3.Distance(transform.position, player.transform.position) <= talkDistance)
         {
             Vector3 targetPostition = new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z);
-            this.transform.LookAt(targetPostition);
         }
 
         if (Vector3.Distance(transform.position, player.transform.position) <= talkDistance && entered == false)
