@@ -1503,6 +1503,13 @@ MonoBehaviour:
   - {fileID: 558966902257772537}
   _camera: {fileID: 4207702496644517324}
   maxHP: 100
+  _audioClips:
+  - {fileID: 8300000, guid: c26582629243e224e8cdd6472adb1a11, type: 3}
+  - {fileID: 8300000, guid: cfdde96f4dfd09a428bef27d02cb1c20, type: 3}
+  - {fileID: 8300000, guid: 6e3b0fa01c77c7343b44ee3bed0ce7b4, type: 3}
+  - {fileID: 8300000, guid: c33493a2277eaf643be6c4305944fce7, type: 3}
+  - {fileID: 8300000, guid: 8e23c557de3e4d242b285d6b917c4673, type: 3}
+  - {fileID: 8300000, guid: 40469bea0c1fac84c8d8c29bc8e81608, type: 3}
   _speed: 70
   _Hp: 100
   _timeControlPlayer: 0
@@ -1576,6 +1583,9 @@ MonoBehaviour:
   _spawned:
     _value: 0
   _storedForce: 0
+  audioClips:
+  - {fileID: 8300000, guid: 6e3b0fa01c77c7343b44ee3bed0ce7b4, type: 3}
+  - {fileID: 8300000, guid: c33493a2277eaf643be6c4305944fce7, type: 3}
   recordPlayerText: {fileID: 8079042278450408453}
 --- !u!114 &5476158691148093407
 MonoBehaviour:

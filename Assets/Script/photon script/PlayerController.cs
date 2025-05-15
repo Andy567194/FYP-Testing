@@ -14,6 +14,10 @@ public class PlayerController : NetworkBehaviour
     private Camera _camera;
     [SerializeField]
     private int maxHP = 100;
+
+    [SerializeField]
+    private AudioClip[] _audioClips;
+
     [SerializeField]
     private float _speed = 5f;
 
@@ -260,10 +264,15 @@ public class PlayerController : NetworkBehaviour
                 if (timeControlPlayer && timeStopAreaSpawner != null)
                 {
                     timeStopAreaSpawner.SpawnObject();
+                    Rpc_Playsound4();
+
                 }
                 if (manipulateEnergyPlayer && manipulateEnergy != null)
                 {
                     manipulateEnergy.AbosrbEnergy();
+                    Rpc_Playsound0();
+
+
                 }
             }
             if (Skill2ButtonPressed.IsSet(InputButton.Skill2))
@@ -271,10 +280,14 @@ public class PlayerController : NetworkBehaviour
                 if (timeControlPlayer && timeStopAreaSpawner != null)
                 {
                     timeStopAreaSpawner.RewindObject();
+                    Rpc_Playsound3();
+
                 }
                 if (manipulateEnergyPlayer && manipulateEnergy != null)
                 {
                     manipulateEnergy.KnockbackPlayer();
+                    Rpc_Playsound1();
+
                 }
             }
             if (Skill3ButtonPressed.IsSet(InputButton.Skill3))
@@ -282,6 +295,7 @@ public class PlayerController : NetworkBehaviour
                 if (timeControlPlayer && timeStopAreaSpawner != null)
                 {
                     timeStopAreaSpawner.ActivateRecordAndRewindPlayer();
+
                 }
                 if (manipulateEnergyPlayer && manipulateEnergy != null && !manipulatingObject)
                 {
@@ -379,13 +393,61 @@ public class PlayerController : NetworkBehaviour
             _pitch = 89;
         }
     }
+    [Rpc]
+    public void Rpc_Playsound0()
+    {
+        AudioSource audioSource = GetComponent<AudioSource>();
+        if (audioSource != null)
+        {
+            audioSource.PlayOneShot(_audioClips[0]);
+        }
+    }
+    [Rpc]
+    public void Rpc_Playsound1()
+    {
+        AudioSource audioSource = GetComponent<AudioSource>();
+        if (audioSource != null)
+        {
+            audioSource.PlayOneShot(_audioClips[1]);
+        }
+    }
+    [Rpc]
+    public void Rpc_Playsound2()
+    {
+        AudioSource audioSource = GetComponent<AudioSource>();
+        if (audioSource != null)
+        {
+            audioSource.PlayOneShot(_audioClips[2]);
+        }
+    }
+    [Rpc]
+    public void Rpc_Playsound3()
+    {
+        AudioSource audioSource = GetComponent<AudioSource>();
+        if (audioSource != null)
+        {
+            audioSource.PlayOneShot(_audioClips[3]);
+        }
+    }
+    [Rpc]
+    public void Rpc_Playsound4()
+    {
+        AudioSource audioSource = GetComponent<AudioSource>();
+        if (audioSource != null)
+        {
+            audioSource.PlayOneShot(_audioClips[4]);
+        }
+    }
 
     public void TakeDamage(int damage)
     {
         if (invincibleTimer >= 0)
             return;
+        AudioSource audioSource = GetComponent<AudioSource>();
 
         Hp -= damage;
+        audioSource.PlayOneShot(_audioClips[5]);
+
         invincibleTimer = invincibleTime;
         Debug.Log($"Player took {damage} damage. Current HP: {Hp}");
         if (Hp <= 0)

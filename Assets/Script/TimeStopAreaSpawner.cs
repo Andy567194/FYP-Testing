@@ -11,6 +11,8 @@ public class TimeStopAreaSpawner : NetworkBehaviour
     //public float scrollSpeed = 1f;
     //private GameObject currentPreview; // Reference to the current preview object
     private NetworkObject TSA;
+
+
     [Networked] public NetworkBool spawned { get; set; } = false;
     //[Networked] private Vector3 previewPosition { get; set; }
     //[Networked] private Quaternion previewRotation { get; set; }
@@ -21,6 +23,7 @@ public class TimeStopAreaSpawner : NetworkBehaviour
 
     private List<TransformData> transformData = new List<TransformData>();
 
+    public AudioClip[] audioClips;
     private struct TransformData
     {
         public Vector3 position;
@@ -186,6 +189,7 @@ public class TimeStopAreaSpawner : NetworkBehaviour
             recordedTime = 0;
             recordPlayerText.enabled = true;
             Rpc_playRecordParticle();
+
         }
         else if (isRecordingPlayer && recordedTime >= 0.5)
         {
@@ -229,13 +233,20 @@ public class TimeStopAreaSpawner : NetworkBehaviour
         Transform playerTransform = FindObjectOfType<IsVisible>().gameObject.transform.parent;
         GameObject plexus = playerTransform.Find("Plexus").gameObject;
         plexus.SetActive(true);
+        AudioSource audioSource = GetComponent<AudioSource>();
+        if (audioSource != null)
+        {
+            audioSource.PlayOneShot(audioClips[0]);
+        }
     }
+
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void Rpc_stopRecordParticle()
     {
         Transform playerTransform = FindObjectOfType<IsVisible>().gameObject.transform.parent;
         GameObject plexus = playerTransform.Find("Plexus").gameObject;
         plexus.SetActive(false);
+
     }
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void Rpc_startRewindParticle()
@@ -243,6 +254,11 @@ public class TimeStopAreaSpawner : NetworkBehaviour
         Transform playerTransform = FindObjectOfType<IsVisible>().gameObject.transform.parent;
         GameObject rewind = playerTransform.Find("Magic circle").gameObject;
         rewind.SetActive(true);
+        AudioSource audioSource = GetComponent<AudioSource>();
+        if (audioSource != null)
+        {
+            audioSource.PlayOneShot(audioClips[1]);
+        }
     }
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void Rpc_stopRewindParticle()

@@ -24,6 +24,8 @@ public class Shooter : NetworkBehaviour
     Quaternion originalRotation;
     float transformResetTimer = 3;
     public float bulletLifetime = 5;
+    public AudioSource AudioSource;
+
     [SerializeField] float sightDistance = 100;
     [Networked] public bool timeStopped { get; set; } = false;
 
@@ -134,6 +136,10 @@ public class Shooter : NetworkBehaviour
         foreach (var particle in GetComponentsInChildren<ParticleSystem>())
         {
             particle.Play();
+        }
+        if (AudioSource != null)
+        {
+            AudioSource.Play();
         }
     }
 
