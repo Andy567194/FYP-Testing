@@ -56,7 +56,7 @@ public class Shooter : NetworkBehaviour
     {
         if (Object.HasStateAuthority)
         {
-            if (destroyed || timeStopped)
+            if (destroyed || timeStopped || !active)
             {
                 return;
             }
