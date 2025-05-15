@@ -118,9 +118,6 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
             // Keep track of the player avatars for easy access
             _spawnedCharacters[player] = networkPlayerObject;
-
-            // Log whether the player has InputAuthority
-            Debug.Log($"Player {player} spawned by host. Has InputAuthority: {networkPlayerObject.HasInputAuthority}");
         }
         else
         {

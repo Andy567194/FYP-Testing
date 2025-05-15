@@ -286,7 +286,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6386383679134839235, guid: 48d9138619269de4283fe41272fa487f, type: 3}
       propertyPath: targetSceneIndex
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -476,7 +476,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6386383679134839235, guid: 48d9138619269de4283fe41272fa487f, type: 3}
       propertyPath: targetSceneIndex
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
