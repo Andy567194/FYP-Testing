@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 6466316891772262171}
   - component: {fileID: 2234224078096222690}
   - component: {fileID: 1533993546899981309}
+  - component: {fileID: 1315594482017763629}
+  - component: {fileID: 4475632036699435647}
   m_Layer: 0
   m_Name: PatrolEnemy
   m_TagString: Untagged
@@ -123,18 +125,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 2234224078096222690}
-  player: {fileID: 3122157007716473001}
+  player: {fileID: 0}
   GroundMesh:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 65
   PlayerTarget:
     serializedVersion: 2
-    m_Bits: 0
-  health: 0
+    m_Bits: 128
+  _health: 0
   walkPoint: {x: 0, y: 0, z: 0}
   walkPointRange: 10
   timeBetweenAttacks: 10
-  projectile: {fileID: 2615641462783147809, guid: ab09ccbc1c03942458d6a048a949e637, type: 3}
+  projectile: {fileID: 2936222057628905393, guid: 11a3dd945e20f6349b6831d9f58ba879, type: 3}
   sightRange: 14.02
   attackRange: 2.19
   playerInSightRange: 0
@@ -188,3 +190,44 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1315594482017763629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 928733433193703300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 3533580799
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 6466316891772262171}
+  - {fileID: 4475632036699435647}
+--- !u!114 &4475632036699435647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 928733433193703300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a591d221a634417e9827eb58e17de84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncScale: 0
+  SyncParent: 1
+  _interpolationTarget: {fileID: 0}
+  UsePreciseRotation: 0
+  UseRenderSleepThresholds: 1
+  RenderThresholds:
+    UseEnergy: 1
+    Position: 0.01
+    Rotation: 0.01
+    Scale: 0.01

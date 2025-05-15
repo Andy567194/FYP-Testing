@@ -6,8 +6,9 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.ProBuilder;
 //using static UnityEditor.Experimental.GraphView.GraphView;
+using Fusion;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : NetworkBehaviour
 {
     public NavMeshAgent agent;
 
@@ -15,11 +16,11 @@ public class EnemyAI : MonoBehaviour
 
     public LayerMask GroundMesh, PlayerTarget;
 
-    public float health;
+    [Networked] public float health { get; set; }
 
     //Patroling
     public Vector3 walkPoint;
-    bool walkPointSet;
+    [SerializeField] bool walkPointSet;
     public float walkPointRange;
 
     //Attacking
@@ -29,20 +30,28 @@ public class EnemyAI : MonoBehaviour
 
     //States
     public float sightRange, attackRange;
-    public bool playerInSightRange, playerInAttackRange;
+    [Networked] public bool playerInSightRange { get; set; } = false;
+    [Networked] public bool playerInAttackRange { get; set; } = false;
 
-    private void Awake()
+    public override void Spawned()
     {
-        player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
     }
 
-    private void Update()
+    public override void FixedUpdateNetwork()
     {
-        //Check for sight and attack range
-        playerInSightRange = Physics.CheckSphere(transform.position, sightRange, PlayerTarget);
-        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, PlayerTarget);
+        GameObject playerObj = FindNearestPlayer();
+        if (playerObj != null)
+        {
+            player = playerObj.transform;
+        }
+        if (player != null)
+        {
+            //Check for sight and attack range
+            playerInSightRange = Physics.CheckSphere(transform.position, sightRange, PlayerTarget);
+            playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, PlayerTarget);
 
+        }
         if (!playerInSightRange && !playerInAttackRange) Patroling();
 
         if (playerInSightRange && !playerInAttackRange) ChasePlayer();
@@ -120,6 +129,26 @@ public class EnemyAI : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, sightRange);
+    }
+
+    GameObject FindNearestPlayer()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        GameObject nearestPlayer = null;
+        float nearestDistance = Mathf.Infinity;
+
+        foreach (GameObject player in players)
+        {
+            float distance = Vector3.Distance(transform.position, player.transform.position);
+
+            if (distance < nearestDistance)
+            {
+                nearestDistance = distance;
+                nearestPlayer = player;
+            }
+        }
+
+        return nearestPlayer;
     }
 
 }
