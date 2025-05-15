@@ -48,7 +48,7 @@ public class PauseMenuController : MonoBehaviour
            // {
             //    RestartLevel();
            // }
-          if (Input.GetKeyDown(KeyCode.Alpha2))
+          if (Input.GetKeyDown(KeyCode.Alpha0))
             {
                 ReturnToSelectLevel();
             }

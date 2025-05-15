@@ -347,6 +347,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 434675720}
     - target: {fileID: 5059308664152369321, guid: 00b6ec2f8d829004b914d27feef70d8a, type: 3}
+      propertyPath: playerProgress
+      value: 99
+      objectReference: {fileID: 0}
+    - target: {fileID: 5059308664152369321, guid: 00b6ec2f8d829004b914d27feef70d8a, type: 3}
       propertyPath: createRoomButton
       value: 
       objectReference: {fileID: 988757594}
@@ -958,7 +962,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7427302377260134951, guid: 8fefbf5541d77e54fbb804a3ae143c90, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -291.5
+      value: -291.49994
       objectReference: {fileID: 0}
     - target: {fileID: 7427302377260134951, guid: 8fefbf5541d77e54fbb804a3ae143c90, type: 3}
       propertyPath: m_AnchoredPosition.y

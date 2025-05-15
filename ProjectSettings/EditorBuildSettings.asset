@@ -8,18 +8,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Lobby.unity
     guid: 6c6f108be204edd4fb844e1eec826eec
+  - enabled: 1
+    path: Assets/Scenes/LevelSelect.unity
+    guid: 4e6ac747854546a4ebca1fecd4a5e3f6
+  - enabled: 1
+    path: Assets/Scenes/Level1V2.unity
+    guid: b8ae638e3b277c84c883ad19fc02fc02
   - enabled: 0
     path: Assets/Scenes/PICKUP.unity
     guid: 94d4ef4623a64c3499f4092c629e1e0e
   - enabled: 0
-    path: Assets/Scenes/LevelSelect.unity
-    guid: 4e6ac747854546a4ebca1fecd4a5e3f6
-  - enabled: 1
     path: Assets/Scenes/Level1.unity
     guid: 3b7118f89fbdf554598f8df06e93f3c3
-  - enabled: 0
-    path: Assets/Scenes/Level1V2.unity
-    guid: b8ae638e3b277c84c883ad19fc02fc02
   - enabled: 0
     path: Assets/Scenes/Level2.unity
     guid: 649d40ba3ffbc854098776327ee4b81a
