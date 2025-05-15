@@ -50,14 +50,14 @@ public class LevelChangeTrigger : NetworkBehaviour
                 {
                     Debug.Log($"Player {playerObject.InputAuthority} entered the trigger!");
                     hasTriggered = true; // Mark as triggered (synced across network)
-                    ChangeLevel();
+                    Rpc_ChangeLevel();
                 }
                 // Fallback: Check if the object has a specific component or tag to identify it as a player
                 else if (other.CompareTag("Player") || other.GetComponentInParent<PlayerController>() != null)
                 {
                     Debug.Log($"Fallback: Identified {other.gameObject.name} as a player via tag/component!");
                     hasTriggered = true;
-                    ChangeLevel();
+                    Rpc_ChangeLevel();
                 }
                 else
                 {
@@ -71,7 +71,8 @@ public class LevelChangeTrigger : NetworkBehaviour
         }
     }
 
-    private void ChangeLevel()
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    private void Rpc_ChangeLevel()
     {
         if (HasStateAuthority) // Ensure only the host initiates the scene load
         {

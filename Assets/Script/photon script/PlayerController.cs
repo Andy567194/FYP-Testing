@@ -3,6 +3,8 @@ using Fusion.Addons.Physics;
 using Photon.Voice.Unity;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 
 public class PlayerController : NetworkBehaviour
 {
@@ -64,9 +66,16 @@ public class PlayerController : NetworkBehaviour
     [Networked]
     public string PlayerName { get; set; }
     public Text playerNameText;
+    [SerializeField] Image[] skillIcons;
+    [SerializeField] Sprite[] skillSprites;
+    [SerializeField] GameObject pauseMenuPanel;
+    [SerializeField] Button restartButton;
+    [SerializeField] Button returnButton;
+    private bool isPaused = false;
 
-    public override void Spawned()
+    public override async void Spawned()
     {
+        await Task.Delay(1500);
         Hp = maxHP;
 
         if (Object.HasInputAuthority)
@@ -150,10 +159,29 @@ public class PlayerController : NetworkBehaviour
         animator = GetComponent<Animator>();
 
         UpdatePlayerNameUI();
+        if (timeControlPlayer)
+        {
+            skillIcons[0].sprite = skillSprites[0];
+            skillIcons[1].sprite = skillSprites[1];
+            skillIcons[2].sprite = skillSprites[2];
+
+        }
+        else
+        {
+            skillIcons[0].sprite = skillSprites[3];
+            skillIcons[1].sprite = skillSprites[4];
+            skillIcons[2].sprite = skillSprites[5];
+        }
+
+        pauseMenuPanel.SetActive(false);
     }
 
     public override void FixedUpdateNetwork()
     {
+        if (!SceneManager.GetActiveScene().isLoaded)
+        {
+            return;
+        }
         if (GetInput(out InputData data))
         {
             var jumpButtonPressed = data.JumpButton.GetPressed(_jumpPreviousButton);
@@ -188,7 +216,7 @@ public class PlayerController : NetworkBehaviour
             {
                 moveInput += Vector3.back;
             }
-            Vector3 tempRbVelocity = rb.velocity;
+            //Vector3 tempRbVelocity = rb.velocity;
             if (moveInput != Vector3.zero && rb != null && isGrounded)
             {
                 rb.AddForce(transform.rotation * moveInput * _speed, ForceMode.Force);
@@ -302,6 +330,32 @@ public class PlayerController : NetworkBehaviour
                 UpdatePlayerNameUI();
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            isPaused = !isPaused;
+            pauseMenuPanel.SetActive(isPaused);
+        }
+
+        // Check for key presses when paused
+        if (isPaused)
+        {
+            // if (Input.GetKeyDown(KeyCode.Alpha1))
+            // {
+            //    RestartLevel();
+            // }
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            if (Input.GetKeyDown(KeyCode.Alpha0))
+            {
+                Rpc_ReturnToSelectLevel();
+            }
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 
     private void HandlePitchYaw(InputData data)
@@ -382,9 +436,12 @@ public class PlayerController : NetworkBehaviour
             selectedObject.transform.Rotate(Vector3.down, (float)data.Yaw);
             selectedObject.transform.Rotate(Vector3.right, (float)data.Pitch);
 
-            if (selectedObject.GetComponent<TimeControl>().timeStopped)
+            if (selectedObject.GetComponent<TimeControl>() != null)
             {
-                selectedObject.GetComponent<TimeControl>().storedForce = selectedObject.transform.forward * selectedObject.GetComponent<TimeControl>().storedForce.magnitude;
+                if (selectedObject.GetComponent<TimeControl>().timeStopped)
+                {
+                    selectedObject.GetComponent<TimeControl>().storedForce = selectedObject.transform.forward * selectedObject.GetComponent<TimeControl>().storedForce.magnitude;
+                }
             }
         }
     }
@@ -427,5 +484,16 @@ public class PlayerController : NetworkBehaviour
         {
             playerNameText.text = PlayerName;
         }
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void Rpc_ReturnToSelectLevel()
+    {
+        if (Runner != null)
+        {
+            Runner.LoadScene("LevelSelect");
+        }
+        // Replace with your select level scene name
+        Debug.Log("Return to Select Level triggered"); // Optional debug log
     }
 }

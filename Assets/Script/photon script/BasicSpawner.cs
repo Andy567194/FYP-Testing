@@ -11,6 +11,7 @@ using Fusion.Addons.Physics;
 
 using TMPro;
 using UnityEngine.UI;
+using Photon.Realtime;
 
 public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -118,6 +119,9 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
             // Keep track of the player avatars for easy access
             _spawnedCharacters[player] = networkPlayerObject;
+
+            // Log whether the player has InputAuthority
+            Debug.Log($"Player {player} spawned by host. Has InputAuthority: {networkPlayerObject.HasInputAuthority}");
         }
         else
         {
@@ -149,7 +153,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         if (runner.IsServer)
         {
             // Delay to ensure despawn and spawn don't happen in the same tick
-            await Task.Delay(100); // Wait 100ms to avoid same-tick spawn/despawn
+            await Task.Delay(1000); // Wait 100ms to avoid same-tick spawn/despawn
 
             foreach (var player in _playersToRespawn)
             {
@@ -172,6 +176,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
                 if (player.Value != null)
                 {
                     _playersToRespawn.Add(player.Key); // Store PlayerRef for respawning
+                    //await Task.Delay(100);
                     runner.Despawn(player.Value);
                     Debug.Log($"Despawning Player {player.Key} before scene change.");
                 }

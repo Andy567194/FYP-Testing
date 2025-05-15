@@ -14,8 +14,6 @@ public class PauseMenuController : NetworkBehaviour
     {
         pauseMenuPanel.SetActive(false);
         //  restartButton.onClick.AddListener(RestartLevel);
-        returnButton.onClick.AddListener(ReturnToSelectLevel);
-
         //_runner = FindObjectOfType<NetworkRunner>();
     }
 
@@ -38,7 +36,7 @@ public class PauseMenuController : NetworkBehaviour
             Cursor.visible = true;
             if (Input.GetKeyDown(KeyCode.Alpha0))
             {
-                ReturnToSelectLevel();
+                Rpc_ReturnToSelectLevel();
             }
         }
         else
@@ -59,7 +57,8 @@ public class PauseMenuController : NetworkBehaviour
     //Debug.Log("Restart Level triggered"); // Optional debug log
     // }
 
-    void ReturnToSelectLevel()
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void Rpc_ReturnToSelectLevel()
     {
         if (Runner != null)
         {

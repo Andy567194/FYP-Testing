@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4651391855605886462}
   - component: {fileID: 6171962637152565163}
   - component: {fileID: 4815155258610187467}
-  - component: {fileID: 5370568064015192293}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -110,29 +109,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &5370568064015192293
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1209532758179856}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eff146445f79e254b889be4a5052efb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillIcons:
-  - {fileID: 21300000, guid: bc491bdf7a879cd409da4208fca87825, type: 3}
-  - {fileID: 21300000, guid: 0d5a3b36a56963d4babab4fe7d7ae94a, type: 3}
-  - {fileID: 21300000, guid: 9b0dea4509bd7824b92aa5421c63b2d7, type: 3}
-  - {fileID: 21300000, guid: a4fbbce81fd83cc4ab9cd3ef0fc85d54, type: 3}
-  - {fileID: 21300000, guid: 19ac13db75570e64e80f69ad4343d095, type: 3}
-  - {fileID: 21300000, guid: 89d6c582f54b574408aecde404676a41, type: 3}
-  skillObjects:
-  - {fileID: 7156856367315300022}
-  - {fileID: 4054440976509075810}
-  - {fileID: 5112750660314326288}
 --- !u!1 &31219260435736574
 GameObject:
   m_ObjectHideFlags: 0
@@ -1301,8 +1277,6 @@ MonoBehaviour:
   - {fileID: -1967685888418279853}
   - {fileID: 6507067208268790593}
   - {fileID: 3326443103264263932}
-  - {fileID: 5370568064015192293}
-  - {fileID: 5431549611534720277}
 --- !u!114 &528073394489392325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1334,6 +1308,20 @@ MonoBehaviour:
   respawnPoint: {fileID: 0}
   _PlayerName: 
   playerNameText: {fileID: 1000215341322278953}
+  skillIcons:
+  - {fileID: 7156856367315300022}
+  - {fileID: 4054440976509075810}
+  - {fileID: 5112750660314326288}
+  skillSprites:
+  - {fileID: 21300000, guid: bc491bdf7a879cd409da4208fca87825, type: 3}
+  - {fileID: 21300000, guid: 0d5a3b36a56963d4babab4fe7d7ae94a, type: 3}
+  - {fileID: 21300000, guid: 9b0dea4509bd7824b92aa5421c63b2d7, type: 3}
+  - {fileID: 21300000, guid: a4fbbce81fd83cc4ab9cd3ef0fc85d54, type: 3}
+  - {fileID: 21300000, guid: 19ac13db75570e64e80f69ad4343d095, type: 3}
+  - {fileID: 21300000, guid: 89d6c582f54b574408aecde404676a41, type: 3}
+  pauseMenuPanel: {fileID: 7987383143617925010}
+  restartButton: {fileID: 5608218335168439654}
+  returnButton: {fileID: 1467172115974051515}
 --- !u!54 &5109056489862770732
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3309,7 +3297,6 @@ GameObject:
   - component: {fileID: 2900742225631064637}
   - component: {fileID: 6797876011005993961}
   - component: {fileID: 4305957303232315077}
-  - component: {fileID: 5431549611534720277}
   m_Layer: 0
   m_Name: PauseMenuCanvas
   m_TagString: Untagged
@@ -3400,21 +3387,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &5431549611534720277
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6816497293610526485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b560528db950d0488e07af9fcc3e04b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pauseMenuPanel: {fileID: 7987383143617925010}
-  restartButton: {fileID: 5608218335168439654}
-  returnButton: {fileID: 1467172115974051515}
 --- !u!1 &6847703770869332511
 GameObject:
   m_ObjectHideFlags: 0
@@ -3786,7 +3758,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5961513485348945846}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: PauseMenuController, Assembly-CSharp
+        m_MethodName: Rpc_ReturnToSelectLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7213871077698228084
 GameObject:
   m_ObjectHideFlags: 0
