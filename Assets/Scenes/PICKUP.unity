@@ -943,7 +943,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4904727048188980316, guid: 6449748e38587a044984c0994105ea7d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2226,25 +2226,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 272862339376841161, guid: 50da293806e953a4f9657d4d56e66588, type: 3}
-      propertyPath: SortKey
-      value: 11745109
-      objectReference: {fileID: 0}
     - target: {fileID: 330871427680041445, guid: 50da293806e953a4f9657d4d56e66588, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 93728258}
     - target: {fileID: 330871427680041445, guid: 50da293806e953a4f9657d4d56e66588, type: 3}
       propertyPath: m_VersionIndex
-      value: 2603
+      value: 2609
       objectReference: {fileID: 0}
     - target: {fileID: 1847156424299587284, guid: 50da293806e953a4f9657d4d56e66588, type: 3}
       propertyPath: m_Name
       value: DoorwithPressure
-      objectReference: {fileID: 0}
-    - target: {fileID: 1847156424299587284, guid: 50da293806e953a4f9657d4d56e66588, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4399818756373471004, guid: 50da293806e953a4f9657d4d56e66588, type: 3}
       propertyPath: m_Mesh
@@ -2308,7 +2300,7 @@ PrefabInstance:
       objectReference: {fileID: 814197110}
     - target: {fileID: 7664262193950937525, guid: 50da293806e953a4f9657d4d56e66588, type: 3}
       propertyPath: m_VersionIndex
-      value: 2595
+      value: 2601
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2554,7 +2546,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6379914796334189846, guid: 26aedc24315920347815cc91d51e3b63, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9205634385589130388, guid: 26aedc24315920347815cc91d51e3b63, type: 3}
       propertyPath: m_LocalPosition.x

@@ -276,7 +276,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2592
+  m_VersionIndex: 2598
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -411,7 +411,7 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 774386076
+  SortKey: 11745109
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
@@ -772,7 +772,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2600
+  m_VersionIndex: 2606
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
