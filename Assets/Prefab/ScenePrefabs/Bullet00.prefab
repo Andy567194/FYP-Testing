@@ -264,11 +264,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2936222057628905393}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b0fe1bf624d1a649a5f7f3d7a24cb2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isRewinding: 0
 --- !u!1001 &5983746652414854124
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -336,24 +336,24 @@ public class PlayerController : NetworkBehaviour
         Debug.Log($"Player took {damage} damage. Current HP: {Hp}");
         if (Hp <= 0)
         {
-            if (respawnPoint != null)
-            {
-                Rpc_Respawn(respawnPoint.position);
-            }
-            else
-            {
-                Rpc_Respawn(Vector3.zero);
-            }
+            Rpc_Respawn();
         }
     }
 
     [Rpc]
-    public void Rpc_Respawn(Vector3 respawnPosition)
+    public void Rpc_Respawn()
     {
         Hp = maxHP;
         UpdateHealthBar();
         NetworkRigidbody3D networkRigidbody3d = GetComponent<NetworkRigidbody3D>();
-        networkRigidbody3d.Teleport(respawnPosition, Quaternion.identity);
+        if (respawnPoint == null)
+        {
+            networkRigidbody3d.Teleport(Vector3.zero, Quaternion.identity);
+        }
+        else
+        {
+            networkRigidbody3d.Teleport(respawnPoint.position, Quaternion.identity);
+        }
         Debug.Log("Player respawned");
     }
 

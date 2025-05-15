@@ -111,17 +111,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         if (_runner.IsServer)
         {
             NetworkObject networkPlayerObject;
-            if (!changedScene)
-            {
-                // Create a unique position for the player
-                Vector3 spawnPosition = playerSpawnPoint.position;
-                networkPlayerObject = _runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
-            }
-            else
-            {
-                networkPlayerObject = _runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
-
-            }
+            networkPlayerObject = _runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
 
             // Assign input authority to the player object
             networkPlayerObject.AssignInputAuthority(player);
