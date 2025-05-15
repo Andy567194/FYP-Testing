@@ -107,20 +107,13 @@ public class PlayerController : NetworkBehaviour
         IsVisible isVisible = GetComponentInChildren<IsVisible>();
         if (basicSpawner != null)
         {
-            int i = 0;
-            foreach (var kvp in basicSpawner._spawnedCharacters)
-            {
-                if (kvp.Value == Object)
-                {
-                    break;
-                }
-                i++;
-            }
-            if (i == 1 && timeStopAreaSpawner != null && manipulateEnergy != null)
+            NetworkObject playerObject = GetComponent<NetworkObject>();
+            Debug.Log(gameObject.name + ": " + playerObject.InputAuthority.ToString());
+            if (playerObject.InputAuthority.ToString() == "[Player:2]")
             {
                 timeControlPlayer = true;
             }
-            else if (i == 0 && manipulateEnergy != null && timeStopAreaSpawner != null)
+            else if (playerObject.InputAuthority.ToString() == "[Player:1]")
             {
                 manipulateEnergyPlayer = true;
             }
@@ -408,17 +401,17 @@ public class PlayerController : NetworkBehaviour
             mic.sprite = speaker.enabled ? openMicSprite : offMicSprite;
         }
     }
-    public bool isPaused { get; set; } = false;
+
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
     public void RPC_RequestRespawn()
     {
-    // Respawn logic, e.g.:
+        // Respawn logic, e.g.:
         transform.position = respawnPoint.position; // Ensure respawnPoint is defined
         Hp = maxHP; // Reset health or other states as needed
     }
     // Added RPC to set the player name
     [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
-    public void RPC_SetPlayerName(string name)  
+    public void RPC_SetPlayerName(string name)
     {
         if (!string.IsNullOrEmpty(name))
         {

@@ -3,76 +3,69 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Fusion;
 
-public class PauseMenuController : MonoBehaviour
+public class PauseMenuController : NetworkBehaviour
 {
     public GameObject pauseMenuPanel;
     public Button restartButton;
     public Button returnButton;
     private bool isPaused = false;
-    private PlayerController localPlayerController;
-    private NetworkRunner _runner;
 
-    void Start()
+    public override void Spawned()
     {
         pauseMenuPanel.SetActive(false);
-      //  restartButton.onClick.AddListener(RestartLevel);
+        //  restartButton.onClick.AddListener(RestartLevel);
         returnButton.onClick.AddListener(ReturnToSelectLevel);
 
-        _runner = FindObjectOfType<NetworkRunner>();
-        if (_runner != null)
-        {
-            NetworkObject playerObject = _runner.GetPlayerObject(_runner.LocalPlayer);
-            if (playerObject != null)
-            {
-                localPlayerController = playerObject.GetComponent<PlayerController>();
-            }
-        }
+        //_runner = FindObjectOfType<NetworkRunner>();
     }
 
-    void Update()
+    public override void FixedUpdateNetwork()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             isPaused = !isPaused;
             pauseMenuPanel.SetActive(isPaused);
-            if (localPlayerController != null)
-            {
-                localPlayerController.isPaused = isPaused;
-            }
         }
 
         // Check for key presses when paused
         if (isPaused)
         {
-           // if (Input.GetKeyDown(KeyCode.Alpha1))
-           // {
+            // if (Input.GetKeyDown(KeyCode.Alpha1))
+            // {
             //    RestartLevel();
-           // }
-          if (Input.GetKeyDown(KeyCode.Alpha0))
+            // }
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            if (Input.GetKeyDown(KeyCode.Alpha0))
             {
                 ReturnToSelectLevel();
             }
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
 
     //void RestartLevel()
     //{
-     
-      //  {
-        //    localPlayerController.Rpc_RespawnPlayer();
-        //}
-        //isPaused = false;
-        //pauseMenuPanel.SetActive(false);
-        //Debug.Log("Restart Level triggered"); // Optional debug log
-   // }
+
+    //  {
+    //    localPlayerController.Rpc_RespawnPlayer();
+    //}
+    //isPaused = false;
+    //pauseMenuPanel.SetActive(false);
+    //Debug.Log("Restart Level triggered"); // Optional debug log
+    // }
 
     void ReturnToSelectLevel()
     {
-      if (_runner != null)
-       {
-            _runner.LoadScene("LevelSelect");
+        if (Runner != null)
+        {
+            Runner.LoadScene("LevelSelect");
         }
- // Replace with your select level scene name
+        // Replace with your select level scene name
         Debug.Log("Return to Select Level triggered"); // Optional debug log
-   }
+    }
 }

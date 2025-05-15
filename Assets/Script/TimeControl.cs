@@ -13,7 +13,7 @@ public class TimeControl : NetworkBehaviour
     [Networked] public Vector3 storedForce { get; set; }
     Rigidbody rb;
 
-    private void Start()
+    public override void Spawned()
     {
         rb = GetComponent<Rigidbody>();
         if (lineRenderer == null)
@@ -29,7 +29,7 @@ public class TimeControl : NetworkBehaviour
         //takePowerButton.SetActive(false);
     }
 
-    void Update()
+    public override void FixedUpdateNetwork()
     {
         if (rb == null)
         {
@@ -43,7 +43,7 @@ public class TimeControl : NetworkBehaviour
                 storedForce += tempVelocity * rb.mass;
             }
             recovered = false;
-            ShowForceDirection();
+            Rpc_ShowForceDirection();
             //takePowerButton.SetActive(true);
         }
         else
@@ -74,7 +74,8 @@ public class TimeControl : NetworkBehaviour
         }
     }
 
-    void ShowForceDirection()
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    void Rpc_ShowForceDirection()
     {
         lineRenderer.enabled = true;
         lineRenderer.SetPosition(0, transform.position);

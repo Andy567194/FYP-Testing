@@ -14,7 +14,7 @@ public class TimeStopArea : NetworkBehaviour
     private List<Shooter> shooterObjects = new List<Shooter>();
 
 
-    void Start()
+    public override void Spawned()
     {
         MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer renderer in renderers)
@@ -26,6 +26,10 @@ public class TimeStopArea : NetworkBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        if (!HasStateAuthority)
+        {
+            return;
+        }
         if (other.CompareTag("TimeStoppable"))
         {
             TimeControl timeControl = other.GetComponentInParent<TimeControl>();
