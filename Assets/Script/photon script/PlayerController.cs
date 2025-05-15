@@ -288,7 +288,13 @@ public class PlayerController : NetworkBehaviour
                     manipulateEnergy.UseEnergy();
                 }
             }
-            if (data.Skill3Button.IsSet(InputButton.Skill3) && manipulateEnergyPlayer)
+            SelectObject selectObject = GetComponent<SelectObject>();
+            GameObject selectedObject = null;
+            if (selectObject != null)
+            {
+                selectedObject = selectObject.selectedObject;
+            }
+            if (data.Skill3Button.IsSet(InputButton.Skill3) && manipulateEnergyPlayer && selectedObject != null)
             {
                 manipulatingObject = true;
             }
