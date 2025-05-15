@@ -20,14 +20,20 @@ public class ShooterActivation : NetworkBehaviour
                 {
                     foreach (Shooter shooter in shooters)
                     {
-                        shooter.active = true;
+                        if (shooter != null)
+                        {
+                            shooter.active = true;
+                        }
                     }
                 }
                 if (fireTurrets != null)
                 {
                     foreach (FireTurret fireTurret in fireTurrets)
                     {
-                        fireTurret.active = true;
+                        if (fireTurret != null)
+                        {
+                            fireTurret.active = true;
+                        }
                     }
                 }
 
