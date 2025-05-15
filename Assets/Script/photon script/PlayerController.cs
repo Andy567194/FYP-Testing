@@ -72,6 +72,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] Button restartButton;
     [SerializeField] Button returnButton;
     private bool isPaused = false;
+    [SerializeField] GameObject loadingScreen;
 
     public override async void Spawned()
     {
@@ -173,7 +174,7 @@ public class PlayerController : NetworkBehaviour
             skillIcons[2].sprite = skillSprites[5];
         }
 
-        pauseMenuPanel.SetActive(false);
+        loadingScreen.SetActive(false);
     }
 
     public override void FixedUpdateNetwork()
