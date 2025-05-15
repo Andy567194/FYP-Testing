@@ -411,7 +411,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6386383679134839235, guid: 48d9138619269de4283fe41272fa487f, type: 3}
       propertyPath: targetSceneIndex
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -497,7 +497,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1075225414284015241, guid: 48d9138619269de4283fe41272fa487f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4762137798099233194, guid: 48d9138619269de4283fe41272fa487f, type: 3}
       propertyPath: SortKey
@@ -1311,8 +1311,8 @@ SceneRoots:
   - {fileID: 18907256}
   - {fileID: 961263473}
   - {fileID: 369671807}
-  - {fileID: 928049972}
   - {fileID: 1145790115}
+  - {fileID: 928049972}
   - {fileID: 460042410}
   - {fileID: 9178236494984234870}
   - {fileID: 8950821109998711265}

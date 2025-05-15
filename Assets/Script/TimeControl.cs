@@ -7,7 +7,7 @@ public class TimeControl : NetworkBehaviour
 {
     [Networked] public bool timeStopped { get; set; }
     public LineRenderer lineRenderer;
-    public GameObject takePowerButton;
+    public float arrowLength = 2f;
     bool recovered = false;
     [Networked] private Vector3 tempVelocity { get; set; }
     [Networked] public Vector3 storedForce { get; set; }
@@ -24,8 +24,11 @@ public class TimeControl : NetworkBehaviour
                 lineRenderer = line;
             }
         }
-        lineRenderer.positionCount = 2;
-        lineRenderer.enabled = false;
+        if (lineRenderer != null)
+        {
+            lineRenderer.positionCount = 2;
+            lineRenderer.enabled = false;
+        }
         //takePowerButton.SetActive(false);
     }
 
@@ -43,7 +46,8 @@ public class TimeControl : NetworkBehaviour
                 storedForce += tempVelocity * rb.mass;
             }
             recovered = false;
-            Rpc_ShowForceDirection();
+            if (lineRenderer != null)
+                Rpc_ShowForceDirection();
             //takePowerButton.SetActive(true);
         }
         else
@@ -56,7 +60,8 @@ public class TimeControl : NetworkBehaviour
                 recovered = true;
             }
             tempVelocity = rb.velocity;
-            lineRenderer.enabled = false;
+            if (lineRenderer != null)
+                Rpc_hideLineRenderer();
             //takePowerButton.SetActive(false);
         }
     }
@@ -79,7 +84,7 @@ public class TimeControl : NetworkBehaviour
     {
         lineRenderer.enabled = true;
         lineRenderer.SetPosition(0, transform.position);
-        lineRenderer.SetPosition(1, transform.position + storedForce.normalized * 2);
+        lineRenderer.SetPosition(1, transform.position + storedForce.normalized * arrowLength);
 
         float forceMagnitude = storedForce.magnitude;
         Color arrowColor = Color.Lerp(Color.green, Color.red, forceMagnitude / 100f);
@@ -97,5 +102,11 @@ public class TimeControl : NetworkBehaviour
     public void SetTimeStopped(bool value)
     {
         timeStopped = value;
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    void Rpc_hideLineRenderer()
+    {
+        lineRenderer.enabled = false;
     }
 }

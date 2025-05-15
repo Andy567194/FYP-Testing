@@ -19,6 +19,16 @@ public class Trap : NetworkBehaviour
             return;
         }
 
+        // Check if the time is stopped
+        TimeControl timeControl = GetComponent<TimeControl>();
+        if (timeControl != null)
+        {
+            if (timeControl.timeStopped)
+            {
+                return;
+            }
+        }
+
         if (other.gameObject.CompareTag("Player"))
         {
             Debug.Log($"Trap: Player tag detected on {other.gameObject.name}");
