@@ -377,6 +377,58 @@ public class PlayerController : NetworkBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Rpc_Respawn(Vector3.zero);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            if (SceneManager.GetActiveScene().name == "Level1V2")
+                Rpc_Respawn(new Vector3(15.828432083129883f, 3.513843536376953f, 63.08114242553711f));
+            else if (SceneManager.GetActiveScene().name == "Level2")
+            {
+                if (timeControlPlayer)
+                {
+                    Rpc_Respawn(new Vector3(80.64547729492188f, -5.280000686645508f, -44.17205047607422f));
+                }
+                else if (manipulateEnergyPlayer)
+                {
+                    Rpc_Respawn(new Vector3(73.71570587158203f, -2.172490119934082f, -22.35167694091797f));
+                }
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            if (SceneManager.GetActiveScene().name == "Level1V2")
+                Rpc_Respawn(new Vector3(15.860000610351563f, 0.7907352447509766f, 87.43000030517578f));
+            else if (SceneManager.GetActiveScene().name == "Level2")
+            {
+                if (timeControlPlayer)
+                {
+                    Rpc_Respawn(new Vector3(80.99810791015625f, 8.55065631866455f, -14.512619018554688f));
+                }
+                else if (manipulateEnergyPlayer)
+                {
+                    Rpc_Respawn(new Vector3(88.91313934326172f, -3.3038883209228517f, -22.35167694091797f));
+                }
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            if (SceneManager.GetActiveScene().name == "Level1V2")
+                Rpc_Respawn(new Vector3(18.84000015258789f, 3.770000457763672f, 149.9199981689453f));
+            else if (SceneManager.GetActiveScene().name == "Level2")
+                Rpc_Respawn(new Vector3(80.20999908447266f, 33.45000076293945f, 75.16000366210938f));
+
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            if (SceneManager.GetActiveScene().name == "Level1V2")
+                Rpc_Respawn(new Vector3(-34.90999984741211f, 0.4700002670288086f, 210.14999389648438f));
+            else if (SceneManager.GetActiveScene().name == "Level2")
+                Rpc_Respawn(new Vector3(93.71324920654297f, 38.39402389526367f, 190.70864868164063f));
+        }
     }
 
     private void HandlePitchYaw(InputData data)
