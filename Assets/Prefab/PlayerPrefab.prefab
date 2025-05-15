@@ -1586,6 +1586,8 @@ MonoBehaviour:
   audioClips:
   - {fileID: 8300000, guid: 6e3b0fa01c77c7343b44ee3bed0ce7b4, type: 3}
   - {fileID: 8300000, guid: c33493a2277eaf643be6c4305944fce7, type: 3}
+  - {fileID: 8300000, guid: 8e23c557de3e4d242b285d6b917c4673, type: 3}
+  - {fileID: 8300000, guid: 04ffa64cdc7141045aa99836ce6f765e, type: 3}
   recordPlayerText: {fileID: 8079042278450408453}
 --- !u!114 &5476158691148093407
 MonoBehaviour:

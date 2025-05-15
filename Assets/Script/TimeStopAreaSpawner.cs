@@ -109,6 +109,7 @@ public class TimeStopAreaSpawner : NetworkBehaviour
         {
             TSA = Runner.Spawn(objectToSpawn, transform.position, Quaternion.identity, Object.InputAuthority);
             spawned = true;
+            Rpc_playerSound2();
         }
         else
         {
@@ -116,6 +117,7 @@ public class TimeStopAreaSpawner : NetworkBehaviour
             {
                 Runner.Despawn(TSA);
                 spawned = false;
+                Rpc_playerSound3();
             }
         }
     }
@@ -266,5 +268,25 @@ public class TimeStopAreaSpawner : NetworkBehaviour
         Transform playerTransform = FindObjectOfType<IsVisible>().gameObject.transform.parent;
         GameObject rewind = playerTransform.Find("Magic circle").gameObject;
         rewind.SetActive(false);
+    }
+
+    [Rpc]
+    void Rpc_playerSound2()
+    {
+        AudioSource audioSource = GetComponent<AudioSource>();
+        if (audioSource != null)
+        {
+            audioSource.PlayOneShot(audioClips[2]);
+        }
+    }
+
+    [Rpc]
+    void Rpc_playerSound3()
+    {
+        AudioSource audioSource = GetComponent<AudioSource>();
+        if (audioSource != null)
+        {
+            audioSource.PlayOneShot(audioClips[3]);
+        }
     }
 }

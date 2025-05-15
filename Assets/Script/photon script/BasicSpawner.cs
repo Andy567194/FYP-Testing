@@ -153,7 +153,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         if (runner.IsServer)
         {
             // Delay to ensure despawn and spawn don't happen in the same tick
-            await Task.Delay(1000); // Wait 100ms to avoid same-tick spawn/despawn
+            await Task.Delay(100); // Wait 100ms to avoid same-tick spawn/despawn
 
             foreach (var player in _playersToRespawn)
             {

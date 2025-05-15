@@ -80,7 +80,7 @@ public class PlayerController : NetworkBehaviour
 
     public override async void Spawned()
     {
-        await Task.Delay(1500);
+        await Task.Delay(5000);
         Hp = maxHP;
 
         if (Object.HasInputAuthority)
@@ -264,7 +264,7 @@ public class PlayerController : NetworkBehaviour
                 if (timeControlPlayer && timeStopAreaSpawner != null)
                 {
                     timeStopAreaSpawner.SpawnObject();
-                    Rpc_Playsound4();
+                    //Rpc_Playsound4();
 
                 }
                 if (manipulateEnergyPlayer && manipulateEnergy != null)
