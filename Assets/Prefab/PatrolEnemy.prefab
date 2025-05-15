@@ -134,13 +134,14 @@ MonoBehaviour:
     m_Bits: 128
   _health: 0
   walkPoint: {x: 0, y: 0, z: 0}
+  walkPointSet: 0
   walkPointRange: 10
   timeBetweenAttacks: 10
   projectile: {fileID: 2936222057628905393, guid: 11a3dd945e20f6349b6831d9f58ba879, type: 3}
   sightRange: 14.02
   attackRange: 2.19
-  playerInSightRange: 0
-  playerInAttackRange: 0
+  _playerInSightRange: 0
+  _playerInAttackRange: 0
 --- !u!195 &2234224078096222690
 NavMeshAgent:
   m_ObjectHideFlags: 0

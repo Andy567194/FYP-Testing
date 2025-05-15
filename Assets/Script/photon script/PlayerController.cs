@@ -336,26 +336,27 @@ public class PlayerController : NetworkBehaviour
         Debug.Log($"Player took {damage} damage. Current HP: {Hp}");
         if (Hp <= 0)
         {
-            Rpc_Respawn();
+            if (respawnPoint != null)
+            {
+                Rpc_Respawn(respawnPoint.position);
+            }
+            else
+            {
+                Rpc_Respawn(Vector3.zero);
+            }
         }
     }
 
     [Rpc]
-    public void Rpc_Respawn()
+    public void Rpc_Respawn(Vector3 respawnPosition)
     {
         Hp = maxHP;
         UpdateHealthBar();
         NetworkRigidbody3D networkRigidbody3d = GetComponent<NetworkRigidbody3D>();
-        if (respawnPoint == null)
-        {
-            networkRigidbody3d.Teleport(Vector3.zero, Quaternion.identity);
-        }
-        else
-        {
-            networkRigidbody3d.Teleport(respawnPoint.position, Quaternion.identity);
-        }
+        networkRigidbody3d.Teleport(respawnPosition, Quaternion.identity);
         Debug.Log("Player respawned");
     }
+
 
     private void UpdateHealthBar()
     {
@@ -407,10 +408,17 @@ public class PlayerController : NetworkBehaviour
             mic.sprite = speaker.enabled ? openMicSprite : offMicSprite;
         }
     }
-
+    public bool isPaused { get; set; } = false;
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_RequestRespawn()
+    {
+    // Respawn logic, e.g.:
+        transform.position = respawnPoint.position; // Ensure respawnPoint is defined
+        Hp = maxHP; // Reset health or other states as needed
+    }
     // Added RPC to set the player name
     [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
-    public void RPC_SetPlayerName(string name)
+    public void RPC_SetPlayerName(string name)  
     {
         if (!string.IsNullOrEmpty(name))
         {
@@ -418,6 +426,7 @@ public class PlayerController : NetworkBehaviour
             UpdatePlayerNameUI();
         }
     }
+
 
     private void UpdatePlayerNameUI()
     {
