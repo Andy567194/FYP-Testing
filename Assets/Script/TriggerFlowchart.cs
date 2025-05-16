@@ -53,10 +53,8 @@ public class TriggerFlowchart : MonoBehaviour
     void Update()
     {
         GameObject player = FindNearestPlayer();
-        if (Vector3.Distance(transform.position, player.transform.position) <= talkDistance)
-        {
-            Vector3 targetPostition = new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z);
-        }
+        if (player.name != "PlayerPrefab(Clone)" || player.layer != LayerMask.NameToLayer("LocalPlayerModel"))
+            return;
 
         if (Vector3.Distance(transform.position, player.transform.position) <= talkDistance && entered == false)
         {
