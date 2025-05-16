@@ -27,8 +27,8 @@ TagManager:
   - UI
   - Ground
   - LocalPlayerModel
-  - 
-  - 
+  - Enemy
+  - Wall
   - 
   - 
   - 

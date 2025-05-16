@@ -21,7 +21,7 @@ public class ObjectTimeout : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Object.HasStateAuthority)
+        if (HasStateAuthority)
         {
             if (timeControl != null && timeRewind != null)
             {
